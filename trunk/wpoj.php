@@ -15,16 +15,19 @@ GPL V2
 class OJ{
 	function init(){
 		OJ::_init();
-		add_action('init',array(__CLASS__,'_register_post_type'));
+		add_action('init',array(__CLASS__,'_register_post_types'));
 		if ( is_admin() ) {
-			add_action( 'admin_menu', array(__CLASS__,'_regiter_meta_box') );
+			require_once (OJ_LIBRARY.'/class/meta_boxs.php');
+			OJ_meta_box::init();
+			add_action('save_post','oj_save_problem',"10",2);
 		}
 	}
 	function _init(){
 		define('OJ_LIBRARY',dirname(__FILE__).'/library');
 		define('OJ_FUNCTIONS',OJ_LIBRARY.'/functions');
+		include(OJ_FUNCTIONS.'/db.php');
 	}
-	function _register_post_type(){
+	function _register_post_types(){
 		/* register post types */
 		register_post_type("contest",array(
 			'public' => true,
@@ -86,10 +89,6 @@ class OJ{
 			),
 			'hierarchical'=> false
 		));
-	}
-	function _regiter_meta_box(){
-		require_once (OJ_LIBRARY.'/class/meta_box.php');
-		OJ_meta_box::init();
 	}
 }
 add_action('plugins_loaded', array('OJ','init'));
