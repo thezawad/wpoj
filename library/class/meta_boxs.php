@@ -1,9 +1,84 @@
 <?php
+function oj_save_metas($post_id,$post){
+	switch ($post->post_type){
+		case 'problem':
+			if ( !wp_verify_nonce( $_POST["_problem_meta_box_nonce"], "problem_meta_box" ) ) return $post_id;
+			oj_save_problem_metas($post_id,$post);
+			break;
+		case 'contest':
+			if ( !wp_verify_nonce( $_POST["_contest_meta_box_nonce"], "contest_meta_box" ) ) return $post_id;
+			oj_save_contest_metas($post_id,$post);
+			break;
+	}
+}
 class OJ_meta_box{
+	
 	function init(){
 		add_filter('mce_buttons',array(__CLASS__,'_add_code_button') );
 		add_action('admin_print_styles', array(__CLASS__,'_print_box_styles'));
 		add_action("add_meta_boxes", array(__CLASS__,"_register_meta_boxes"),10,2);
+	}
+	static function get_meta_box_args($post_type){
+		$public_options=array('default'=>'public','values'=>array('public','private'));
+		$language_options=array('C','C++','Pascal','JAVA','Ruby','Bash','Python');
+		$special_judge=array('default' => 'N', values=>array("Y","N"));
+		$meta_box_args=array(
+			'contest' =>array(
+				array(
+					'box' => array('id' =>'contest_meta_detail','title' => 'Contest Detail','callback' =>array(__CLASS__,'_meta_box_default'), 'context' => 'normal', 'priority' =>'default','callback_args' =>null),
+					'fields' => array(
+						'start_time'=>array('name'=>'start_time', 'title'=>'Start Time', 'type' =>'date'),
+						'end_time' => array('name'=>'end_time' , 'title' =>'End Time', 'type'=>'date'),
+						'public' => array('name'=>'public' , 'title' => 'Public' ,'type' => 'select','options' =>$public_options,'multiple'=>false),
+						'language'=>array('name'=>'language' , 'title'=> 'Language', 'type'=> 'select', 'options' => $language_options, 'multiple'=>true)
+					)
+				),
+			),
+			'problem' =>array(
+				array(
+					'box' => array('id'=>'problem_meta_input','title'=>'Input','callback' =>array(__CLASS__,'_meta_box_default'),'context'=>'normal','priority'=>'default','callback_args' =>null),
+					'fields' =>array(
+						'input' => array('name' =>'input' ,'title' =>'Input', 'type' =>'tinymce')
+					)
+				),
+				array(
+					'box' => array('id'=>'problem_meta_output','title'=>'Output','callback' =>array(__CLASS__,'_meta_box_default'),'context'=>'normal','priority'=>'default','callback_args' =>null),
+					'fields' =>array(
+						'input' => array('name' =>'output' ,'title' =>'Output', 'type' =>'tinymce')
+					)
+				),
+				array(
+					'box' => array('id'=>'problem_meta_sample','title'=>'Sample Data','callback' =>array(__CLASS__,'_meta_box_two_column'),'context'=>'normal','priority'=>'default','callback_args' =>null),
+					'fields' =>array(
+						'sample_input' => array("name" =>'sample_input' ,'title' =>'Sample Input', 'type' =>'textarea','positon'=>'left'),
+						'sample_output' => array("name" =>'sample_output' ,'title' =>'Sample Output', 'type' =>'textarea','position'=>'right'),
+					)
+				),
+				array(
+					'box' => array('id'=>'problem_meta_test','title'=>'Test Data','callback' =>array(__CLASS__,'_meta_box_two_column'),'context'=>'normal','priority'=>'default','callback_args' =>null),
+					'fields' =>array(
+						'test_input' => array("name" =>'test_input' ,'title' =>'Sample Input', 'type' =>'textarea','positon'=>'left'),
+						'test_output' => array("name" =>'test_output' ,'title' =>'Sample Output', 'type' =>'textarea','position'=>'right'),
+					)
+				),
+				array(
+					'box' => array('id'=>'problem_meta_hint','title'=>'Hint','callback' =>array(__CLASS__,'_meta_box_default'),'context'=>'normal','priority'=>'default','callback_args' =>null),
+					'fields' =>array(
+						'input' => array('name' =>'output' ,'title' =>'Output', 'type' =>'tinymce')
+					)
+				),
+				array(
+					'box' => array('id' =>'problem_meta_detail','title' => 'Problem Detail','callback' =>array(__CLASS__,'_meta_box_default'), 'context' => 'side', 'priority' =>'core','callback_args' =>null),
+					'fields' => array(
+						'time_limit' => array('name'=> 'time_limit' ,'title'=> 'Time Limit(s):', 'type'=> 'text'),
+						'memory_limit' => array('name'=>'memory_limit','title'=> 'Memory Limit(M)','type'=>'text'),
+						'specital_judge' =>array('name'=> 'special_judge','title'=> 'Secial Judge' , 'type' => 'radio','options'=>$special_judge),
+						'source' => array('name' => 'source', 'title'=>'Source', 'type' => 'text'),
+					)
+				),
+			)
+		);
+		return $meta_box_args[$post_type];
 	}
 	function _register_meta_boxes($post_type,$post){
 		switch($post_type){
@@ -16,8 +91,28 @@ class OJ_meta_box{
 				add_meta_box('problem_meta_sample', 'Sample Data', array(__CLASS__,'_problem_meta_sample'), 'problem','normal');
 				add_meta_box('problem_meta_test', 'Test Data', array(__CLASS__,'_problem_meta_test'), 'problem','normal');
 				add_meta_box('problem_meta_hint', 'Hint', array(__CLASS__,'_problem_meta_hint'), 'problem','normal');
-				add_meta_box("problem_meta_detail", "Problem Detail", array(__CLASS__,'_problem_meta_detail'), 'problem','side',"core");	
-		}	
+				add_meta_box("problem_meta_detail", "Problem Detail", array(__CLASS__,'_problem_meta_detail'), 'problem','side',"core");
+			case "contest":
+				add_meta_box("contest_meta_detail","Contest Details",array(__CLASS__,'_contest_meta_detail'),'contest','normal');
+		}
+	}
+	function _meta_box_default($object,$box){
+
+		$meta_box_options = hybrid_post_meta_box_args( $object->post_type ); ?>
+	
+		<input type="hidden" name="<?php echo "{$prefix}_{$object->post_type}_meta_box_nonce"; ?>" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
+	
+		<table class="form-table">
+	
+			<?php foreach ( $meta_box_options as $option ) {
+				if ( function_exists( "hybrid_post_meta_box_{$option['type']}" ) )
+					call_user_func( "hybrid_post_meta_box_{$option['type']}", $option, get_post_meta( $object->ID, $option['name'], true ) );
+			} ?>
+	
+		</table><!-- .form-table --><?php
+	}
+	function _meta_box_two_column($object,$box){
+		
 	}
 	function _problem_meta_input($post){
 		echo '<textarea id="input" class="theEditor" name="input">'.$post->input.'</textarea>';
@@ -27,6 +122,7 @@ class OJ_meta_box{
 	}
 	function _problem_meta_sample($post){
 		?>
+		<input type="hidden" name="<?php echo "_problem_meta_box_nonce"; ?>" value="<?php echo wp_create_nonce( "problem_meta_box" ); ?>" />
 		<div class="text-wrapper text-input">
 			<div class="inner-wrapper">
 				<h4>Sample Input</h4>
@@ -88,6 +184,12 @@ class OJ_meta_box{
 		</div>
 		<div class="item-line"><label><strong>Source:</strong><input type="text" style="width:214px" name="source" value="<?php echo $source;?>"/></label></div>
 		<div style="clear:both"></div>
+		<?php 
+	}
+	function _contest_meta_detail(){
+		?>
+		<input type="hidden" name="<?php echo "_problem_meta_box_nonce"; ?>" value="<?php echo wp_create_nonce( "problem_meta_box" ); ?>" />
+		
 		<?php 
 	}
 	function _print_box_styles(){
