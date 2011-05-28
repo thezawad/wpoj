@@ -1,5 +1,5 @@
 <?php
-function oj_save_problem($post_id,$post){
+function oj_save_problem_metas($post_id,$post){
 	$post->input=$_POST['input'];
 	$post->output=$_POST['output'];
 	$post->sample_input=$_POST['sample_input'];
@@ -27,6 +27,9 @@ function oj_save_problem($post_id,$post){
 		'source'=>$post->source
 	));
 }
+function oj_save_contest_metas($post,$post_id){
+	
+}
 function oj_update_problem_metas($post_id,$data){
 	update_post_meta($post_id, 'input', $data['input']);
 	update_post_meta($post_id, 'output',$data['output']);
@@ -36,7 +39,7 @@ function oj_update_problem_metas($post_id,$data){
 }
 function oj_fill_problem_metas($post){
 	if(!$post) return false;
-	if($post->input) return $post;
+	if($post->time_limit) return $post;
 	$input=get_post_meta($post->ID, "input",true);
 	$output=get_post_meta($post->ID, "output",true);
 	$info=get_post_meta($post->ID, "info",true);

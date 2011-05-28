@@ -19,7 +19,7 @@ class OJ{
 		if ( is_admin() ) {
 			require_once (OJ_LIBRARY.'/class/meta_boxs.php');
 			OJ_meta_box::init();
-			add_action('save_post','oj_save_problem',"10",2);
+			add_action('save_post','oj_save_metas',"10",2);
 		}
 	}
 	function _init(){
