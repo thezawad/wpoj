@@ -27,8 +27,8 @@ class OJ_meta_box{
 				array(
 					'box' => array('id' =>'contest_meta_detail','title' => 'Contest Detail','callback' =>array(__CLASS__,'_meta_box_default'), 'context' => 'normal', 'priority' =>'default','callback_args' =>null),
 					'fields' => array(
-						'start_time'=>array('name'=>'start_time', 'title'=>'Start Time', 'type' =>'date'),
-						'end_time' => array('name'=>'end_time' , 'title' =>'End Time', 'type'=>'date'),
+						'start_time'=>array('name'=>'start_time', 'title'=>'Start Time', 'type' =>'datetime'),
+						'end_time' => array('name'=>'end_time' , 'title' =>'End Time', 'type'=>'datetime'),
 						'public' => array('name'=>'public' , 'title' => 'Public' ,'type' => 'select','options' =>$public_options,'multiple'=>false),
 						'language'=>array('name'=>'language' , 'title'=> 'Language', 'type'=> 'select', 'options' => $language_options, 'multiple'=>true)
 					)
@@ -86,27 +86,36 @@ class OJ_meta_box{
 				if($_GET['action']=="edit") {
 					$post=oj_fill_problem_metas($post);
 				}
+				/*
 				add_meta_box('problem_meta_input', 'Input', array(__CLASS__,'_problem_meta_input'), 'problem','normal');
 				add_meta_box('problem_meta_output', 'Output', array(__CLASS__,'_problem_meta_output'), 'problem','normal');
 				add_meta_box('problem_meta_sample', 'Sample Data', array(__CLASS__,'_problem_meta_sample'), 'problem','normal');
 				add_meta_box('problem_meta_test', 'Test Data', array(__CLASS__,'_problem_meta_test'), 'problem','normal');
 				add_meta_box('problem_meta_hint', 'Hint', array(__CLASS__,'_problem_meta_hint'), 'problem','normal');
-				add_meta_box("problem_meta_detail", "Problem Detail", array(__CLASS__,'_problem_meta_detail'), 'problem','side',"core");
+				add_meta_box("problem_meta_detail", "Problem Detail", array(__CLASS__,'_problem_meta_detail'), 'problem','side',"core");*/
+				$meta_post_boxes = OJ_meta_box::get_meta_box_args( $post_type ); 
+				foreach ($meta_post_boxes as $box){
+					add_meta_box($box['box']['id'], $box['box']['title'], $box['box']['callback'], $post_type,$box['box']['context'],$box['box']['priority'],$box['fields']);
+				}
 			case "contest":
-				add_meta_box("contest_meta_detail","Contest Details",array(__CLASS__,'_contest_meta_detail'),'contest','normal');
+				$meta_post_boxes = OJ_meta_box::get_meta_box_args( $post_type ); 
+				foreach ($meta_post_boxes as $box){
+					add_meta_box($box['box']['id'], $box['box']['title'], $box['box']['callback'], $post_type,$box['box']['context'],$box['box']['priority'],$box['fields']);
+				}
 		}
 	}
 	function _meta_box_default($object,$box){
 
-		$meta_box_options = hybrid_post_meta_box_args( $object->post_type ); ?>
+		$fields=$box['args']; ?>
 	
-		<input type="hidden" name="<?php echo "{$prefix}_{$object->post_type}_meta_box_nonce"; ?>" value="<?php echo wp_create_nonce( basename( __FILE__ ) ); ?>" />
+		<input type="hidden" name="<?php echo "{$object->post_type}_meta_box_nonce"; ?>" value="<?php echo "{$object->post_type}_meta_box_nonce"; ?>" />
 	
 		<table class="form-table">
-	
-			<?php foreach ( $meta_box_options as $option ) {
-				if ( function_exists( "hybrid_post_meta_box_{$option['type']}" ) )
-					call_user_func( "hybrid_post_meta_box_{$option['type']}", $option, get_post_meta( $object->ID, $option['name'], true ) );
+
+			<?php foreach ( $fields as $field ) {
+				
+				if ( function_exists( "hybrid_post_meta_box_{$field['type']}" ) )
+					call_user_func( "hybrid_post_meta_box_{$field['type']}", $field, get_post_meta( $object->ID, $field['name'], true ) );
 			} ?>
 	
 		</table><!-- .form-table --><?php
@@ -210,4 +219,45 @@ class OJ_meta_box{
 		<?php 
 	}
 }
+function hybrid_post_meta_box_select( $args = array(), $value = false ) {
+	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
+	<tr>
+		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
+		<td><input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo wp_specialchars( $value, 1 ); ?>" size="30" tabindex="30" style="width: 97%;" /></td>
+	</tr>
+	<?php
+}
+function hybrid_post_meta_box_datetime( $args = array(), $value = false ) {
+	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
+	<tr>
+		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
+		<td><input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo wp_specialchars( $value, 1 ); ?>" size="30" tabindex="30" style="width: 97%;" /></td>
+	</tr>
+	<?php
+}
+function hybrid_post_meta_box_radio( $args = array(), $value = false ) {
+	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
+	<tr>
+		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
+		<td><input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo wp_specialchars( $value, 1 ); ?>" size="30" tabindex="30" style="width: 97%;" /></td>
+	</tr>
+	<?php
+}
+function hybrid_post_meta_box_text( $args = array(), $value = false ) {
+	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
+	<tr>
+		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
+		<td><input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo wp_specialchars( $value, 1 ); ?>" size="30" tabindex="30" style="width: 97%;" /></td>
+	</tr>
+	<?php
+}
+function hybrid_post_meta_box_tinymce( $args = array(), $value = false ) {
+	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
+	<tr>
+		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
+		<td><input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo wp_specialchars( $value, 1 ); ?>" size="30" tabindex="30" style="width: 97%;" /></td>
+	</tr>
+	<?php
+}
+
 ?>
