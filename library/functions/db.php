@@ -1,33 +1,33 @@
 <?php
-function oj_save_problem_metas($post_id,$post){
-	$post->input=$_POST['input'];
-	$post->output=$_POST['output'];
-	$post->sample_input=$_POST['sample_input'];
-	$post->sample_output=$_POST['sample_output'];
-	$post->test_input=$_POST['test_input'];
-	$post->test_output=$_POST['test_output'];
-	$post->hint=$_POST['hint'];
+function oj_save_object_metas($post_id,$object){
+	$object->input=$_POST['input'];
+	$object->output=$_POST['output'];
+	$object->sample_input=$_POST['sample_input'];
+	$object->sample_output=$_POST['sample_output'];
+	$object->test_input=$_POST['test_input'];
+	$object->test_output=$_POST['test_output'];
+	$object->hint=$_POST['hint'];
 	
-	$post->time_limit=$_POST['time_limit'];
-	$post->memory_limit=$_POST['memory_limit'];
-	$post->special_judge=$_POST['special_judge'];
-	$post->source=$_POST['source'];
+	$object->time_limit=$_POST['time_limit'];
+	$object->memory_limit=$_POST['memory_limit'];
+	$object->special_judge=$_POST['special_judge'];
+	$object->source=$_POST['source'];
 	
 	oj_update_problem_metas($post_id,array(
-		'input'=>$post->input,
-		'output'=>$post->output,
-		'time_limit'=>$post->time_limit,
-		'memory_limit'=>$post->memory_limit,
-		'sample_input'=>$post->sample_input,
-		'sample_output'=>$post->sample_output,
-		'test_input'=>$post->test_input,
-		'test_output'=>$post->test_output,
-		'hint'=>$post->hint,
-		'special_judge'=>$post->special_judge,
-		'source'=>$post->source
+		'input'=>$object->input,
+		'output'=>$object->output,
+		'time_limit'=>$object->time_limit,
+		'memory_limit'=>$object->memory_limit,
+		'sample_input'=>$object->sample_input,
+		'sample_output'=>$object->sample_output,
+		'test_input'=>$object->test_input,
+		'test_output'=>$object->test_output,
+		'hint'=>$object->hint,
+		'special_judge'=>$object->special_judge,
+		'source'=>$object->source
 	));
 }
-function oj_save_contest_metas($post,$post_id){
+function oj_save_contest_metas($object,$post_id){
 	
 }
 function oj_update_problem_metas($post_id,$data){
