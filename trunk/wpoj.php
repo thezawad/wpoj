@@ -14,8 +14,9 @@ GPL V2
 */	
 class OJ{
 	function init(){
-		OJ::_init();
+		OJ::init_contst_includes();
 		add_action('init',array(__CLASS__,'_register_post_types'));
+		add_action("admin_menu",array(__CLASS__,'_register_admin_menu'));
 		if ( is_admin() ) {
 			require_once (OJ_LIBRARY.'/class/meta_boxs.php');
 			OJ_meta_box::init();
@@ -23,13 +24,17 @@ class OJ{
 			add_action('delete_post','oj_delete_object_metas',10,1);
 		}
 	}
-	function _init(){
+	function init_contst_includes(){
 		define('OJ_LIBRARY',dirname(__FILE__).'/library');
 		define('OJ_FUNCTIONS',OJ_LIBRARY.'/functions');
 		define('OJ_CLASSES',OJ_LIBRARY.'/class');
 		include(OJ_FUNCTIONS.'/db.php');
+		include(OJ_FUNCTIONS.'/fps.php');
 		include(OJ_CLASSES.'/objects.php');
 		
+	}
+	function _register_admin_menu(){
+		add_submenu_page('edit.php?post_type=problem', 'Import Problems', 'Import Problems', 6, 'import_problems','oj_import_problems');
 	}
 	function _register_post_types(){
 		/* register post types */

@@ -20,7 +20,6 @@ function oj_save_metas($post_id,$object){
 		if ($key=="test_input" || $key=="test_output"){
 			continue;
 		}
-		if(is_string($meta_value)){$meta_value="'".$meta_value."'";}
 		$meta_to_save[$key]=$meta_value;
 	}
 	oj_save_object_metas($post_id,$object,$meta_to_save);
@@ -103,8 +102,8 @@ class OJ_meta_box{
 
 			<?php foreach ( $fields as $field ) {
 				
-				if ( function_exists( "hybrid_post_meta_box_{$field['type']}" ) )
-					call_user_func( "hybrid_post_meta_box_{$field['type']}", $field, $object->$field['name'] );
+				if ( function_exists( "wpoj_post_meta_box_{$field['type']}" ) )
+					call_user_func( "wpoj_post_meta_box_{$field['type']}", $field, $object->$field['name'] );
 			} ?>
 	
 		</table><!-- .form-table --><?php
@@ -137,7 +136,7 @@ class OJ_meta_box{
 		<?php 
 	}
 }
-function hybrid_post_meta_box_radio( $args = array(), $value = false ) {
+function wpoj_post_meta_box_radio( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); 
 	if($args['options']['default']&&!value) $value=$args['options']['default'];	?>
 	<tr>
@@ -150,7 +149,7 @@ function hybrid_post_meta_box_radio( $args = array(), $value = false ) {
 	</tr>
 	<?php
 }
-function hybrid_post_meta_box_select( $args = array(), $value = false ) {
+function wpoj_post_meta_box_select( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); 
 	$options=$args['options'];
 	if($value) {
@@ -173,7 +172,7 @@ function hybrid_post_meta_box_select( $args = array(), $value = false ) {
 	</tr>
 	<?php
 }
-function hybrid_post_meta_box_text( $args = array(), $value = false ) {
+function wpoj_post_meta_box_text( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
 	<tr>
 		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
@@ -181,7 +180,7 @@ function hybrid_post_meta_box_text( $args = array(), $value = false ) {
 	</tr>
 	<?php
 }
-function hybrid_post_meta_box_textarea( $args = array(), $value = false ) {
+function wpoj_post_meta_box_textarea( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
 	<tr>
 		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
@@ -189,7 +188,7 @@ function hybrid_post_meta_box_textarea( $args = array(), $value = false ) {
 	</tr>
 	<?php
 }
-function hybrid_post_meta_box_tinymce( $args = array(), $value = false ) {
+function wpoj_post_meta_box_tinymce( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
 	<tr>
 		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
@@ -197,7 +196,7 @@ function hybrid_post_meta_box_tinymce( $args = array(), $value = false ) {
 	</tr>
 	<?php
 }
-function hybrid_post_meta_box_datetime( $args = array(), $value = false ) {
+function wpoj_post_meta_box_datetime( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] );
 	$yy="";
 	$mm="";
