@@ -153,7 +153,6 @@ function fps_addproblem($postarr,$problem_metas,$OJ_DATA="/home/judge/data"){
 	$postarr['post_status']="publish";
 	$postarr['post_type']='problem';
 	$post_id=wp_insert_post($postarr);
-	$problem_metas['post_id']=$post_id;
 	oj_save_object_metas($post_id,get_post($post_id),$problem_metas);
 	return $post_id;
 }

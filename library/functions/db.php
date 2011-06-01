@@ -2,6 +2,7 @@
 function oj_save_object_metas($post_id,$object,$meta_to_save){
 	global $wpdb;
 	$table=$wpdb->prefix . $object->post_type . '_meta';
+	$meta_to_save['post_id']=$post_id;
 	$data = apply_filters('wp_insert_post_data', array('input','output','sample_input','sample_output','hint','source'), $meta_to_save);
 	$exist=$wpdb->query("select ID from `{$table}` where post_id={$post_id}");
 	foreach ($meta_to_save as $key=>$value) {
@@ -37,6 +38,8 @@ function oj_fill_object_metas($object){
 	$sql="SELECT * FROM `{$table}` WHERE post_id = {$object->ID}";
 	$object_meta=$wpdb->get_row($sql);
 	if(!$object_meta) return $object;
+	unset($object_meta->ID);
+	unset($object_meta->post_id);
 	foreach ($object_meta as $key=>$value){
 		$object->$key=$value;
 	}
