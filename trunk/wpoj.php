@@ -25,7 +25,10 @@ class OJ{
 	function _init(){
 		define('OJ_LIBRARY',dirname(__FILE__).'/library');
 		define('OJ_FUNCTIONS',OJ_LIBRARY.'/functions');
+		define('OJ_CLASSES',OJ_LIBRARY.'/class');
 		include(OJ_FUNCTIONS.'/db.php');
+		include(OJ_CLASSES.'/objects.php');
+		
 	}
 	function _register_post_types(){
 		/* register post types */

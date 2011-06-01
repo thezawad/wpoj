@@ -37,7 +37,7 @@ function oj_update_problem_metas($post_id,$data){
 	unset($data['output']);
 	update_post_meta($post_id, 'info',$data);
 }
-function oj_fill_problem_metas($post){
+function oj_fill_problem_metas_bak($post){
 	if(!$post) return false;
 	if($post->time_limit) return $post;
 	$input=get_post_meta($post->ID, "input",true);
@@ -54,6 +54,24 @@ function oj_fill_problem_metas($post){
 	$post->hint = $info['hint'];
 	$post->special_judge = $info['special_judge'];
 	$post->source = $info['source'];
+	return $post;
+}
+function oj_fill_problem_metas($post){
+	if(!$post) return false;
+	if($post->time_limit) return $post;
+	foreach (OJ_OBJECT::$fields[$post->post_type] as $field){
+		$name=$field['name'];
+		$post->$name=get_post_meta($post->ID, $name,true);
+	}
+	return $post;
+}
+function oj_fill_contest_metas($post){
+	if(!$post) return false;
+	if($post->start_time) return $post;
+	foreach (OJ_OBJECT::$fields[$post->post_type] as $field){
+		$name=$field['name'];
+		$post->$name=get_post_meta($post->ID, $name,true);
+	}
 	return $post;
 }
 ?>
