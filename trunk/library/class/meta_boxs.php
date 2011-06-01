@@ -2,7 +2,6 @@
 function oj_save_metas($post_id,$object){
 	if ( !wp_verify_nonce( $_POST["{$object->post_type}_meta_box_nonce"], "{$object->post_type}_meta_box_nonce" ) ) return $post_id;
 	$object_metas=OJ_OBJECT::$fields[$object->post_type];
-	$meta_to_save=array('post_id'=>$post_id);
 
 	foreach ($object_metas as $field){
 		$key=$field['name'];
