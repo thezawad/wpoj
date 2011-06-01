@@ -2,35 +2,28 @@
 function oj_save_metas($post_id,$object){
 	if ( !wp_verify_nonce( $_POST["{$object->post_type}_meta_box_nonce"], "{$object->post_type}_meta_box_nonce" ) ) return $post_id;
 	$object_metas=OJ_OBJECT::$fields[$object->post_type];
-	
+	$meta_to_save=array('post_id'=>$post_id);
+
 	foreach ($object_metas as $field){
 		$key=$field['name'];
 		switch ($field['type']){
 			case 'datetime':
-				$new_meta_value=intval($_POST[$field['yy']]).'-'.intval($_POST[$field['mm']]).'-'.intval($_POST[$field['dd']]).' '.intval($_POST[$field['hh']]).':'.intval($_POST[$field['mn']]).':00';
+				$meta_value=intval($_POST[$field['yy']]).'-'.intval($_POST[$field['mm']]).'-'.intval($_POST[$field['dd']]).' '.intval($_POST[$field['hh']]).':'.intval($_POST[$field['mn']]).':00';
 				break;
 			case 'select':
 				if(!is_array($_POST[$key])) $_POST[$key]=array($_POST[$key]); 
-				$new_meta_value=implode(',',$_POST[$key]);
+				$meta_value=implode(',',$_POST[$key]);
 				break;
 			default:
-				$new_meta_value=$_POST[$key];
+				$meta_value=$_POST[$key];
 		}
-		$meta_value=get_post_meta($post_id, $key,true);
-		
-		
-		if ( $new_meta_value && '' == $meta_value )
-			add_post_meta( $post_id, $key, $new_meta_value, true );
-
-		/* If the new meta value does not match the old value, update it. */
-		elseif ( $new_meta_value && $new_meta_value != $meta_value )
-			update_post_meta( $post_id, $key, $new_meta_value );
-
-		/* If there is no new meta value but an old value exists, delete it. */
-		elseif ( '' == $new_meta_value && $meta_value )
-			delete_post_meta( $post_id, $key, $meta_value );
+		if ($key=="test_input" || $key=="test_output"){
+			continue;
+		}
+		if(is_string($meta_value)){$meta_value="'".$meta_value."'";}
+		$meta_to_save[$key]=$meta_value;
 	}
-	//oj_save_object_metas($post_id,$object);
+	oj_save_object_metas($post_id,$object,$meta_to_save);
 }
 class OJ_meta_box{
 	static $_object_nonce=array(
@@ -51,7 +44,7 @@ class OJ_meta_box{
 					'fields' => array(
 						'start_time'=> OJ_OBJECT::$fields['contest']['start_time'],
 						'end_time' => OJ_OBJECT::$fields['contest']['end_time'],
-						'public' => OJ_OBJECT::$fields['contest']['public'],
+						'private' => OJ_OBJECT::$fields['contest']['private'],
 						'language'=> OJ_OBJECT::$fields['contest']['language'],
 					)
 				),
@@ -84,7 +77,7 @@ class OJ_meta_box{
 					'fields' => array(
 						'time_limit' => OJ_OBJECT::$fields['problem']['time_limit'],
 						'memory_limit' => OJ_OBJECT::$fields['problem']['memory_limit'],
-						'specital_judge' => OJ_OBJECT::$fields['problem']['specital_judge'],
+						'spj' => OJ_OBJECT::$fields['problem']['spj'],
 						'source' => OJ_OBJECT::$fields['problem']['source'],
 					)
 				),
@@ -93,23 +86,12 @@ class OJ_meta_box{
 		return $meta_box_args[$post_type];
 	}
 	function _register_meta_boxes($post_type,$post){
-		switch($post_type){
-			case "problem":
-				if($_GET['action']=="edit") {
-					$post=oj_fill_problem_metas($post);
-				}
-				$object_metas = OJ_meta_box::get_meta_box_args( $post_type ); 
-				foreach ($object_metas as $box){
-					add_meta_box($box['box']['id'], $box['box']['title'], $box['box']['callback'], $post_type,$box['box']['context'],$box['box']['priority'],$box['fields']);
-				}
-			case "contest":
-				if($_GET['action']=="edit") {
-					$post=oj_fill_contest_metas($post);
-				}
-				$object_metas = OJ_meta_box::get_meta_box_args( $post_type ); 
-				foreach ($object_metas as $box){
-					add_meta_box($box['box']['id'], $box['box']['title'], $box['box']['callback'], $post_type,$box['box']['context'],$box['box']['priority'],$box['fields']);
-				}
+		if($_GET['action']=="edit") {
+			$post=oj_fill_object_metas($post);
+		}
+		$object_metas = OJ_meta_box::get_meta_box_args( $post_type ); 
+		foreach ($object_metas as $box){
+			add_meta_box($box['box']['id'], $box['box']['title'], $box['box']['callback'], $post_type,$box['box']['context'],$box['box']['priority'],$box['fields']);
 		}
 	}
 	function _meta_box_default($object,$box){

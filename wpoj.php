@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Online Judge
+Plugin Name: wpoj
 Version: 0.1
 Plugin Author: johnnychen
 Description: onlinejudge system based on wordpress
@@ -19,7 +19,8 @@ class OJ{
 		if ( is_admin() ) {
 			require_once (OJ_LIBRARY.'/class/meta_boxs.php');
 			OJ_meta_box::init();
-			add_action('save_post','oj_save_metas',"10",2);
+			add_action('save_post','oj_save_metas',10,2);
+			add_action('delete_post','oj_delete_object_metas',10,1);
 		}
 	}
 	function _init(){
@@ -95,6 +96,70 @@ class OJ{
 	}
 }
 add_action('plugins_loaded', array('OJ','init'));
+register_activation_hook(__FILE__,'wpoj_active');
+function wpoj_active(){
+	global $wpdb;
+	// Check for capability
+	if ( !current_user_can('activate_plugins') ) 
+		return;
+	
+	
+	// add charset & collate like wp core
+	$charset_collate = '';
 
+	if ( ! empty($wpdb->charset) )
+		$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
+	if ( ! empty($wpdb->collate) )
+		$charset_collate .= " COLLATE $wpdb->collate";
 
+   	$problem_meta					= $wpdb->prefix . 'problem_meta';
+	$contest_meta					= $wpdb->prefix . 'contest_meta';
 
+   
+	if($wpdb->get_var("show tables like '$problem_meta'") != $problem_meta) {
+      
+		$sql = "CREATE TABLE " . $problem_meta . " (
+		`ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+		  `post_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+		  `input` text,
+		  `output` text,
+		  `sample_input` text,
+		  `sample_output` text,
+		  `spj` char(1) NOT NULL DEFAULT '0',
+		  `hint` text,
+		  `source` varchar(100) DEFAULT NULL,
+		  `time_limit` int(11) NOT NULL DEFAULT '0',
+		  `memory_limit` int(11) NOT NULL DEFAULT '0',
+		  `accepted` int(11) DEFAULT '0',
+		  `submit` int(11) DEFAULT '0',
+		  `solved` int(11) DEFAULT '0',
+		  PRIMARY KEY (`ID`),
+		  KEY `post_id` (`post_id`)
+		) $charset_collate;";
+	
+      $wpdb->query($sql);
+      echo $sql;
+    }
+
+	if($wpdb->get_var("show tables like '$contest_meta'") != $contest_meta) {
+      
+		$sql = "CREATE TABLE " . $contest_meta . " (
+		`ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+		  `post_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+		  `start_time` datetime DEFAULT NULL,
+		  `end_time` datetime DEFAULT NULL,
+		  `private` text,
+		  `language` text,
+		  PRIMARY KEY (`ID`),
+		  KEY `post_id` (`post_id`)
+		) $charset_collate;";
+	
+      $wpdb->query($sql);
+   }
+
+	// check one table again, to be sure
+	if($wpdb->get_var("show tables like '$contest_meta'")!= $contest_meta) {
+		update_option( "ngg_init_check", __('NextGEN Gallery : Tables could not created, please check your database settings',"nggallery") );
+		return;
+	}
+}

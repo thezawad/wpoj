@@ -11,7 +11,7 @@ class OJ_OBJECT{
 				'test_output' => 	array("name" =>'test_output' ,'title' =>'Test Output', 'type' =>'textarea','position'=>'right'),
 				'time_limit' => 	array('name'=> 'time_limit' ,'title'=> 'Time Limit(s):', 'type'=> 'text'),
 				'memory_limit' => 	array('name'=>'memory_limit','title'=> 'Memory Limit(M)','type'=>'text'),
-				'specital_judge' =>	array('name'=> 'special_judge','title'=> 'Secial Judge' , 'type' => 'radio',
+				'spj' =>			array('name'=> 'spj','title'=> 'Secial Judge' , 'type' => 'radio',
 											'options'=>array(
 													'default' => 'N', 
 													'values'=>array("Y","N"))
@@ -23,7 +23,7 @@ class OJ_OBJECT{
 											'yy'=>"start_yy",'mm'=>'start_mm','dd'=>'start_dd','hh'=>'start_hh','mn'=>'start_mn'),
 				'end_time' =>		array('name'=>'end_time' , 'title' =>'End Time', 'type'=>'datetime',
 											'yy'=>"end_yy",'mm'=>'end_mm','dd'=>'end_dd','hh'=>'end_hh','mn'=>'end_mn'),
-				'public' => 		array('name'=>'public' , 'title' => 'Public' ,'type' => 'select',
+				'private' => 		array('name'=>'private' , 'title' => 'Public' ,'type' => 'select',
 											'raw_options' =>array('public' => FALSE,'private' =>FALSE),
 											'options' =>array('public' => TRUE,'private' =>FALSE), 'multiple'=>false),
 				'language'=>		array('name'=>'language' , 'title'=> 'Language', 'type'=> 'select', 

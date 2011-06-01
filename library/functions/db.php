@@ -1,77 +1,40 @@
 <?php
-function oj_save_object_metas($post_id,$object){
-	$object->input=$_POST['input'];
-	$object->output=$_POST['output'];
-	$object->sample_input=$_POST['sample_input'];
-	$object->sample_output=$_POST['sample_output'];
-	$object->test_input=$_POST['test_input'];
-	$object->test_output=$_POST['test_output'];
-	$object->hint=$_POST['hint'];
+function oj_save_object_metas($post_id,$object,$meta_to_save){
+	global $wpdb;
+	$table=$wpdb->prefix . $object->post_type . '_meta';
 	
-	$object->time_limit=$_POST['time_limit'];
-	$object->memory_limit=$_POST['memory_limit'];
-	$object->special_judge=$_POST['special_judge'];
-	$object->source=$_POST['source'];
-	
-	oj_update_problem_metas($post_id,array(
-		'input'=>$object->input,
-		'output'=>$object->output,
-		'time_limit'=>$object->time_limit,
-		'memory_limit'=>$object->memory_limit,
-		'sample_input'=>$object->sample_input,
-		'sample_output'=>$object->sample_output,
-		'test_input'=>$object->test_input,
-		'test_output'=>$object->test_output,
-		'hint'=>$object->hint,
-		'special_judge'=>$object->special_judge,
-		'source'=>$object->source
-	));
-}
-function oj_save_contest_metas($object,$post_id){
-	
-}
-function oj_update_problem_metas($post_id,$data){
-	update_post_meta($post_id, 'input', $data['input']);
-	update_post_meta($post_id, 'output',$data['output']);
-	unset($data['input']);
-	unset($data['output']);
-	update_post_meta($post_id, 'info',$data);
-}
-function oj_fill_problem_metas_bak($post){
-	if(!$post) return false;
-	if($post->time_limit) return $post;
-	$input=get_post_meta($post->ID, "input",true);
-	$output=get_post_meta($post->ID, "output",true);
-	$info=get_post_meta($post->ID, "info",true);
-	$post->input = $input;
-	$post->output = $output;
-	$post->time_limit = $info['time_limit'];
-	$post->memory_limit = $info['memory_limit'];
-	$post->sample_input = $info['sample_input'];
-	$post->sample_output = $info['sample_output'];
-	$post->test_input = $info['test_input'];
-	$post->test_output = $info['test_output'];
-	$post->hint = $info['hint'];
-	$post->special_judge = $info['special_judge'];
-	$post->source = $info['source'];
-	return $post;
-}
-function oj_fill_problem_metas($post){
-	if(!$post) return false;
-	if($post->time_limit) return $post;
-	foreach (OJ_OBJECT::$fields[$post->post_type] as $field){
-		$name=$field['name'];
-		$post->$name=get_post_meta($post->ID, $name,true);
+	$exist=$wpdb->query("select ID from `{$table}` where post_id={$post_id}");
+	if($exist){
+		$update_values=array();;
+		foreach ($meta_to_save as $key => $value){
+			$update_values[] = ' `'.$key.'` = '.$value;
+		}
+		$update_values=implode(',',$update_values);
+		$sql = "UPDATE `{$table}` SET {$update_values} WHERE `post_id` ={$post_id}";
+	}else{
+		$keys= implode('`,`',array_keys($meta_to_save));
+		$values= implode(',', $meta_to_save);
+		$sql = "INSERT INTO `{$table}` (`{$keys}`) VALUES({$values});";
 	}
-	return $post;
+	
+	$wpdb->query($sql);
 }
-function oj_fill_contest_metas($post){
-	if(!$post) return false;
-	if($post->start_time) return $post;
-	foreach (OJ_OBJECT::$fields[$post->post_type] as $field){
-		$name=$field['name'];
-		$post->$name=get_post_meta($post->ID, $name,true);
+function oj_delete_object_metas($post_id){
+	global $wpdb;
+	$object=get_post($post_id);
+	$table=$wpdb->prefix . $object->post_type . '_meta';
+	$sql= "DELETE FROM `{$table}` WHERE post_id={$post_id}";
+}
+function oj_fill_object_metas($object){
+	global $wpdb;
+	if(!$object) return false;
+	$table=$wpdb->prefix . $object->post_type . '_meta';
+	$sql="SELECT * FROM `{$table}` WHERE post_id = {$object->ID}";
+	$object_meta=$wpdb->get_row($sql);
+	if(!$object_meta) return $object;
+	foreach ($object_meta as $key=>$value){
+		$object->$key=$value;
 	}
-	return $post;
+	return $object;
 }
 ?>
