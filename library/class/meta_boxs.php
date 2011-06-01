@@ -1,7 +1,36 @@
 <?php
 function oj_save_metas($post_id,$object){
 	if ( !wp_verify_nonce( $_POST["{$object->post_type}_meta_box_nonce"], "{$object->post_type}_meta_box_nonce" ) ) return $post_id;
-	oj_save_object_metas($post_id,$object);
+	$object_metas=OJ_OBJECT::$fields[$object->post_type];
+	
+	foreach ($object_metas as $field){
+		$key=$field['name'];
+		switch ($field['type']){
+			case 'datetime':
+				$new_meta_value=intval($_POST[$field['yy']]).'-'.intval($_POST[$field['mm']]).'-'.intval($_POST[$field['dd']]).' '.intval($_POST[$field['hh']]).':'.intval($_POST[$field['mn']]).':00';
+				break;
+			case 'select':
+				if(!is_array($_POST[$key])) $_POST[$key]=array($_POST[$key]); 
+				$new_meta_value=implode(',',$_POST[$key]);
+				break;
+			default:
+				$new_meta_value=$_POST[$key];
+		}
+		$meta_value=get_post_meta($post_id, $key,true);
+		
+		
+		if ( $new_meta_value && '' == $meta_value )
+			add_post_meta( $post_id, $key, $new_meta_value, true );
+
+		/* If the new meta value does not match the old value, update it. */
+		elseif ( $new_meta_value && $new_meta_value != $meta_value )
+			update_post_meta( $post_id, $key, $new_meta_value );
+
+		/* If there is no new meta value but an old value exists, delete it. */
+		elseif ( '' == $new_meta_value && $meta_value )
+			delete_post_meta( $post_id, $key, $meta_value );
+	}
+	//oj_save_object_metas($post_id,$object);
 }
 class OJ_meta_box{
 	static $_object_nonce=array(
@@ -15,18 +44,15 @@ class OJ_meta_box{
 		add_action("add_meta_boxes", array(__CLASS__,"_register_meta_boxes"),10,2);
 	}
 	static function get_meta_box_args($post_type){
-		$public_options=array('default'=>'public','values'=>array('public','private'));
-		$language_options=array('C','C++','Pascal','JAVA','Ruby','Bash','Python');
-		$special_judge=array('default' => 'N', 'values'=>array("Y","N"));
 		$meta_box_args=array(
 			'contest' =>array(
 				array(
 					'box' => array('id' =>'contest_meta_detail','title' => 'Contest Detail','callback' =>array(__CLASS__,'_meta_box_default'), 'context' => 'normal', 'priority' =>'default','callback_args' =>null),
 					'fields' => array(
-						'start_time'=>array('name'=>'start_time', 'title'=>'Start Time', 'type' =>'datetime'),
-						'end_time' => array('name'=>'end_time' , 'title' =>'End Time', 'type'=>'datetime'),
-						'public' => array('name'=>'public' , 'title' => 'Public' ,'type' => 'select','options' =>$public_options,'multiple'=>false),
-						'language'=>array('name'=>'language' , 'title'=> 'Language', 'type'=> 'select', 'options' => $language_options, 'multiple'=>true)
+						'start_time'=> OJ_OBJECT::$fields['contest']['start_time'],
+						'end_time' => OJ_OBJECT::$fields['contest']['end_time'],
+						'public' => OJ_OBJECT::$fields['contest']['public'],
+						'language'=> OJ_OBJECT::$fields['contest']['language'],
 					)
 				),
 			),
@@ -34,32 +60,32 @@ class OJ_meta_box{
 				array(
 					'box' => array('id'=>'problem_meta_input_output_hint','title'=>'Input & Output & Hint','callback' =>array(__CLASS__,'_meta_box_default'),'context'=>'normal','priority'=>'default','callback_args' =>null),
 					'fields' =>array(
-						'input' => array('name' =>'input' ,'title' =>'Input', 'type' =>'tinymce'),
-						'output' => array('name' =>'output' ,'title' =>'Output', 'type' =>'tinymce'),
-						'hint' => array('name' =>'hint' ,'title' =>'Hint', 'type' =>'tinymce')
+						'input' => OJ_OBJECT::$fields['problem']['input'],
+						'output' => OJ_OBJECT::$fields['problem']['output'],
+						'hint' => OJ_OBJECT::$fields['problem']['hint'],
 					)
 				),
 				array(
 					'box' => array('id'=>'problem_meta_sample','title'=>'Sample Data','callback' =>array(__CLASS__,'_meta_box_default'),'context'=>'normal','priority'=>'default','callback_args' =>null),
 					'fields' =>array(
-						'sample_input' => array("name" =>'sample_input' ,'title' =>'Sample Input', 'type' =>'textarea','positon'=>'left'),
-						'sample_output' => array("name" =>'sample_output' ,'title' =>'Sample Output', 'type' =>'textarea','position'=>'right'),
+						'sample_input' => OJ_OBJECT::$fields['problem']['sample_input'],
+						'sample_output' => OJ_OBJECT::$fields['problem']['sample_output'],
 					)
 				),
 				array(
 					'box' => array('id'=>'problem_meta_test','title'=>'Test Data','callback' =>array(__CLASS__,'_meta_box_default'),'context'=>'normal','priority'=>'default','callback_args' =>null),
 					'fields' =>array(
-						'test_input' => array("name" =>'test_input' ,'title' =>'Test Input', 'type' =>'textarea','positon'=>'left'),
-						'test_output' => array("name" =>'test_output' ,'title' =>'Test Output', 'type' =>'textarea','position'=>'right'),
+						'test_input' => OJ_OBJECT::$fields['problem']['test_input'],
+						'test_output' => OJ_OBJECT::$fields['problem']['test_output'],
 					)
 				),
 				array(
 					'box' => array('id' =>'problem_meta_detail','title' => 'Problem Detail','callback' =>array(__CLASS__,'_meta_box_default'), 'context' => 'side', 'priority' =>'core','callback_args' =>null),
 					'fields' => array(
-						'time_limit' => array('name'=> 'time_limit' ,'title'=> 'Time Limit(s):', 'type'=> 'text'),
-						'memory_limit' => array('name'=>'memory_limit','title'=> 'Memory Limit(M)','type'=>'text'),
-						'specital_judge' =>array('name'=> 'special_judge','title'=> 'Secial Judge' , 'type' => 'radio','options'=>$special_judge),
-						'source' => array('name' => 'source', 'title'=>'Source', 'type' => 'text'),
+						'time_limit' => OJ_OBJECT::$fields['problem']['time_limit'],
+						'memory_limit' => OJ_OBJECT::$fields['problem']['memory_limit'],
+						'specital_judge' => OJ_OBJECT::$fields['problem']['specital_judge'],
+						'source' => OJ_OBJECT::$fields['problem']['source'],
 					)
 				),
 			)
@@ -72,13 +98,16 @@ class OJ_meta_box{
 				if($_GET['action']=="edit") {
 					$post=oj_fill_problem_metas($post);
 				}
-				$meta_post_boxes = OJ_meta_box::get_meta_box_args( $post_type ); 
-				foreach ($meta_post_boxes as $box){
+				$object_metas = OJ_meta_box::get_meta_box_args( $post_type ); 
+				foreach ($object_metas as $box){
 					add_meta_box($box['box']['id'], $box['box']['title'], $box['box']['callback'], $post_type,$box['box']['context'],$box['box']['priority'],$box['fields']);
 				}
 			case "contest":
-				$meta_post_boxes = OJ_meta_box::get_meta_box_args( $post_type ); 
-				foreach ($meta_post_boxes as $box){
+				if($_GET['action']=="edit") {
+					$post=oj_fill_contest_metas($post);
+				}
+				$object_metas = OJ_meta_box::get_meta_box_args( $post_type ); 
+				foreach ($object_metas as $box){
 					add_meta_box($box['box']['id'], $box['box']['title'], $box['box']['callback'], $post_type,$box['box']['context'],$box['box']['priority'],$box['fields']);
 				}
 		}
@@ -120,26 +149,11 @@ class OJ_meta_box{
 			#problem_meta_input_output_hint th{border-right:1px solid #EEE; vertical-align:middle; text-align:center;}
 			#problem_meta_input_output_hint td{padding:0;}
 			.form-table label{color:#21759B}
+			#contest_meta_detail td select{height:auto; min-width:80px;}
 		-->
 		</style>
 		<?php 
 	}
-}
-function hybrid_post_meta_box_select( $args = array(), $value = false ) {
-	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
-	<tr>
-		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
-		<td><input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo wp_specialchars( $value, 1 ); ?>" size="30" tabindex="30" style="width: 97%;" /></td>
-	</tr>
-	<?php
-}
-function hybrid_post_meta_box_datetime( $args = array(), $value = false ) {
-	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); ?>
-	<tr>
-		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
-		<td><input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo wp_specialchars( $value, 1 ); ?>" size="30" tabindex="30" style="width: 97%;" /></td>
-	</tr>
-	<?php
 }
 function hybrid_post_meta_box_radio( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); 
@@ -150,6 +164,29 @@ function hybrid_post_meta_box_radio( $args = array(), $value = false ) {
 			<?php foreach ( $args['options']['values'] as  $val ) { ?>
 				<?php echo $val; ?> <input <?php if ( $value == $val ) echo ' checked="checked"'; ?>type="radio" name="<?php echo $name; ?>" value="<?php echo $val; ?>" /> 
 			<?php } ?>
+		</td>
+	</tr>
+	<?php
+}
+function hybrid_post_meta_box_select( $args = array(), $value = false ) {
+	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); 
+	$options=$args['options'];
+	if($value) {
+		$value=explode(',', $value);
+		$ref_value=array();
+		foreach ($value as $select){
+			$ref_value[$select]=true;
+		}
+		$options=array_merge($args['raw_options'],$ref_value);
+	}?>
+	<tr>
+		<th style="width:10%;"><label for="<?php echo $name;?>"><?php echo $args['title']; ?></label></th>
+		<td>
+		<select name="<?php echo $name;if($args['multiple']) echo '[]'; ?>" <?php if($args['multiple']) echo 'multiple="multiple"';?>>
+		<?php foreach ( $options as  $option => $flag ) { ?>
+			<option value="<?php echo $option;?>" <?php if($flag) echo ' selected="selected"';?>><?php echo $option;?></option>
+		<?php } ?>
+		</select>
 		</td>
 	</tr>
 	<?php
@@ -178,5 +215,33 @@ function hybrid_post_meta_box_tinymce( $args = array(), $value = false ) {
 	</tr>
 	<?php
 }
-
+function hybrid_post_meta_box_datetime( $args = array(), $value = false ) {
+	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] );
+	$yy="";
+	$mm="";
+	$dd="";
+	$hh="";
+	$mn="";
+	if($value==false && ($name ="start_time" || $name="end_time")){
+		date_default_timezone_set("PRC");
+		$value=date("Y-m-d H:i:s");
+	}
+	$yy=substr($value,0,4);
+	$mm=substr($value,5,2);
+	$dd=substr($value,8,2);
+	$hh=substr($value,11,2);
+	$mn=substr($value,14,2);
+	?>
+	<tr>
+		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
+		<td>
+		Year:<input type="text" name="<?php echo $args['yy'];?>" size="4" value="<?php echo $yy;?>"/>-
+		<input type="text" name="<?php echo $args['mm'];?>" size="2" value="<?php echo $mm;?>"/>-
+		<input type="text" name="<?php echo $args['dd'];?>" size="2" value="<?php echo $dd;?>"/>@
+		<input type="text" name="<?php echo $args['hh'];?>" size="2" value="<?php echo $hh;?>"/>:
+		<input type="text" name="<?php echo $args['mn'];?>" size="2" value="<?php echo $mn;?>"/>
+		</td>
+	</tr>
+	<?php
+}
 ?>
