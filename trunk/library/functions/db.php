@@ -11,7 +11,7 @@ function oj_save_object_metas($post_id,$object,$meta_to_save){
 	if($exist){
 		$update_values=array();;
 		foreach ($meta_to_save as $key => $value){
-			$update_values[] = ' `'.$key.'` = '.mysql_real_escape_string($value);
+			$update_values[] = ' `'.$key.'` = '.$value;
 		}
 		$update_values=implode(',',$update_values);
 		
