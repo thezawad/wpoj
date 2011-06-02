@@ -31,7 +31,7 @@ class OJ{
 		include(OJ_FUNCTIONS.'/db.php');
 		include(OJ_FUNCTIONS.'/fps.php');
 		include(OJ_CLASSES.'/objects.php');
-		
+		register_theme_directory( WP_PLUGIN_DIR . '/wpoj/themes' );
 	}
 	function _register_admin_menu(){
 		add_submenu_page('edit.php?post_type=problem', 'Import Problems', 'Import Problems', 6, 'import_problems','oj_import_problems');
