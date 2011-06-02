@@ -44,6 +44,10 @@ class OJ{
 				'name' => 'Contests',
 				'singular_name' => 'Contest',
 				'search_items' =>'Search Contests',
+				'new_item' => 'New Contest',
+				'edit_item' => 'Edit Contest',
+				'view_item' => 'View Contest',
+				'add_new_item' => 'Add New Contest',
 				'not_found' => 'No contests found'
 			),
 			'has_archive' => 'contests'

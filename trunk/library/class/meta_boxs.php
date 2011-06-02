@@ -84,10 +84,11 @@ class OJ_meta_box{
 		return $meta_box_args[$post_type];
 	}
 	function _register_meta_boxes($post_type,$post){
+		$object_metas = OJ_meta_box::get_meta_box_args( $post_type );
+		if(!$object_metas[$post_type]) return;
 		if($_GET['action']=="edit") {
 			$post=oj_fill_object_metas($post);
 		}
-		$object_metas = OJ_meta_box::get_meta_box_args( $post_type ); 
 		foreach ($object_metas as $box){
 			add_meta_box($box['box']['id'], $box['box']['title'], $box['box']['callback'], $post_type,$box['box']['context'],$box['box']['priority'],$box['fields']);
 		}
