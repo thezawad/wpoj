@@ -1,4 +1,36 @@
 <?php
+add_filter('posts_join_paged','oj_query_join',10,1);
+add_filter('posts_fields','oj_query_fields',10,1);
+add_filter('posts_orderby','oj_query_orderby');
+function oj_query_join($join){
+	global $oj_context,$wpdb;
+	switch ($oj_context){
+		case 'problems':
+			$join=' LEFT JOIN '.$wpdb->prefix.'problem_meta as meta ON meta.post_id='.$wpdb->prefix.'posts.ID ';
+			break;
+	}
+	return $join;
+}
+function oj_query_fields($fields){
+	global $oj_context,$wpdb;
+	switch ($oj_context){
+		case 'problems':
+			$fields = $fields . ', meta.source , meta.accepted , meta.submit';
+			break;
+	}
+	return $fields;
+}
+function oj_query_orderby($orderby){
+	global $oj_context,$wpdb;
+	switch ($oj_context){
+		case 'problems':
+			$new_orderby=trim($_GET['orderby']);
+			$allowed_keys=array('source','accedpted','submit');
+			if($new_orderby && in_array($new_orderby, $allowed_keys)) return $new_orderby;
+			break;
+	}
+	return $orderby;
+}
 function oj_save_object_metas($post_id,$object,$meta_to_save){
 	global $wpdb;
 	$table=$wpdb->prefix . $object->post_type . '_meta';
