@@ -141,7 +141,6 @@ function wpoj_active(){
 		  `memory_limit` int(11) NOT NULL DEFAULT '0',
 		  `accepted` int(11) DEFAULT '0',
 		  `submit` int(11) DEFAULT '0',
-		  `solved` int(11) DEFAULT '0',
 		  PRIMARY KEY (`ID`),
 		  KEY `post_id` (`post_id`)
 		) $charset_collate;";

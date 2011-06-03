@@ -84,8 +84,8 @@ class OJ_meta_box{
 		return $meta_box_args[$post_type];
 	}
 	function _register_meta_boxes($post_type,$post){
+		if(!in_array($post_type, array('problem','contest'))){ return;}
 		$object_metas = OJ_meta_box::get_meta_box_args( $post_type );
-		if(!$object_metas[$post_type]) return;
 		if($_GET['action']=="edit") {
 			$post=oj_fill_object_metas($post);
 		}
