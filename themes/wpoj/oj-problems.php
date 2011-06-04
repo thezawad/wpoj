@@ -11,9 +11,8 @@ get_header(); ?>
 			<tbody>
 			<?php
 			global $wp_query,$oj_context;
-			$current_query=$wp_query;
 			$oj_context="problems";
-			$posts=$wp_query->query(array("post_type" => "problem",'numberposts' =>20 ,'paged'=> get_query_var( 'paged' ),'orderby'=>'submit'));
+			$posts=$wp_query->query(array("post_type" => "problem",'numberposts' =>20 ,'paged'=> trim($_GET['paged']),'orderby'=>'submit'));
 			foreach ($posts as $post):setup_postdata($post);?>
 				<tr>
 					<td><?php echo $post->ID;?></td>
