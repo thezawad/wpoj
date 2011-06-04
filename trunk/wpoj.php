@@ -123,6 +123,7 @@ function wpoj_active(){
 
    	$problem_meta					= $wpdb->prefix . 'problem_meta';
 	$contest_meta					= $wpdb->prefix . 'contest_meta';
+	$solution_meta					= $wpdb->prefix . 'solution_meta';
 
    
 	if($wpdb->get_var("show tables like '$problem_meta'") != $problem_meta) {
@@ -160,6 +161,34 @@ function wpoj_active(){
 		  `language` text,
 		  PRIMARY KEY (`ID`),
 		  KEY `post_id` (`post_id`)
+		) $charset_collate;";
+	
+      $wpdb->query($sql);
+   }
+   
+	if($wpdb->get_var("show tables like '$solution_meta'") != $solution_meta) {
+      //className,valid,num 不知道干嘛的
+		$sql = "CREATE TABLE " . $contest_meta . " (
+		`solution_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+		  `problem_id` int(11) NOT NULL DEFAULT '0',
+		  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+		  `time` int(11) NOT NULL DEFAULT '0',
+		  `memory` int(11) NOT NULL DEFAULT '0',
+		  `className` varchar(20) NOT NULL DEFAULT '',
+		  `result` smallint(6) NOT NULL DEFAULT '0',
+		  `language` tinyint(4) NOT NULL DEFAULT '0',
+		  `ip` varchar(20) NOT NULL DEFAULT '',
+		  `contest_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+		  `valid` tinyint(4) NOT NULL DEFAULT '1',
+		  `num` tinyint(4) NOT NULL DEFAULT '-1',
+		  `code_length` int(11) NOT NULL DEFAULT '0',
+		  `judgetime` datetime DEFAULT NULL,
+		  `source` text NOT NULL,
+		  PRIMARY KEY (`ID`),
+		  KEY `uid` (`user_id`),
+		  KEY `pid` (`problem_id`),
+		  KEY `res` (`result`),
+		  KEY `cid` (`contest_id`)
 		) $charset_collate;";
 	
       $wpdb->query($sql);
