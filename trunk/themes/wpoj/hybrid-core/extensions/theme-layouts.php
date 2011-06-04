@@ -49,13 +49,8 @@ function theme_layouts_get_layout() {
 	$layout = '';
 
 	/* If viewing a singular post, check if a layout has been specified. */
-	if ( is_singular() ) {
-
-		/* Get the current post ID. */
-		$post_id = $wp_query->get_queried_object_id();
-
-		/* Get the post layout. */
-		$layout = get_post_layout( $post_id );
+	if(is_home() || is_archive() || is_single()){
+		$layout='2c-l';
 	}
 
 	/* Make sure the given layout is in the array of available post layouts for the theme. */
