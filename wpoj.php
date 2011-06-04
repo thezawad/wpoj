@@ -17,6 +17,7 @@ class OJ{
 		OJ::init_contst_includes();
 		add_action('init',array(__CLASS__,'_register_post_types'));
 		add_action("admin_menu",array(__CLASS__,'_register_admin_menu'));
+		add_action('wp_loaded','oj_maybe_redirect_url');
 		if ( is_admin() ) {
 			require_once (OJ_LIBRARY.'/class/meta_boxs.php');
 			OJ_meta_box::init();
@@ -30,6 +31,7 @@ class OJ{
 		define('OJ_CLASSES',OJ_LIBRARY.'/class');
 		include(OJ_FUNCTIONS.'/db.php');
 		include(OJ_FUNCTIONS.'/fps.php');
+		include(OJ_FUNCTIONS.'/url_locator.php');
 		include(OJ_CLASSES.'/objects.php');
 		register_theme_directory( WP_PLUGIN_DIR . '/wpoj/themes' );
 	}

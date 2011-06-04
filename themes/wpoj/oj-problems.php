@@ -1,14 +1,4 @@
 <?php
-/**
- * Template Name: problem-list-template
- *
- * A list page of custom post type
- *
- * @package WordPress
- * @subpackage Twenty_Ten
- * @since Twenty Ten 1.0
- */
-
 get_header(); ?>
 
 	<div id="content" role="main">
