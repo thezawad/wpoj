@@ -46,7 +46,7 @@ function retro_fitted_theme_setup() {
 	$prefix = hybrid_get_prefix();
 
 	/* Add theme support for core framework features. */
-	add_theme_support( 'hybrid-core-menus', array( 'primary' ) );
+	//add_theme_support( 'hybrid-core-menus', array( 'primary' ) );
 	add_theme_support( 'hybrid-core-sidebars', array( 'primary', 'secondary', 'before-content', 'after-content', 'after-singular' ) );
 	add_theme_support( 'hybrid-core-widgets' );
 	add_theme_support( 'hybrid-core-shortcodes' );
@@ -87,19 +87,16 @@ function retro_fitted_theme_setup() {
 	add_filter( 'next_comments_link_attributes', 'retro_fitted_next_comments_link_attributes' );
 	/* Add By Johnnychen */
 	add_action( 'wp','wpoj_top_menu');
-	add_filter('breadcrumb_trail_items', 'wpoj_add_top_menu');
+	add_filter( 'breadcrumb_trail_items', 'wpoj_add_top_menu');
+	add_filter( 'body_class','wpoj_set_top_page_class');
 }
 function wpoj_top_menu(){
-	global $wpoj_top_menu,$wp_query;
-	$wpoj_top_menu=new stdClass();
-	$wpoj_top_menu->menu_urls=array(
-		'problem'=>'<a href="http://alipress.org/?page_id=131">题库</a>'
-	);
+	global $top_page,$wp_query;
 	if(is_singular()){
 		$post = $wp_query->get_queried_object();
 		$post_type = $post -> post_type;
 		if(in_array($post_type, array('problem'))){
-			$wpoj_top_menu->page=$post_type;
+			$top_page=$post_type;
 		}
 	}elseif(is_archive()){
 		if ( is_tax() || is_category() || is_tag() ) {
@@ -107,19 +104,34 @@ function wpoj_top_menu(){
 			$taxonomy = get_taxonomy( $term->taxonomy );
 			$post_type =$taxonomy->object_type[0];
 			if(in_array($post_type, array('problem'))){
-				$wpoj_top_menu->page=$post_type;
+				$top_page=$post_type;
 			}
 		}
 	}
 }
 function wpoj_add_top_menu($args){
-	global $wpoj_top_menu;
-	if(in_array($wpoj_top_menu->page, array('problem'))){
+	global $top_page;
+	if (is_home()) return $args;
+	if (empty($top_page)){echo "<h1>wrong top_page(debug mode)</h1>";}
+	$page_urls=array(
+		'problem'=>'<a href="http://alipress.org/?oj=problems">Problems</a>',
+		'status' =>'<a href="http://alipress.org/?oj=status">Status</a>',
+	);
+	if(count($args)==1){
+		$args['trail_end']=$page_urls[$top_page];
+		return $args;
+	}
+	if(in_array($top_page, array('problem'))){
 		$first=$args[0];
 		array_shift($args);
-		$args=array_merge(array($first,$wpoj_top_menu->menu_urls[$wpoj_top_menu->page]),$args);
+		$args=array_merge(array($first,$page_urls[$top_page]),$args);
 	}
 	return $args;
+}
+function wpoj_set_top_page_class($classes){
+	global $top_page;
+	$classes[]='oj-'.$top_page;
+	return $classes;
 }
 /**
  * Custom breadcrumb trail arguments.
