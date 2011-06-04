@@ -13,8 +13,8 @@ class OJ_OBJECT{
 				'memory_limit' => 	array('name'=>'memory_limit','title'=> 'Memory Limit(M)','type'=>'text'),
 				'spj' =>			array('name'=> 'spj','title'=> 'Secial Judge' , 'type' => 'radio',
 											'options'=>array(
-													'default' => 'N', 
-													'values'=>array("Y","N"))
+													'default' => '0', 
+													'values'=>array('Y'=>"1",'N'=>"0"))
 												),
 				'source' => 		array('name' => 'source', 'title'=>'Source', 'type' => 'text'),
 			),
@@ -24,11 +24,10 @@ class OJ_OBJECT{
 				'end_time' =>		array('name'=>'end_time' , 'title' =>'End Time', 'type'=>'datetime',
 											'yy'=>"end_yy",'mm'=>'end_mm','dd'=>'end_dd','hh'=>'end_hh','mn'=>'end_mn'),
 				'private' => 		array('name'=>'private' , 'title' => 'Public' ,'type' => 'select',
-											'raw_options' =>array('public' => FALSE,'private' =>FALSE),
 											'options' =>array('public' => TRUE,'private' =>FALSE), 'multiple'=>false),
 				'language'=>		array('name'=>'language' , 'title'=> 'Language', 'type'=> 'select', 
-											'raw_options' =>array('C'=>FALSE,'C++'=>FALSE,'Pascal'=>FALSE,'JAVA'=>FALSE,'Ruby'=>FALSE,'Bash'=>FALSE,'Python'=>FALSE), 
-											'options' => array('C'=>true,'C++'=>true,'Pascal'=>true,'JAVA'=>true,'Ruby'=>true,'Bash'=>true,'Python'=>true), 'multiple'=>true),
+											'options' => array('C'=>true,'C++'=>true,'Pascal'=>true,'JAVA'=>true,'Ruby'=>true,'Bash'=>true,'Python'=>true), 
+											'multiple'=>true),
 			),
 		);
 }

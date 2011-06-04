@@ -142,8 +142,8 @@ function wpoj_post_meta_box_radio( $args = array(), $value = false ) {
 	<tr>
 		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
 		<td>
-			<?php foreach ( $args['options']['values'] as  $val ) { ?>
-				<?php echo $val; ?> <input <?php if ( $value == $val ) echo ' checked="checked"'; ?>type="radio" name="<?php echo $name; ?>" value="<?php echo $val; ?>" /> 
+			<?php foreach ( $args['options']['values'] as  $label => $val) { ?>
+				<?php echo $label; ?> <input <?php if ( $value == $val ) echo ' checked="checked"'; ?>type="radio" name="<?php echo $name; ?>" value="<?php echo $val; ?>" /> 
 			<?php } ?>
 		</td>
 	</tr>
@@ -155,11 +155,16 @@ function wpoj_post_meta_box_select( $args = array(), $value = false ) {
 	if($value) {
 		$value=explode(',', $value);
 		$ref_value=array();
+		$raw_options=array_keys($options);
+		foreach ($raw_options as $select){
+			$ref_value[$select]=false;
+		}
 		foreach ($value as $select){
 			$ref_value[$select]=true;
 		}
-		$options=array_merge($args['raw_options'],$ref_value);
-	}?>
+		$options=$ref_value;
+	}
+	?>
 	<tr>
 		<th style="width:10%;"><label for="<?php echo $name;?>"><?php echo $args['title']; ?></label></th>
 		<td>

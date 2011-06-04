@@ -38,7 +38,7 @@ function oj_import_problems(){
 				$problem_meta['hint'] = fps_getValue ( $searchNode, 'hint' );
 				$problem_meta['source'] = fps_getValue ( $searchNode, 'source' );
 				$problem_meta['spj'] = fps_getValue ( $searchNode, 'spj' );
-				$problem_meta['spj'] = trim($problem_meta['spj'])?'Y':'N';
+				$problem_meta['spj'] = trim($problem_meta['spj'])?'1':'0';
 
 				//$solutions = $searchNode->getElementsByTagName("solution");
 				
