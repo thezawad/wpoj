@@ -34,19 +34,22 @@ get_header(); // Loads the header.php template. ?>
 						<?php echo apply_atomic_shortcode( 'entry_title', '[entry-title]' ); ?>
 
 						<?php echo apply_atomic_shortcode( 'byline', '<div class="byline">' . __( 'By [entry-author] on [entry-published] [entry-edit-link before=" | "]', hybrid_get_textdomain() ) . '</div>' ); ?>
-
+						<div class="problem-section-title"><h3><span class="inner">Description</span></h3></div>
 						<div class="entry-content">
 							<?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', hybrid_get_textdomain() ) ); ?>
 							<?php wp_link_pages( array( 'before' => '<p class="page-links">' . __( 'Pages:', hybrid_get_textdomain() ), 'after' => '</p>' ) ); ?>
 						</div><!-- .entry-content -->
-
+						<div class="problem-section-title"><h3><span class="inner">Input</span></h3></div>
+						<div class="problem-section-content"><?php echo $post->input;?></div>
+						<div class="problem-section-title"><h3><span class="inner">Ouput</span></h3></div>
+						<div class="problem-section-content"><?php echo $post->output;?></div>
+						<div class="problem-section-title"><h3><span class="inner">Sample Input</span></h3></div>
+						<div class="problem-section-content"><?php echo $post->sample_input;?></div>
+						<div class="problem-section-title"><h3><span class="inner">Sample output</span></h3></div>
+						<div class="problem-section-content"><?php echo $post->sample_output;?></div>
 						<?php do_atomic( 'close_entry' ); // retro-fitted_close_entry ?>
 
 					</div><!-- .hentry -->
-					<div class="hentry"><?php echo $post->input;?></div>
-					<div class="hentry"><?php echo $post->output;?></div>
-					<div class="hentry"><pre><?php echo $post->sample_input;?></pre></div>
-					<div class="hentry"><pre><?php echo $post->sample_output;?></pre></div>
 					<?php do_atomic( 'after_entry' ); // retro-fitted_after_entry ?>
 
 					<?php get_sidebar( 'after-singular' ); // Loads the sidebar-after-singular.php template. ?>

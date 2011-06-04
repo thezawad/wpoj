@@ -1139,3 +1139,30 @@ body {
 	float: right;
 	width: 205px;
 	}
+/*
+ * problem
+ */
+div.problem-section-title{
+	background:url("images/problem_section_title.png") no-repeat;
+	height:42px;
+	display:inline-block;
+	margin-left:-33px;
+}
+div.problem-section-title h3{
+	background:url("images/problem_section_title.png") no-repeat right -50px;
+	height:42px;
+	padding-right:18px;
+	margin:0;
+	margin-left:7px;
+}
+div.problem-section-title span{
+	background-color:#15adf4;
+	display:block;
+	height:34px;
+	padding:0 20px;
+	line-height:32px;
+	font-size:18px;
+	color:#FFF;
+	font-family:"Times New Roman";
+}
+div.problem-section-content{ margin:15px 0;}
