@@ -2,10 +2,8 @@
 /*
  * wp-loaded hook callback
  */
-function oj_maybe_redirect_url(){
-	global $top_page,$page_urls,$oj_bread_trail;
-	$oj_bread_trail=array();
-	$page_urls=array(
+function oj_get_top_page(){
+	return array(
 		'problem'=>array(
 			'url'=>'<a href="/?oj=problems">Problems</a>',
 			'url_raw' => '/?oj=problems',
@@ -30,44 +28,45 @@ function oj_maybe_redirect_url(){
 			'url_raw' => '/?oj=addsolution'
 		)
 	);
+}
+function oj_maybe_redirect_url(){
+	global $oj,$oj_bread_trail;
+	$oj_bread_trail=array();
 	$page=$_GET['oj'];
-	if(empty($page)){
-		$top_page ='home';
-		return ;
-	}
+	if(empty($page)){return ;}
 	switch ($page){
 		case 'statusl':
-			$top_page='status';
+			$oj->context='status';
 			$oj_bread_trail['trail_end']='Status';
 			locate_template('oj-status-list.php',true);
 			exit(0);break;
 		case 'statusd':
 			if($_GET['title']){
-				$top_page='problem';
-				$oj_bread_trail[]=$page_urls['problem']['url'];
+				$oj->context='problem';
+				$oj_bread_trail[]=$oj->page['problem']['url'];
 				$oj_bread_trail[]='<a href="/?problem='.$_GET['title'].'">'.$_GET['title'].'</a>';
 				$oj_bread_trail['trail_end']='Problem Status';
 			}else{
-				$top_page='status';
-				$oj_bread_trail[]=$page_urls['status']['url'];
+				$oj->context='status';
+				$oj_bread_trail[]=$oj->page['status']['url'];
 				$oj_bread_trail['trail_end']='Status Detail';
 			}
 			locate_template('oj-status-detail.php',true);
 			exit(0);break;		
 		case 'problems':
-			$top_page='problem';
+			$oj->context='problem';
 			$oj_bread_trail['trail_end']='Problem';
 			locate_template('oj-problems.php',true);
 			exit(0);break;
 		case 'submitpage':
-			$top_page='problem';
-			$oj_bread_trail[]=$page_urls['problem']['url'];
+			$oj->context='problem';
+			$oj_bread_trail[]=$oj->page['problem']['url'];
 			$oj_bread_trail[]='<a href="/?problem='.$_GET['title'].'">'.$_GET['title'].'</a>';
 			$oj_bread_trail['trail_end']='Submit Solution';
 			locate_template('oj-submitpage.php',true);
 			exit(0);break;
 		case 'addsolution':
-			$top_page='home';
+			$oj->context='home';
 			require_once (dirname(dirname(dirname(__FILE__))).'/addsolution.php');
 			exit(0);break;
 	}

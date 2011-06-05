@@ -10,8 +10,8 @@ get_header(); ?>
 			</thead>
 			<tbody>
 			<?php
-			global $wp_query,$oj_context;
-			$oj_context="problems";
+			global $wp_query,$oj;
+			$oj->current_page="problems";
 			$posts=$wp_query->query(array("post_type" => "problem",'numberposts' =>20 ,'paged'=> trim($_GET['paged']),'orderby'=>'submit'));
 			foreach ($posts as $post):setup_postdata($post);?>
 				<tr>

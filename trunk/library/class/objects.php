@@ -1,7 +1,7 @@
 <?php
-class OJ_OBJECT{
-	static $fields =	array(
-			'problem' =>	array(
+function oj_get_objects(){
+	return array	(
+	'problem' =>	array(
 				'input' => 			array('name' =>'input' ,'title' =>'Input', 'type' =>'tinymce'),
 				'output' => 		array('name' =>'output' ,'title' =>'Output', 'type' =>'tinymce'),
 				'hint' =>			array('name' =>'hint' ,'title' =>'Hint', 'type' =>'tinymce'),
@@ -17,8 +17,8 @@ class OJ_OBJECT{
 													'values'=>array('Y'=>"1",'N'=>"0"))
 												),
 				'source' => 		array('name' => 'source', 'title'=>'Source', 'type' => 'text'),
-			),
-			'contest' =>	array(
+	),
+	'contest' =>	array(
 				'start_time'=>		array('name'=>'start_time', 'title'=>'Start Time', 'type' =>'datetime',
 											'yy'=>"start_yy",'mm'=>'start_mm','dd'=>'start_dd','hh'=>'start_hh','mn'=>'start_mn'),
 				'end_time' =>		array('name'=>'end_time' , 'title' =>'End Time', 'type'=>'datetime',
@@ -32,6 +32,6 @@ class OJ_OBJECT{
 											'options' => array('C'=>true,'C++'=>true,'Pascal'=>true,'Java'=>true,'Ruby'=>true,'Bash'=>true,'Python'=>true), 
 											'values' => array('C'=>0,'C++'=>1,'Pascal'=>2,'Java'=>3,'Ruby'=>4,'Bash'=>5,'Python'=>6), 
 											'multiple'=>true),
-			),
-		);
+	),
+				);
 }
