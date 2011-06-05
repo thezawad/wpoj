@@ -110,21 +110,16 @@ function wpoj_top_menu(){
 	}
 }
 function wpoj_add_top_menu($args){
-	global $top_page;
+	global $top_page,$page_urls,$oj_bread_trail;
 	if (is_home()) return $args;
 	if (empty($top_page)){echo "<h1>wrong top_page(debug mode)</h1>";}
-	$page_urls=array(
-		'problem'=>'<a href="http://alipress.org/?oj=problems">Problems</a>',
-		'status' =>'<a href="http://alipress.org/?oj=status">Status</a>',
-	);
 	if(count($args)==1){
-		$args['trail_end']=$page_urls[$top_page];
-		return $args;
+		return array_merge($args,$oj_bread_trail);
 	}
 	if(in_array($top_page, array('problem'))){
 		$first=$args[0];
 		array_shift($args);
-		$args=array_merge(array($first,$page_urls[$top_page]),$args);
+		$args=array_merge(array($first,$page_urls[$top_page]['url']),$args);
 	}
 	return $args;
 }

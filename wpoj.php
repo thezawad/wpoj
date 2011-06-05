@@ -67,7 +67,8 @@ class OJ{
 				'search_items' => 'Search Problems',
 				'not_found' => 'No problems found'
 			),
-			'has_archive' =>'problems'
+			'has_archive' =>'problems',
+
 		));
 		register_post_type("solution",array(
 			'public' => true,

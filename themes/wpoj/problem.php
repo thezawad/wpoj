@@ -28,7 +28,16 @@ get_header(); // Loads the header.php template. ?>
 					<?php do_atomic( 'before_entry' ); // retro-fitted_before_entry ?>
 
 					<div id="post-<?php the_ID(); ?>" class="<?php hybrid_entry_class(); ?>">
-
+					<?php 
+						global $page_urls;
+						$url_common_parm='&title='.$post->post_title.'&ID='.$post->ID;
+						$url_submit=$page_urls['submitpage']['url_raw'].$url_common_parm.'&language='.$_GET['language'];
+						$url_status=$page_urls['statusd']['url_raw'].$url_common_parm;
+					?>
+						<div class='problem-feature problem-feature-top'>
+							<a class="feature f-submit" href="<?php echo $url_submit;?>">Submit</a>
+							<a class="feature f-status" href="<?php echo $url_status;?>">Status</a>
+						</div>
 						<?php do_atomic( 'open_entry' ); // retro-fitted_open_entry ?>
 
 						<?php echo apply_atomic_shortcode( 'entry_title', '[entry-title]' ); ?>
@@ -48,7 +57,10 @@ get_header(); // Loads the header.php template. ?>
 						<div class="problem-section-title"><h3><span class="inner">Sample output</span></h3></div>
 						<div class="problem-section-content"><?php echo $post->sample_output;?></div>
 						<?php do_atomic( 'close_entry' ); // retro-fitted_close_entry ?>
-
+						<div class='problem-feature problem-feature-bottom'>
+							<a class="feature f-submit" href="<?php echo url_submit;?>">Submit</a>
+							<a class="feature f-status" href="<?php echo url_status;?>">Status</a>
+						</div>
 					</div><!-- .hentry -->
 					<?php do_atomic( 'after_entry' ); // retro-fitted_after_entry ?>
 
@@ -57,6 +69,7 @@ get_header(); // Loads the header.php template. ?>
 					<?php do_atomic( 'after_singular' ); // retro-fitted_after_singular ?>
 
 					<?php //comments_template( '/comments.php', true ); // Loads the comments.php template. ?>
+					
 
 				<?php endwhile; ?>
 
