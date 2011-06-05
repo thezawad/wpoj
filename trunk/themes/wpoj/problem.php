@@ -58,8 +58,8 @@ get_header(); // Loads the header.php template. ?>
 						<div class="problem-section-content"><?php echo $post->sample_output;?></div>
 						<?php do_atomic( 'close_entry' ); // retro-fitted_close_entry ?>
 						<div class='problem-feature problem-feature-bottom'>
-							<a class="feature f-submit" href="<?php echo url_submit;?>">Submit</a>
-							<a class="feature f-status" href="<?php echo url_status;?>">Status</a>
+							<a class="feature f-submit" href="<?php echo $url_submit;?>">Submit</a>
+							<a class="feature f-status" href="<?php echo $url_status;?>">Status</a>
 						</div>
 					</div><!-- .hentry -->
 					<?php do_atomic( 'after_entry' ); // retro-fitted_after_entry ?>
