@@ -126,7 +126,7 @@ function wpoj_active(){
 
    	$problem_meta					= $wpdb->prefix . 'problem_meta';
 	$contest_meta					= $wpdb->prefix . 'contest_meta';
-	$solution_meta					= $wpdb->prefix . 'solution_meta';
+	$solution_meta					= $wpdb->prefix . 'solution';
 	$solution_source				= $wpdb->prefix . 'solution_source';
 
    
@@ -172,12 +172,13 @@ function wpoj_active(){
    
 	if($wpdb->get_var("show tables like '$solution_meta'") != $solution_meta) {
       //className,valid,num 不知道干嘛的
-		$sql = "CREATE TABLE " . $contest_meta . " (
+		$sql = "CREATE TABLE " . $solution_meta . " (
 		`solution_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 		  `problem_id` int(11) NOT NULL DEFAULT '0',
 		  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
 		  `time` int(11) NOT NULL DEFAULT '0',
 		  `memory` int(11) NOT NULL DEFAULT '0',
+		  `in_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 		  `className` varchar(20) NOT NULL DEFAULT '',
 		  `result` smallint(6) NOT NULL DEFAULT '0',
 		  `language` tinyint(4) NOT NULL DEFAULT '0',
@@ -187,22 +188,24 @@ function wpoj_active(){
 		  `num` tinyint(4) NOT NULL DEFAULT '-1',
 		  `code_length` int(11) NOT NULL DEFAULT '0',
 		  `judgetime` datetime DEFAULT NULL,
-		  PRIMARY KEY (`ID`),
+		  PRIMARY KEY (`solution_id`),
 		  KEY `uid` (`user_id`),
 		  KEY `pid` (`problem_id`),
 		  KEY `res` (`result`),
 		  KEY `cid` (`contest_id`)
 		) $charset_collate;";
+		
+		$wpdb->query($sql);
 	}
 	
 	if($wpdb->get_var("show tables like '$solution_source'") != $solution_source) {
       //className,valid,num 不知道干嘛的
-		$sql = "CREATE TABLE " . $contest_meta . " (
-		CREATE TABLE IF NOT EXISTS `source_code` (
+		$sql = "CREATE TABLE " . $solution_source . " (
 		  `solution_id` int(11) NOT NULL,
 		  `source` text NOT NULL,
 		  PRIMARY KEY (`solution_id`)
 		) $charset_collate;";
+		
       $wpdb->query($sql);
    }
 	// check one table again, to be sure

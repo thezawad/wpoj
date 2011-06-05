@@ -14,7 +14,8 @@ function echo_language_select($langmask,$default){
 	echo '</select>';
 }
 ?>
-<?php 
+<?php
+	global $page_urls;
 	$problem_id=$_GET['pid'];
 	$contest_id=$_GET['cid'];
 	$solution_id=$_GET['sid'];
@@ -38,7 +39,7 @@ function echo_language_select($langmask,$default){
 			,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,syntax_selection,|, change_smooth_selection, highlight, reset_highlight, word_wrap, |, help"          
 	});
 	</script>
-	<form action="submit.php" method="post" class="solution-submit">
+	<form class="solution-submit" action="<?php echo $page_urls['addsolution']['url_raw'];?>" method="post" >
 		<input type="hidden" name="pid" value="<?=$problem_id?>">
 		<input type="hidden" name="cid" value="<?=$contest_id?>">
 		<input type="hidden" name="sid" value="<?=$solution_id?>">
