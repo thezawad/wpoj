@@ -31,7 +31,7 @@ get_header(); // Loads the header.php template. ?>
 					<?php 
 						global $page_urls;
 						$url_common_parm='&title='.$post->post_title.'&ID='.$post->ID;
-						$url_submit=$page_urls['submitpage']['url_raw'].$url_common_parm.'&language='.$_GET['language'];
+						$url_submit=$page_urls['submitpage']['url_raw'].$url_common_parm.'&langmask='.$_GET['langmask'];
 						$url_status=$page_urls['statusd']['url_raw'].$url_common_parm;
 					?>
 						<div class='problem-feature problem-feature-top'>
