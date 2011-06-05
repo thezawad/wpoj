@@ -1,10 +1,31 @@
 <?php 
-get_header();?>
-<center>
-<script language="Javascript" type="text/javascript" src="<?php echo THEME_URI;?>/edit_area/edit_area_full.js"></script>
-<script language="Javascript" type="text/javascript">
-
-editAreaLoader.init({
+get_header();
+function echo_language_select($langmask,$default){
+	echo '<select id="language" name="language">';
+	$lang=(~((int)$langmask))&127;
+	
+	if(($lang&1)>0) echo"	    <option value=0 ".( $default==0?"selected":"").">C</option>";
+	if(($lang&2)>0) echo"		<option value=1 ".( $default==1?"selected":"").">C++</option>";
+	if(($lang&4)>0) echo"		<option value=2 ".( $default==2?"selected":"").">Pascal</option>";
+	if(($lang&8)>0) echo"		<option value=3 ".( $default==3?"selected":"").">Java</option>";
+	if(($lang&16)>0) echo"		<option value=4 ".( $default==4?"selected":"").">Ruby</option>";
+	if(($lang&32)>0) echo"		<option value=5 ".( $default==5?"selected":"").">Bash</option>";
+	if(($lang&64)>0) echo"		<option value=6 ".( $default==6?"selected":"").">Python</option>";
+	echo '</select>';
+}
+?>
+<?php 
+	$problem_id=$_GET['pid'];
+	$contest_id=$_GET['cid'];
+	$solution_id=$_GET['sid'];
+	$source_code=oj_get_solution_source($solution_id);
+	if(isset($_GET['langmask'])) $langmask=$_GET['langmask'];  else	$langmask=0;
+	if(isset($_COOKIE['lastlang'])) $lastlang=$_COOKIE['lastlang'];	else $lastlang=1;
+?>
+<div id="content">
+	<script language="Javascript" type="text/javascript" src="<?php echo THEME_URI;?>/edit_area/edit_area_full.js"></script>
+	<script language="Javascript" type="text/javascript">
+	editAreaLoader.init({
 	        id: "source"            
 	        ,start_highlight: true 
 	        ,allow_resize: "both"
@@ -16,77 +37,25 @@ editAreaLoader.init({
 	        ,syntax_selection_allow: "basic,c,cpp,java,pas,perl,php,python,ruby"
 			,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,syntax_selection,|, change_smooth_selection, highlight, reset_highlight, word_wrap, |, help"          
 	});
-</script>
-<form action="submit.php" method="post" 
-<?if($OJ_LANG=="cn"){?>
- onsubmit="return checksource(document.getElementById('source').value);"
-<?}?> 
- >
-<?if (isset($id)){?>
-Problem <font color=blue><b><?=$id?></b></font><br>
-<input type='hidden' value='<?=$id?>' name="id">
-<?
-}else{
-$PID="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-if ($pid>25) $pid=25;
-?>
-Problem <font color=blue><b><?=$PID[$pid]?></b></font> of Contest <font color=blue><b><?=$cid?></b></font><br>
-<input type='hidden' value='<?=$cid?>' name="cid">
-<input type='hidden' value='<?=$pid?>' name="pid">
-<?}?>
-Language:
-<select id="language" name="language">
-<? 
-  if(isset($_GET['langmask']))
-	$langmask=$_GET['langmask'];
-  else
-	$langmask=$OJ_LANGMASK;
-	
-  $lang=(~((int)$langmask))&127;
- $C_=($lang&1)>0;
- $CPP_=($lang&2)>0;
- $P_=($lang&4)>0;
- $J_=($lang&8)>0;
- $R_=($lang&16)>0;
- $B_=($lang&32)>0;
- $Y_=($lang&64)>0;
- if(isset($_COOKIE['lastlang'])) $lastlang=$_COOKIE['lastlang'];
- else $lastlang=1;
- 
- if($C_) echo"	    <option value=0 ".( $lastlang==0?"selected":"").">C</option>";
- if($CPP_) echo"	<option value=1 ".( $lastlang==1?"selected":"").">C++</option>";
- if($P_) echo"		<option value=2 ".( $lastlang==2?"selected":"").">Pascal</option>";
- if($J_) echo"		<option value=3 ".( $lastlang==3?"selected":"").">Java</option>";
- if($R_) echo"		<option value=4 ".( $lastlang==4?"selected":"").">Ruby</option>";
- if($B_) echo"		<option value=5 ".( $lastlang==5?"selected":"").">Bash</option>";
- if($Y_) echo"		<option value=6 ".( $lastlang==6?"selected":"").">Python</option>";
- 
-?>
-</select>
-<br>
-<?php
- $src="";
- if(isset($_GET['sid'])){
-	$sid=intval($_GET['sid']);
-	$sql="SELECT * FROM `solution` WHERE `solution_id`=".$sid;
-	$result=mysql_query($sql);
-	$row=mysql_fetch_object($result);
-	if ($row && $row->user_id==$_SESSION['user_id']) $ok=true;
-	if (isset($_SESSION['source_browser'])) $ok=true;
-	if ($ok==true){
-		$sql="SELECT `source` FROM `source_code` WHERE `solution_id`='".$sid."'";
-		$result=mysql_query($sql);
-		$row=mysql_fetch_object($result);
-		$src=$row->source;
-	}
- }
-?>
-<textarea cols=80 rows=20 id="source" name="source"><?=$src?></textarea><br>
-
-<input type=submit value="Submit">
-<input type=reset value="Reset">
-</form>
-</center>
+	</script>
+	<form action="submit.php" method="post" class="solution-submit">
+		<input type="hidden" name="pid" value="<?=$problem_id?>">
+		<input type="hidden" name="cid" value="<?=$contest_id?>">
+		<input type="hidden" name="sid" value="<?=$solution_id?>">
+		<div>
+			Problem <span style="color:#00f; font-weight:bold;"><?=$problem_id?></span> : <?php echo $_GET['title'];?>
+		</div>
+		<div>
+			Language : <?php echo_language_select($langmask, $lastlang)?>
+		</div>
+		<div>
+			<textarea cols=80 rows=20 id="source" name="source"><?=$source_code?></textarea>
+		</div>
+		<div>
+			<input type="submit" value="Submit"><input type="reset" value="Reset">
+		</div>
+	</form>
+</div>
 <?php 
 get_footer();
 ?>

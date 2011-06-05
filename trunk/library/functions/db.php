@@ -113,4 +113,7 @@ function oj_fill_object_metas($object){
 	}
 	return $object;
 }
+function oj_get_solution_source($sid){
+	
+}
 ?>
