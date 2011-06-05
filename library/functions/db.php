@@ -31,11 +31,47 @@ function oj_query_orderby($orderby){
 	}
 	return $orderby;
 }
+function oj_save_metas($post_id,$object){
+	if ( !wp_verify_nonce( $_POST["{$object->post_type}_meta_box_nonce"], "{$object->post_type}_meta_box_nonce" ) ) return $post_id;
+	$object_metas=OJ_OBJECT::$fields[$object->post_type];
+	$filter_fields_keys=array();
+	foreach ($object_metas as $field){
+		$key=$field['name'];
+		switch ($field['type']){
+			case 'datetime':
+				$meta_value=intval($_POST[$field['yy']]).'-'.intval($_POST[$field['mm']]).'-'.intval($_POST[$field['dd']]).' '.intval($_POST[$field['hh']]).':'.intval($_POST[$field['mn']]).':00';
+				break;
+			case 'selectm':
+				if($field['name'] == 'langmask'){
+					 $lang=$_POST['langmask'];
+						$meta_value=0;
+						foreach($lang as $t){
+						$meta_value+=1<<$t;
+					} 
+					$meta_value=127&(~$meta_value);
+				}else{
+					$meta_value=implode(',',$_POST[$key]);
+				}
+				break;
+			case 'textarea':
+			case 'tinymce':
+			case 'text':
+				$filter_fields_keys[]=$key;
+			default:
+				$meta_value=$_POST[$key];
+		}
+		if ($key=="test_input" || $key=="test_output"){
+			continue;
+		}
+		$meta_to_save[$key]=$meta_value;
+	}
+	$data = apply_filters('wp_insert_post_data',$filter_fields_keys, $meta_to_save);
+	oj_save_object_metas($post_id,$object,$meta_to_save);
+}
 function oj_save_object_metas($post_id,$object,$meta_to_save){
 	global $wpdb;
 	$table=$wpdb->prefix . $object->post_type . '_meta';
 	$meta_to_save['post_id']=$post_id;
-	$data = apply_filters('wp_insert_post_data', array('input','output','sample_input','sample_output','hint','source'), $meta_to_save);
 	$exist=$wpdb->query("select ID from `{$table}` where post_id={$post_id}");
 	foreach ($meta_to_save as $key=>$value) {
 		if(is_string($value)){$meta_to_save[$key]="'".$value."'";}
