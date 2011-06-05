@@ -11,15 +11,16 @@ class OJ_meta_box{
 		add_action("add_meta_boxes", array(__CLASS__,"_register_meta_boxes"),10,2);
 	}
 	static function get_meta_box_args($post_type){
+		global $oj;
 		$meta_box_args=array(
 			'contest' =>array(
 				array(
 					'box' => array('id' =>'contest_meta_detail','title' => 'Contest Detail','callback' =>array(__CLASS__,'_meta_box_default'), 'context' => 'normal', 'priority' =>'default','callback_args' =>null),
 					'fields' => array(
-						'start_time'=> OJ_OBJECT::$fields['contest']['start_time'],
-						'end_time' => OJ_OBJECT::$fields['contest']['end_time'],
-						'private' => OJ_OBJECT::$fields['contest']['private'],
-						'langmask'=> OJ_OBJECT::$fields['contest']['langmask'],
+						'start_time'=> $oj->objects['contest']['start_time'],
+						'end_time' => $oj->objects['contest']['end_time'],
+						'private' => $oj->objects['contest']['private'],
+						'langmask'=> $oj->objects['contest']['langmask'],
 					)
 				),
 			),
@@ -27,32 +28,32 @@ class OJ_meta_box{
 				array(
 					'box' => array('id'=>'problem_meta_input_output_hint','title'=>'Input & Output & Hint','callback' =>array(__CLASS__,'_meta_box_default'),'context'=>'normal','priority'=>'default','callback_args' =>null),
 					'fields' =>array(
-						'input' => OJ_OBJECT::$fields['problem']['input'],
-						'output' => OJ_OBJECT::$fields['problem']['output'],
-						'hint' => OJ_OBJECT::$fields['problem']['hint'],
+						'input' => $oj->objects['problem']['input'],
+						'output' => $oj->objects['problem']['output'],
+						'hint' => $oj->objects['problem']['hint'],
 					)
 				),
 				array(
 					'box' => array('id'=>'problem_meta_sample','title'=>'Sample Data','callback' =>array(__CLASS__,'_meta_box_default'),'context'=>'normal','priority'=>'default','callback_args' =>null),
 					'fields' =>array(
-						'sample_input' => OJ_OBJECT::$fields['problem']['sample_input'],
-						'sample_output' => OJ_OBJECT::$fields['problem']['sample_output'],
+						'sample_input' => $oj->objects['problem']['sample_input'],
+						'sample_output' => $oj->objects['problem']['sample_output'],
 					)
 				),
 				array(
 					'box' => array('id'=>'problem_meta_test','title'=>'Test Data','callback' =>array(__CLASS__,'_meta_box_default'),'context'=>'normal','priority'=>'default','callback_args' =>null),
 					'fields' =>array(
-						'test_input' => OJ_OBJECT::$fields['problem']['test_input'],
-						'test_output' => OJ_OBJECT::$fields['problem']['test_output'],
+						'test_input' => $oj->objects['problem']['test_input'],
+						'test_output' => $oj->objects['problem']['test_output'],
 					)
 				),
 				array(
 					'box' => array('id' =>'problem_meta_detail','title' => 'Problem Detail','callback' =>array(__CLASS__,'_meta_box_default'), 'context' => 'side', 'priority' =>'core','callback_args' =>null),
 					'fields' => array(
-						'time_limit' => OJ_OBJECT::$fields['problem']['time_limit'],
-						'memory_limit' => OJ_OBJECT::$fields['problem']['memory_limit'],
-						'spj' => OJ_OBJECT::$fields['problem']['spj'],
-						'source' => OJ_OBJECT::$fields['problem']['source'],
+						'time_limit' => $oj->objects['problem']['time_limit'],
+						'memory_limit' => $oj->objects['problem']['memory_limit'],
+						'spj' => $oj->objects['problem']['spj'],
+						'source' => $oj->objects['problem']['source'],
 					)
 				),
 			)
@@ -206,11 +207,7 @@ function wpoj_post_meta_box_tinymce( $args = array(), $value = false ) {
 }
 function wpoj_post_meta_box_datetime( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] );
-	$yy="";
-	$mm="";
-	$dd="";
-	$hh="";
-	$mn="";
+	$yy="";	$mm="";	$dd="";	$hh="";	$mn="";
 	if($value==false && ($name ="start_time" || $name="end_time")){
 		date_default_timezone_set("PRC");
 		$value=date("Y-m-d H:i:s");
@@ -233,4 +230,5 @@ function wpoj_post_meta_box_datetime( $args = array(), $value = false ) {
 	</tr>
 	<?php
 }
+OJ_meta_box::init();
 ?>

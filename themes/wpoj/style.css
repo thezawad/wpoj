@@ -1055,8 +1055,12 @@ input[type='submit'],input[type='reset']{
 	text-indent:-2000px;
 	border:1px solid #FFF;
 }
+.singular-problem .problem-feature a.f-submit{
+	left:100px;
+}
 .singular-problem .problem-feature-top a{
 	border-width:0px 10px 30px 10px;
+	vertical-align:top;
 }
 .singular-problem .problem-feature-bottom a{
 	border-width:30px 10px 0px 10px;

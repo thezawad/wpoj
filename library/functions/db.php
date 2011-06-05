@@ -3,17 +3,17 @@ add_filter('posts_join_paged','oj_query_join',10,1);
 add_filter('posts_fields','oj_query_fields',10,1);
 add_filter('posts_orderby','oj_query_orderby');
 function oj_query_join($join){
-	global $oj_context,$wpdb;
-	switch ($oj_context){
+	global $oj,$wpdb;
+	switch ($oj->current_page){
 		case 'problems':
-			$join=' LEFT JOIN '.$wpdb->prefix.'problem_meta as meta ON meta.post_id='.$wpdb->prefix.'posts.ID ';
+			$join=' LEFT JOIN '.$oj->prefix.'problem_meta as meta ON meta.post_id='.$wpdb->prefix.'posts.ID ';
 			break;
 	}
 	return $join;
 }
 function oj_query_fields($fields){
-	global $oj_context,$wpdb;
-	switch ($oj_context){
+	global $oj,$wpdb;
+	switch ($oj->current_page){
 		case 'problems':
 			$fields = $fields . ', meta.source , meta.accepted , meta.submit';
 			break;
@@ -21,8 +21,8 @@ function oj_query_fields($fields){
 	return $fields;
 }
 function oj_query_orderby($orderby){
-	global $oj_context,$wpdb;
-	switch ($oj_context){
+	global $oj,$wpdb;
+	switch ($oj->current_page){
 		case 'problems':
 			$new_orderby=trim($_GET['orderby']);
 			$allowed_keys=array('source','accedpted','submit');
@@ -32,8 +32,9 @@ function oj_query_orderby($orderby){
 	return $orderby;
 }
 function oj_save_metas($post_id,$object){
+	global $oj;
 	if ( !wp_verify_nonce( $_POST["{$object->post_type}_meta_box_nonce"], "{$object->post_type}_meta_box_nonce" ) ) return $post_id;
-	$object_metas=OJ_OBJECT::$fields[$object->post_type];
+	$object_metas=$oj->objects[$object->post_type];
 	$filter_fields_keys=array();
 	foreach ($object_metas as $field){
 		$key=$field['name'];
@@ -69,8 +70,8 @@ function oj_save_metas($post_id,$object){
 	oj_save_object_metas($post_id,$object,$meta_to_save);
 }
 function oj_save_object_metas($post_id,$object,$meta_to_save){
-	global $wpdb;
-	$table=$wpdb->prefix . $object->post_type . '_meta';
+	global $wpdb,$oj;
+	$table=$oj->prefix . $object->post_type . '_meta';
 	$meta_to_save['post_id']=$post_id;
 	$exist=$wpdb->query("select ID from `{$table}` where post_id={$post_id}");
 	foreach ($meta_to_save as $key=>$value) {
@@ -93,16 +94,16 @@ function oj_save_object_metas($post_id,$object,$meta_to_save){
 	$wpdb->query($sql);
 }
 function oj_delete_object_metas($post_id){
-	global $wpdb;
+	global $wpdb,$oj;
 	$object=get_post($post_id);
-	$table=$wpdb->prefix . $object->post_type . '_meta';
+	$table=$oj->prefix . $object->post_type . '_meta';
 	$sql= "DELETE FROM `{$table}` WHERE post_id={$post_id}";
 	$wpdb->query($sql);
 }
 function oj_fill_object_metas($object){
-	global $wpdb;
+	global $wpdb,$oj;
 	if(!$object) return false;
-	$table=$wpdb->prefix . $object->post_type . '_meta';
+	$table=$oj->prefix . $object->post_type . '_meta';
 	$sql="SELECT * FROM `{$table}` WHERE post_id = {$object->ID}";
 	$object_meta=$wpdb->get_row($sql);
 	if(!$object_meta) return $object;

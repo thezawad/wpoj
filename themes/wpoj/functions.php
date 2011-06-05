@@ -91,12 +91,12 @@ function retro_fitted_theme_setup() {
 	add_filter( 'body_class','wpoj_set_top_page_class');
 }
 function wpoj_top_menu(){
-	global $top_page,$wp_query;
+	global $oj,$wp_query;
 	if(is_singular()){
 		$post = $wp_query->get_queried_object();
 		$post_type = $post -> post_type;
 		if(in_array($post_type, array('problem'))){
-			$top_page=$post_type;
+			$oj->context=$post_type;
 		}
 	}elseif(is_archive()){
 		if ( is_tax() || is_category() || is_tag() ) {
@@ -104,28 +104,28 @@ function wpoj_top_menu(){
 			$taxonomy = get_taxonomy( $term->taxonomy );
 			$post_type =$taxonomy->object_type[0];
 			if(in_array($post_type, array('problem'))){
-				$top_page=$post_type;
+				$oj->context=$post_type;
 			}
 		}
 	}
 }
 function wpoj_add_top_menu($args){
-	global $top_page,$page_urls,$oj_bread_trail;
+	global $oj,$oj_bread_trail;
 	if (is_home()) return $args;
-	if (empty($top_page)){echo "<h1>wrong top_page(debug mode)</h1>";}
+	if (empty($oj->context)){echo "<h1>wrong top_page(debug mode)</h1>";}
 	if(count($args)==1){
 		return array_merge($args,$oj_bread_trail);
 	}
-	if(in_array($top_page, array('problem'))){
+	if(in_array($oj->context, array('problem'))){
 		$first=$args[0];
 		array_shift($args);
-		$args=array_merge(array($first,$page_urls[$top_page]['url']),$args);
+		$args=array_merge(array($first,$oj->page[$oj->context]['url']),$args);
 	}
 	return $args;
 }
 function wpoj_set_top_page_class($classes){
-	global $top_page;
-	$classes[]='oj-'.$top_page;
+	global $oj;
+	$classes[]='oj-'.$oj->context;
 	return $classes;
 }
 /**

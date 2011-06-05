@@ -13,204 +13,57 @@ Copyright (C) 2010 johnnychen(johnnychq@gmail.com)
 GPL V2
 */	
 class OJ{
+	var $prefix='oj_';
+	var $page;
+	var $current_page;
+	var $context="home";
+	var $objects;
 	function init(){
-		OJ::init_contst_includes();
-		add_action('init',array(__CLASS__,'_register_post_types'));
-		add_action("admin_menu",array(__CLASS__,'_register_admin_menu'));
-		add_action('wp_loaded','oj_maybe_redirect_url');
-		if ( is_admin() ) {
-			require_once (OJ_LIBRARY.'/class/meta_boxs.php');
-			OJ_meta_box::init();
-			add_action('save_post','oj_save_metas',10,2);
-			add_action('delete_post','oj_delete_object_metas',10,1);
-		}
+		$this->init_consts();
+		$this->include_functions();
+		$this->include_classes();
+		register_activation_hook(__FILE__,'oj_active');
+		add_action('plugins_loaded', array($this,'_init'));
 	}
-	function init_contst_includes(){
-		define('OJ_LIBRARY',dirname(__FILE__).'/library');
+	function init_consts(){
+		define('OJ_HOME', dirname(__FILE__));
+		define('OJ_LIBRARY',OJ_HOME.'/library');
+		define('OJ_THEMES',OJ_HOME.'/themes');
 		define('OJ_FUNCTIONS',OJ_LIBRARY.'/functions');
 		define('OJ_CLASSES',OJ_LIBRARY.'/class');
-		include(OJ_FUNCTIONS.'/db.php');
-		include(OJ_FUNCTIONS.'/fps.php');
-		include(OJ_FUNCTIONS.'/url_locator.php');
-		include(OJ_CLASSES.'/objects.php');
-		register_theme_directory( WP_PLUGIN_DIR . '/wpoj/themes' );
 	}
-	function _register_admin_menu(){
-		add_submenu_page('edit.php?post_type=problem', 'Import Problems', 'Import Problems', 6, 'import_problems','oj_import_problems');
+	function include_functions(){
+		require_once(OJ_FUNCTIONS.'/init.php');
+		require_once(OJ_FUNCTIONS.'/url_locator.php');
+		require_once(OJ_FUNCTIONS.'/db.php');
+		if(is_admin()){
+			require_once(OJ_FUNCTIONS.'/fps.php');
+		}
 	}
-	function _register_post_types(){
-		/* register post types */
-		register_post_type("contest",array(
-			'public' => true,
-			'labels' => array(
-				'name' => 'Contests',
-				'singular_name' => 'Contest',
-				'search_items' =>'Search Contests',
-				'new_item' => 'New Contest',
-				'edit_item' => 'Edit Contest',
-				'view_item' => 'View Contest',
-				'add_new_item' => 'Add New Contest',
-				'not_found' => 'No contests found'
-			),
-			'has_archive' => 'contests'
-		));
-		
-		register_post_type("problem",array(
-			'public' => true,
-			'labels' => array(
-				'name' => 'Problems',
-				'singular_name' => 'Problem',
-				'new_item' => 'New Problem',
-				'edit_item' => 'Edit Problem',
-				'view_item'	=> 'View Problem',
-				'add_new_item' => 'Add New Problem',
-				'search_items' => 'Search Problems',
-				'not_found' => 'No problems found'
-			),
-			'has_archive' =>'problems',
-
-		));
-		register_post_type("solution",array(
-			'public' => true,
-			'labels' => array(
-				'name' => 'Solutions',
-				'singular_name' => 'Solution',
-				'search_items' => 'Search solutions',
-				'not_found' => 'No solutions found'
-			)
-		));
-		/* register post types connections*/
-		p2p_register_connection_type(array(
-			'from' => 'contest',
-			'to' => 'problem',
-			'reciprocal' => true,
-			'prevent_duplicates'=> false,
-			'title' => array('from'=>'Include Prolems','to'=>'Included Contest')
-		));
-		p2p_register_connection_type('solution','problem');
-		/* register post types taxonomies */
-		register_taxonomy("problem_cat", "problem",array(
-			'public' => true,
-			'labels' => array(
-				'name'=>'Problem Categories',
-				'singular_name'=>'Problem Category',
-			),
-			'hierarchical'=> true
-		));
-		register_taxonomy("problem_tag", "problem",array(
-			'public' => true,
-			'labels' => array(
-				'name'=>'Problem Tags',
-				'singular_name'=>'Problem Tag',
-			),
-			'hierarchical'=> false
-		));
+	function include_classes(){
+		require_once(OJ_CLASSES.'/objects.php');
+		if(is_admin()){
+			require_once (OJ_CLASSES.'/meta_boxs.php');
+		}
 	}
+	function _init(){
+		register_theme_directory( OJ_THEMES);
+		add_action('init',array($this,'register_core_components'));
+		add_action('init',array($this,'register_core_vars'));
+		add_action('wp_loaded','oj_maybe_redirect_url');
+	}
+	function register_core_components(){
+		oj_register_post_types();
+		if(is_admin()){
+			add_action("admin_menu",'oj_register_admin_menu');
+		}
+	}
+	function register_core_vars(){
+		$this->page=oj_get_top_page();
+		$this->objects=oj_get_objects();
+	}
+	
 }
-add_action('plugins_loaded', array('OJ','init'));
-register_activation_hook(__FILE__,'wpoj_active');
-function wpoj_active(){
-	global $wpdb;
-	// Check for capability
-	if ( !current_user_can('activate_plugins') ) 
-		return;
-	
-	
-	// add charset & collate like wp core
-	$charset_collate = '';
-
-	if ( ! empty($wpdb->charset) )
-		$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
-	if ( ! empty($wpdb->collate) )
-		$charset_collate .= " COLLATE $wpdb->collate";
-
-   	$problem_meta					= $wpdb->prefix . 'problem_meta';
-	$contest_meta					= $wpdb->prefix . 'contest_meta';
-	$solution_meta					= $wpdb->prefix . 'solution';
-	$solution_source				= $wpdb->prefix . 'solution_source';
-
-   
-	if($wpdb->get_var("show tables like '$problem_meta'") != $problem_meta) {
-      
-		$sql = "CREATE TABLE " . $problem_meta . " (
-		`ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-		  `post_id` bigint(20) unsigned NOT NULL DEFAULT '0',
-		  `input` text,
-		  `output` text,
-		  `sample_input` text,
-		  `sample_output` text,
-		  `spj` char(1) NOT NULL DEFAULT '0',
-		  `hint` text,
-		  `source` varchar(100) DEFAULT NULL,
-		  `time_limit` int(11) NOT NULL DEFAULT '0',
-		  `memory_limit` int(11) NOT NULL DEFAULT '0',
-		  `accepted` int(11) DEFAULT '0',
-		  `submit` int(11) DEFAULT '0',
-		  PRIMARY KEY (`ID`),
-		  KEY `post_id` (`post_id`)
-		) $charset_collate;";
-	
-      $wpdb->query($sql);
-      echo $sql;
-    }
-
-	if($wpdb->get_var("show tables like '$contest_meta'") != $contest_meta) {
-      
-		$sql = "CREATE TABLE " . $contest_meta . " (
-		`ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-		  `post_id` bigint(20) unsigned NOT NULL DEFAULT '0',
-		  `start_time` datetime DEFAULT NULL,
-		  `end_time` datetime DEFAULT NULL,
-		  `private` text,
-		  `langmask` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'bits for LANG to mask',
-		  PRIMARY KEY (`ID`),
-		  KEY `post_id` (`post_id`)
-		) $charset_collate;";
-	
-      $wpdb->query($sql);
-   }
-   
-	if($wpdb->get_var("show tables like '$solution_meta'") != $solution_meta) {
-      //className,valid,num 不知道干嘛的
-		$sql = "CREATE TABLE " . $solution_meta . " (
-		`solution_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-		  `problem_id` int(11) NOT NULL DEFAULT '0',
-		  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
-		  `time` int(11) NOT NULL DEFAULT '0',
-		  `memory` int(11) NOT NULL DEFAULT '0',
-		  `in_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-		  `className` varchar(20) NOT NULL DEFAULT '',
-		  `result` smallint(6) NOT NULL DEFAULT '0',
-		  `language` tinyint(4) NOT NULL DEFAULT '0',
-		  `ip` varchar(20) NOT NULL DEFAULT '',
-		  `contest_id` bigint(20) unsigned NOT NULL DEFAULT '0',
-		  `valid` tinyint(4) NOT NULL DEFAULT '1',
-		  `num` tinyint(4) NOT NULL DEFAULT '-1',
-		  `code_length` int(11) NOT NULL DEFAULT '0',
-		  `judgetime` datetime DEFAULT NULL,
-		  PRIMARY KEY (`solution_id`),
-		  KEY `uid` (`user_id`),
-		  KEY `pid` (`problem_id`),
-		  KEY `res` (`result`),
-		  KEY `cid` (`contest_id`)
-		) $charset_collate;";
-		
-		$wpdb->query($sql);
-	}
-	
-	if($wpdb->get_var("show tables like '$solution_source'") != $solution_source) {
-      //className,valid,num 不知道干嘛的
-		$sql = "CREATE TABLE " . $solution_source . " (
-		  `solution_id` int(11) NOT NULL,
-		  `source` text NOT NULL,
-		  PRIMARY KEY (`solution_id`)
-		) $charset_collate;";
-		
-      $wpdb->query($sql);
-   }
-	// check one table again, to be sure
-	if($wpdb->get_var("show tables like '$contest_meta'")!= $contest_meta) {
-		update_option( "ngg_init_check", __('NextGEN Gallery : Tables could not created, please check your database settings',"nggallery") );
-		return;
-	}
-}
+global $oj;
+$oj=new OJ();
+$oj->init();
