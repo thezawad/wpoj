@@ -1,28 +1,4 @@
 <?php
-function oj_save_metas($post_id,$object){
-	if ( !wp_verify_nonce( $_POST["{$object->post_type}_meta_box_nonce"], "{$object->post_type}_meta_box_nonce" ) ) return $post_id;
-	$object_metas=OJ_OBJECT::$fields[$object->post_type];
-
-	foreach ($object_metas as $field){
-		$key=$field['name'];
-		switch ($field['type']){
-			case 'datetime':
-				$meta_value=intval($_POST[$field['yy']]).'-'.intval($_POST[$field['mm']]).'-'.intval($_POST[$field['dd']]).' '.intval($_POST[$field['hh']]).':'.intval($_POST[$field['mn']]).':00';
-				break;
-			case 'select':
-				if(!is_array($_POST[$key])) $_POST[$key]=array($_POST[$key]); 
-				$meta_value=implode(',',$_POST[$key]);
-				break;
-			default:
-				$meta_value=$_POST[$key];
-		}
-		if ($key=="test_input" || $key=="test_output"){
-			continue;
-		}
-		$meta_to_save[$key]=$meta_value;
-	}
-	oj_save_object_metas($post_id,$object,$meta_to_save);
-}
 class OJ_meta_box{
 	static $_object_nonce=array(
 		'problem' => true,
@@ -43,7 +19,7 @@ class OJ_meta_box{
 						'start_time'=> OJ_OBJECT::$fields['contest']['start_time'],
 						'end_time' => OJ_OBJECT::$fields['contest']['end_time'],
 						'private' => OJ_OBJECT::$fields['contest']['private'],
-						'language'=> OJ_OBJECT::$fields['contest']['language'],
+						'langmask'=> OJ_OBJECT::$fields['contest']['langmask'],
 					)
 				),
 			),
@@ -138,7 +114,7 @@ class OJ_meta_box{
 }
 function wpoj_post_meta_box_radio( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); 
-	if($args['options']['default']&&!value) $value=$args['options']['default'];	?>
+	if(!$value && $args['options']['default']) $value=$args['options']['default'];	?>
 	<tr>
 		<th style="width:10%;"><label for="<?php echo $name; ?>"><?php echo $args['title']; ?></label></th>
 		<td>
@@ -151,26 +127,53 @@ function wpoj_post_meta_box_radio( $args = array(), $value = false ) {
 }
 function wpoj_post_meta_box_select( $args = array(), $value = false ) {
 	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); 
+	if(!$value && $args['options']['default']) $value=$args['options']['default'];	?>
+	<tr>
+		<th style="width:10%;"><label for="<?php echo $name;?>"><?php echo $args['title']; ?></label></th>
+		<td>
+		<select name="<?php echo $name; ?>">
+		<?php foreach ( $args['options']['values'] as  $label => $val ) { ?>
+			<option value="<?php echo $val;?>" <?php if($value == $val) echo ' selected="selected"';?>><?php echo $label;?></option>
+		<?php } ?>
+		</select>
+		</td>
+	</tr>
+	<?php
+}
+function wpoj_post_meta_box_selectm( $args = array(), $value = false ) {
+	$name = preg_replace( "/[^A-Za-z_-]/", '-', $args['name'] ); 
 	$options=$args['options'];
 	if($value) {
-		$value=explode(',', $value);
-		$ref_value=array();
-		$raw_options=array_keys($options);
-		foreach ($raw_options as $select){
-			$ref_value[$select]=false;
+		if($args['name']=='langmask'){
+			$lang=(~((int)$value))&127;
+			$options=array();
+			($lang&1)>0 ? $options['C']=true : $options['C']=false;
+			($lang&2)>0 ? $options['C++']=true : $options['C++']=false;
+			($lang&4)>0 ? $options['Pascal']=true : $options['Pascal']=false;
+			($lang&8)>0 ? $options['Java']=true : $options['Java']=false;
+			($lang&16)>0 ? $options['Ruby']=true : $options['Ruby']=false;
+			($lang&32)>0 ? $options['Bash']=true : $options['Bash']=false;
+			($lang&64)>0 ? $options['Python']=true : $options['Python']=false;
+		}else{
+			$value=explode(',', $value);
+			$ref_value=array();
+			$raw_options=array_keys($options);
+			foreach ($raw_options as $select){
+				$ref_value[$select]=false;
+			}
+			foreach ($value as $select){
+				$ref_value[$select]=true;
+			}
+			$options=$ref_value;
 		}
-		foreach ($value as $select){
-			$ref_value[$select]=true;
-		}
-		$options=$ref_value;
 	}
 	?>
 	<tr>
 		<th style="width:10%;"><label for="<?php echo $name;?>"><?php echo $args['title']; ?></label></th>
 		<td>
-		<select name="<?php echo $name;if($args['multiple']) echo '[]'; ?>" <?php if($args['multiple']) echo 'multiple="multiple"';?>>
+		<select name="<?php echo $name;?>[]" multiple="multiple">
 		<?php foreach ( $options as  $option => $flag ) { ?>
-			<option value="<?php echo $option;?>" <?php if($flag) echo ' selected="selected"';?>><?php echo $option;?></option>
+			<option value="<?php echo $args['values'][$option];?>" <?php if($flag) echo ' selected="selected"';?>><?php echo $option;?></option>
 		<?php } ?>
 		</select>
 		</td>

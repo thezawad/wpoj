@@ -161,7 +161,7 @@ function wpoj_active(){
 		  `start_time` datetime DEFAULT NULL,
 		  `end_time` datetime DEFAULT NULL,
 		  `private` text,
-		  `language` text,
+		  `langmask` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'bits for LANG to mask',
 		  PRIMARY KEY (`ID`),
 		  KEY `post_id` (`post_id`)
 		) $charset_collate;";

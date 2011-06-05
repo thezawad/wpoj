@@ -24,9 +24,13 @@ class OJ_OBJECT{
 				'end_time' =>		array('name'=>'end_time' , 'title' =>'End Time', 'type'=>'datetime',
 											'yy'=>"end_yy",'mm'=>'end_mm','dd'=>'end_dd','hh'=>'end_hh','mn'=>'end_mn'),
 				'private' => 		array('name'=>'private' , 'title' => 'Public' ,'type' => 'select',
-											'options' =>array('public' => TRUE,'private' =>FALSE), 'multiple'=>false),
-				'language'=>		array('name'=>'language' , 'title'=> 'Language', 'type'=> 'select', 
-											'options' => array('C'=>true,'C++'=>true,'Pascal'=>true,'JAVA'=>true,'Ruby'=>true,'Bash'=>true,'Python'=>true), 
+											'options' =>array(
+													'default' =>'0',
+													'values' => array('public'=>'0','private'=>'1'))
+												),
+				'langmask'=>		array('name'=>'langmask' , 'title'=> 'Language', 'type'=> 'selectm',
+											'options' => array('C'=>true,'C++'=>true,'Pascal'=>true,'Java'=>true,'Ruby'=>true,'Bash'=>true,'Python'=>true), 
+											'values' => array('C'=>0,'C++'=>1,'Pascal'=>2,'Java'=>3,'Ruby'=>4,'Bash'=>5,'Python'=>6), 
 											'multiple'=>true),
 			),
 		);
