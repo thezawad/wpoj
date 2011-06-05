@@ -127,6 +127,7 @@ function wpoj_active(){
    	$problem_meta					= $wpdb->prefix . 'problem_meta';
 	$contest_meta					= $wpdb->prefix . 'contest_meta';
 	$solution_meta					= $wpdb->prefix . 'solution_meta';
+	$solution_source				= $wpdb->prefix . 'solution_source';
 
    
 	if($wpdb->get_var("show tables like '$problem_meta'") != $problem_meta) {
@@ -186,17 +187,24 @@ function wpoj_active(){
 		  `num` tinyint(4) NOT NULL DEFAULT '-1',
 		  `code_length` int(11) NOT NULL DEFAULT '0',
 		  `judgetime` datetime DEFAULT NULL,
-		  `source` text NOT NULL,
 		  PRIMARY KEY (`ID`),
 		  KEY `uid` (`user_id`),
 		  KEY `pid` (`problem_id`),
 		  KEY `res` (`result`),
 		  KEY `cid` (`contest_id`)
 		) $charset_collate;";
+	}
 	
+	if($wpdb->get_var("show tables like '$solution_source'") != $solution_source) {
+      //className,valid,num 不知道干嘛的
+		$sql = "CREATE TABLE " . $contest_meta . " (
+		CREATE TABLE IF NOT EXISTS `source_code` (
+		  `solution_id` int(11) NOT NULL,
+		  `source` text NOT NULL,
+		  PRIMARY KEY (`solution_id`)
+		) $charset_collate;";
       $wpdb->query($sql);
    }
-
 	// check one table again, to be sure
 	if($wpdb->get_var("show tables like '$contest_meta'")!= $contest_meta) {
 		update_option( "ngg_init_check", __('NextGEN Gallery : Tables could not created, please check your database settings',"nggallery") );
