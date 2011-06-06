@@ -31,7 +31,7 @@
 #include <sys/stat.h>
 #include <signal.h>
 
-static int DEBUG=0;
+static int DEBUG=1;
 #define BUFFER_SIZE 1024
 #define LOCKFILE "/var/run/judged.pid"
 #define LOCKMODE (S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
@@ -165,7 +165,7 @@ void init_mysql_conf() {
 		read_buf(buf,"OJ_HTTP_PASSWORD",http_password);
 		
 	}
-	sprintf(query,"SELECT solution_id FROM solution WHERE result<2 and MOD(solution_id,%d)=%d ORDER BY result ASC,solution_id ASC limit %d",oj_tot,oj_mod,max_running*2);
+	sprintf(query,"SELECT solution_id FROM oj_solution WHERE result<2 and MOD(solution_id,%d)=%d ORDER BY result ASC,solution_id ASC limit %d",oj_tot,oj_mod,max_running*2);
 	sleep_tmp=sleep_time;
 }
 
@@ -188,11 +188,11 @@ void run_client(int runid,int clientid){
 	//buf[0]=clientid+'0'; buf[1]=0;
 	sprintf(buf,"%d",clientid);
 	sprintf(runidstr,"%d",runid);
-	//write_log("sid=%s\tclient=%s\toj_home=%s\n",runidstr,buf,oj_home);
+	write_log("sid=%s\tclient=%s\toj_home=%s\n",runidstr,buf,oj_home);
 	if (!DEBUG)
-		execl("/usr/bin/judge_client","/usr/bin/judge_client",runidstr,buf,oj_home,NULL);
+		execl("/usr/bin/judge_client_wpoj","/usr/bin/judge_client_wpoj",runidstr,buf,oj_home,NULL);
 	else
-		execl("/usr/bin/judge_client","/usr/bin/judge_client",runidstr,buf,oj_home,"debug",NULL);
+		execl("/usr/bin/judge_client_wpoj","/usr/bin/judge_client_wpoj",runidstr,buf,oj_home,"debug",NULL);
 
 
 	//exit(0);
