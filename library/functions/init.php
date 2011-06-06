@@ -61,6 +61,14 @@ function oj_register_post_types(){
 		),
 		'hierarchical'=> true
 	));
+	register_taxonomy("fps_cat", "problem",array(
+		'public' => true,
+		'labels' => array(
+			'name'=>'FPS Categores',
+			'singular_name'=>'FPS Category',
+		),
+		'hierarchical'=> true
+	));
 	register_taxonomy("problem_tag", "problem",array(
 		'public' => true,
 		'labels' => array(
