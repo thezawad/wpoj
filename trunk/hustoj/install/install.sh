@@ -1,6 +1,6 @@
 #!/bin/bash
 #before install check DB setting in 
-#	judge.conf 
+#	judge_wpoj.conf
 #	hustoj-read-only/web/include/db_info.inc.php
 #	and down here
 #and run this with root
@@ -41,7 +41,7 @@ sudo    mkdir /home/judge/run0
 sudo    mkdir /home/judge/run1
 sudo    mkdir /home/judge/run2
 sudo    mkdir /home/judge/run3
-sudo cp java0.policy  judge.conf /home/judge/etc
+sudo cp java0.policy  judge_wpoj.conf /home/judge/etc
 sudo chown -R judge /home/judge
 sudo chgrp -R www-data /home/judge/data
 sudo chgrp -R root /home/judge/etc /home/judge/run?

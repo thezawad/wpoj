@@ -145,7 +145,7 @@ void init_mysql_conf() {
 	sleep_time=3;
 	oj_tot=1;
 	oj_mod=0;
-	fp = fopen("./etc/judge.conf", "r");
+	fp = fopen("./etc/judge_wpoj.conf", "r");
 	while (fgets(buf, BUFFER_SIZE - 1, fp)) {
 		buf[strlen(buf) - 1] = 0;
 		read_buf(buf,"OJ_HOST_NAME",host_name);	
