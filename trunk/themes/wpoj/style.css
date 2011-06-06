@@ -1059,8 +1059,10 @@ input[type='submit'],input[type='reset']{
 	left:100px;
 }
 .singular-problem .problem-feature-top a{
-	border-width:0px 10px 30px 10px;
+	border-width:0;
+	padding-top:15px;
 	vertical-align:top;
+	margin-left:20px;
 }
 .singular-problem .problem-feature-bottom a{
 	border-width:30px 10px 0px 10px;

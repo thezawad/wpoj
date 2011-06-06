@@ -1,18 +1,18 @@
 <?php
 get_header(); ?>
 
-	<div id="content" role="main">
+	<div id="content" class="hentry" role="main">
 			<table>
 			<thead>
 				<tr>
-				<th>Problem ID</th><th>Title</th><th>Source</th><th>AC</th><th>Submit</th><th>Category</th><th>Tagged</th>
+				<th>Problem ID</th><th>Title</th><th>Source</th><th>AC</th><th>Submit</th><th>FPS Category</th><th>Tagged</th>
 				</tr>
 			</thead>
 			<tbody>
 			<?php
 			global $wp_query,$oj;
 			$oj->current_page="problems";
-			$posts=$wp_query->query(array("post_type" => "problem",'numberposts' =>20 ,'paged'=> trim($_GET['paged']),'orderby'=>'submit'));
+			$posts=$wp_query->query(array("post_type" => "problem",'posts_per_page' =>20 ,'paged'=> trim($_GET['paged']),'orderby'=>'submit'));
 			foreach ($posts as $post):setup_postdata($post);?>
 				<tr>
 					<td><?php echo $post->ID;?></td>
@@ -20,7 +20,7 @@ get_header(); ?>
 					<td><?php echo $post->source;?></td>
 					<td><?php echo $post->accepted;?></td>
 					<td><?php echo $post->submit;?></td>
-					<td><?php echo get_the_term_list($post->ID,'problem_cat','','，');?></td>
+					<td><?php echo get_the_term_list($post->ID,'fps_cat','','，');?></td>
 					<td><?php echo get_the_term_list($post->ID,'problem_tag','','，');?></td>
 				</tr>
 			<?php endforeach;?>
