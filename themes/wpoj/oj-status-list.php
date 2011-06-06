@@ -1,7 +1,57 @@
-<?php 
-get_header();
-echo "hello,world";
+<?php
+get_header(); ?>
 
+	<div id="content" class="hentry" role="main">
+			<table>
+			<thead>
+				<tr>
+				<th>Run ID</th><th>User</th><th>Problem</th><th>Result</th><th>Memory</th><th>Time</th><th>Language</th><th>Code Length</th><th>Submit Time</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php
+			global $wpdb,$oj,$paged,$wp_query;
+			$perpage=20;
+			if(empty($paged) && !empty($_GET['paged'])) $paged=$_GET['paged'];
+			else $paged=1;
+			if($paged>1) $limit=($paged-1) * $perpage.' , ';
+			else $limit='';
+			$limit.=$perpage;
+			$sql="SELECT SQL_CALC_FOUND_ROWS solution_id,user_id,user_login,problem_id,result,memory,time,language,code_length,in_date FROM {$oj->prefix}solution limit $limit";
+			$posts=$wpdb->get_results($sql);
+			$max_pages = ceil($wpdb->get_var( 'SELECT FOUND_ROWS()' )/20);
+			$wp_query->max_num_pages=$max_pages;
+			$wp_query->query_vars=array('paged'=> $paged);
+			foreach ($posts as $post):?>
+				<tr>
+				<?php 
+					$compile_statas=array(
+						'full'=>array('Pending','Pending Rejudging','Compiling','Running & Judging','Accepted','Presentation Error','Wrong Answer','Time Limit Exceed','Memory Limit Exceed','Output Limit Exceed','Runtime Error','Compile Error','Compile OK'),
+						'short'=>array('PD','PR','CI','RJ','AC','PE','WA','TLE','MLE','OLE','RE','CE','CO'),
+						'class'=>array('PD','PR','CI','RJ','AC','PE','WA','TLE','MLE','OLE','RE','CE','CO')
+					);	
+					$languages=array_keys($oj->languages);
+				?>
+					<td><?php echo $post->solution_id;?></td>
+					<td><a href="/?author=<?php echo $post->user_id;?>"><?php echo $post->user_login;?></a></td>
+					<td><a href="/?post_type=problem&p=<?php echo $post->problem_id;?>"><?php echo $post->problem_id?></a></td>
+					<td><span class="<?php echo $compile_statas['class'][$post->result];?>"><?php echo $compile_statas['full'][$post->result];?></span></td>
+					<td><?php echo $post->memory;?> <span>kb</span></td>
+					<td><?php echo $post->time;?> <span>ms</span></td>
+					<td><?php echo $languages[$post->language];?></td>
+					<td><?php echo $post->code_length;?> B</td>
+					<td><?php echo $post->in_date;?></td>
+				</tr>
+			<?php endforeach;?>
+			</tbody>
+			</table>
+			<?php loop_pagination( array('prev_text' => __( '&larr; Previous', hybrid_get_textdomain() ), 'next_text' => __( 'Next &rarr;', hybrid_get_textdomain() ) ) ); ?>
+	</div><!-- #content -->
+	<?php do_atomic( 'after_content' ); // retro-fitted_after_content ?>
+	
+	<?php get_sidebar( 'primary' ); // Loads the sidebar-primary.php template. ?>
 
-get_footer();
-?>
+	<?php get_sidebar( 'secondary' ); // Loads the sidebar-secondary.php template. ?>
+
+	<?php do_atomic( 'close_main' ); // retro-fitted_close_main ?>
+<?php get_footer(); ?>
