@@ -6,9 +6,8 @@ get_header();
 	$problem_id=$_GET['pid'];
 	$contest_id=$_GET['cid'];
 	$solution_id=$_GET['sid'];
-	$source_code=oj_get_solution_source($solution_id);
-	if(isset($_GET['langmask'])) $langmask=$_GET['langmask'];  else	$langmask=0;
-	if(isset($_COOKIE['lastlang'])) $lastlang=$_COOKIE['lastlang'];	else $lastlang=1;
+	$source_code=oj_get_source_code($solution_id);
+	if(isset($_GET['language'])) $language=$_GET['language'];  else	$language=0;
 ?>
 <div id="content">
 	<script language="Javascript" type="text/javascript" src="<?php echo THEME_URI;?>/edit_area/edit_area_full.js"></script>
@@ -34,7 +33,7 @@ get_header();
 			Problem <span style="color:#00f; font-weight:bold;"><?=$problem_id?></span> : <?php echo $_GET['title'];?>
 		</div>
 		<div>
-			Language : <?php oj_echo_language_select($langmask, $lastlang)?>
+			Language : <?php oj_echo_language_select(0, $language)?>
 		</div>
 		<div>
 			<textarea cols=80 rows=20 id="source" style="height:308px;" name="source"><?=$source_code?></textarea>
