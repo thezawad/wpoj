@@ -123,18 +123,18 @@ function oj_fill_object_metas($object){
 function oj_get_solution_source($sid){
 	
 }
-function oj_submit_solution($user_id,$problem_id,$source,$language,$time_strict=true,$solution_id=NULL,$contest_id=NULL){
-	global $wpdb,$oj;
+function oj_submit_solution($problem_id,$source,$language,$time_strict=true,$solution_id=NULL,$contest_id=NULL){
+	global $wpdb,$oj,$userdata;
 	$ip=$_SERVER['REMOTE_ADDR'];
 	$len=strlen($source);
 	if ($language>6 || $language<0) $language=0;	$language=strval($language);
 	if ($len<2){ return 1;}	elseif ($len>65536){ return 2;}
 	$source=mysql_real_escape_string($source);
 	if($time_strict){
-		$sql="SELECT `in_date` from `solution` where `user_id`='$user_id' and in_date>now()-10 order by `in_date` desc limit 1";
+		$sql="SELECT `in_date` from `solution` where `user_id`='$userdata->ID' and in_date>now()-10 order by `in_date` desc limit 1";
 		if( $wpdb->query($sql)){ return 3;}
 	}
-	$sql="INSERT INTO {$oj->prefix}solution(problem_id,user_id,in_date,language,ip,code_length) VALUES('$problem_id','$user_id',NOW(),'$language','$ip','$len')";
+	$sql="INSERT INTO {$oj->prefix}solution(problem_id,user_id,user_login,in_date,language,ip,code_length) VALUES('$problem_id',$userdata->ID,'$userdata->user_login',NOW(),'$language','$ip','$len')";
 	$wpdb->query($sql);	
 	$insert_id=mysql_insert_id();
 	$sql="INSERT INTO `{$oj->prefix}solution_source`(`solution_id`,`source`) VALUES('$insert_id','$source')";
