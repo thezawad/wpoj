@@ -1,5 +1,4 @@
 <?php
-	global $userdata;
 	$problem_id=		$_POST['pid'];
 	$contest_id=		$_POST['cid'];
 	$solution_id=		$_POST['sid'];
@@ -13,5 +12,4 @@
 	if($status){
 		oj_end_with_status($error_message[$status]);
 	}
-	header("Location: /?oj=statusl.php&user_id=".$userdata->ID);
 ?>

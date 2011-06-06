@@ -26,6 +26,9 @@ function oj_get_top_page(){
 		),
 		'addsolution' => array(
 			'url_raw' => '/?oj=addsolution'
+		),
+		'showsource' => array(
+			'url_raw' => '/?oj=showsource',
 		)
 	);
 }
@@ -36,21 +39,21 @@ function oj_maybe_redirect_url(){
 	if(empty($page)){return ;}
 	switch ($page){
 		case 'statusl':
-			$oj->context='status';
-			$oj_bread_trail['trail_end']='Status';
-			locate_template('oj-status-list.php',true);
-			exit(0);break;
-		case 'statusd':
 			if($_GET['title']){
 				$oj->context='problem';
 				$oj_bread_trail[]=$oj->page['problem']['url'];
-				$oj_bread_trail[]='<a href="/?problem='.$_GET['title'].'">'.$_GET['title'].'</a>';
+				$oj_bread_trail[]='<a href="/?post_type=problem&p='.$_GET['pid'].'">Problem-'.$_GET['pid'].'</a>';
 				$oj_bread_trail['trail_end']='Problem Status';
 			}else{
 				$oj->context='status';
-				$oj_bread_trail[]=$oj->page['status']['url'];
-				$oj_bread_trail['trail_end']='Status Detail';
+				$oj_bread_trail['trail_end']='Status';		
 			}
+			locate_template('oj-status-list.php',true);
+			exit(0);break;
+		case 'statusd':
+			$oj->context='status';
+			$oj_bread_trail[]=$oj->page['statusl']['url'];
+			$oj_bread_trail['trail_end']='Status Detail';
 			locate_template('oj-status-detail.php',true);
 			exit(0);break;		
 		case 'problems':
@@ -61,13 +64,24 @@ function oj_maybe_redirect_url(){
 		case 'submitpage':
 			$oj->context='problem';
 			$oj_bread_trail[]=$oj->page['problem']['url'];
-			$oj_bread_trail[]='<a href="/?problem='.$_GET['title'].'">'.$_GET['title'].'</a>';
+			$oj_bread_trail[]='<a href="/?post_type=problem&p='.$_GET['pid'].'">Problem-'.$_GET['pid'].'</a>';
 			$oj_bread_trail['trail_end']='Submit Solution';
 			locate_template('oj-submitpage.php',true);
 			exit(0);break;
 		case 'addsolution':
+			global $userdata;
 			$oj->context='home';
 			require_once (dirname(dirname(dirname(__FILE__))).'/addsolution.php');
+			header("Location:/?oj=statusl&user_id=".$userdata->ID);
+			exit(0);break;
+		case 'showsource':
+			$oj->context='status';
+			$oj_bread_trail[]=$oj->page['statusl']['url'];
+			$oj_bread_trail['trail_end']='solution-'.$_GET['sid'].'-source';
+			if(empty($_GET['sid'])){
+				oj_end_with_status('Solution ID missing!');
+			}
+			locate_template('oj-showsource.php',true);
 			exit(0);break;
 	}
 }

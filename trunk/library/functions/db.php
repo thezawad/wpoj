@@ -100,7 +100,7 @@ function oj_delete_object_metas($post_id){
 	$sql= "DELETE FROM `{$table}` WHERE post_id={$post_id}";
 	$wpdb->query($sql);
 	if($object->post_type=="problem"){
-		$sql="DELETE FROM `{$oj->prefix}solution_source` WHERE solution_id IN (SELECT solution_id FROM `{$oj->prefix}solution` WHERE problem_id={$post_id})";
+		$sql="DELETE FROM `{$oj->prefix}source_code` WHERE solution_id IN (SELECT solution_id FROM `{$oj->prefix}solution` WHERE problem_id={$post_id})";
 		$wpdb->query($sql);
 		$sql="DELETE FROM `{$oj->prefix}solution` WHERE problem_id={$post_id}";
 		$wpdb->query($sql);
@@ -120,8 +120,20 @@ function oj_fill_object_metas($object){
 	}
 	return $object;
 }
-function oj_get_solution_source($sid){
-	
+function oj_get_solution($sid,$sourcode=true){
+	global $wpdb,$oj;
+	$sql="SELECT * FROM {$oj->prefix}solution WHERE solution_id=$sid";
+	$solution=$wpdb->get_row($sql);
+	if($sourcode){
+		$solution->source=oj_get_source_code($sid);
+	}
+	return $solution;
+}
+function oj_get_source_code($sid){
+	global $wpdb,$oj;
+	$sql="SELECT source FROM {$oj->prefix}source_code WHERE solution_id=$sid";
+	$source_code=$wpdb->get_row($sql);
+	return $source_code->source;
 }
 function oj_submit_solution($problem_id,$source,$language,$time_strict=true,$solution_id=NULL,$contest_id=NULL){
 	global $wpdb,$oj,$userdata;
@@ -137,7 +149,7 @@ function oj_submit_solution($problem_id,$source,$language,$time_strict=true,$sol
 	$sql="INSERT INTO {$oj->prefix}solution(problem_id,user_id,user_login,in_date,language,ip,code_length) VALUES('$problem_id',$userdata->ID,'$userdata->user_login',NOW(),'$language','$ip','$len')";
 	$wpdb->query($sql);	
 	$insert_id=mysql_insert_id();
-	$sql="INSERT INTO `{$oj->prefix}solution_source`(`solution_id`,`source`) VALUES('$insert_id','$source')";
+	$sql="INSERT INTO `{$oj->prefix}source_code`(`solution_id`,`source`) VALUES('$insert_id','$source')";
 	$wpdb->query($sql);
 	return 0;
 }

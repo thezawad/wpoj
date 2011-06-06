@@ -98,7 +98,7 @@ function oj_active(){
    	$problem_meta					= $oj->prefix . 'problem_meta';
 	$contest_meta					= $oj->prefix . 'contest_meta';
 	$solution_meta					= $oj->prefix . 'solution';
-	$solution_source				= $oj->prefix . 'solution_source';
+	$source_code				= $oj->prefix . 'source_code';
 
    
 	if($wpdb->get_var("show tables like '$problem_meta'") != $problem_meta) {
@@ -170,9 +170,9 @@ function oj_active(){
 		$wpdb->query($sql);
 	}
 	
-	if($wpdb->get_var("show tables like '$solution_source'") != $solution_source) {
+	if($wpdb->get_var("show tables like '$source_code'") != $source_code) {
       //className,valid,num 不知道干嘛的
-		$sql = "CREATE TABLE " . $solution_source . " (
+		$sql = "CREATE TABLE " . $source_code . " (
 		  `solution_id` bigint(20) NOT NULL,
 		  `source` text NOT NULL,
 		  PRIMARY KEY (`solution_id`)

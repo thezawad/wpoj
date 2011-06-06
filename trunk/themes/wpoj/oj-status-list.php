@@ -11,17 +11,37 @@ get_header(); ?>
 			<tbody>
 			<?php
 			global $wpdb,$oj,$paged,$wp_query;
+			$problem_id=$_GET['pid'];
+			$user_id=$_GET['user_id'];
+			$user_login=$_GET['user_login'];
+			$orderby=$_GET['orderby'];
 			$perpage=20;
-			if(empty($paged) && !empty($_GET['paged'])) $paged=$_GET['paged'];
-			else $paged=1;
-			if($paged>1) $limit=($paged-1) * $perpage.' , ';
-			else $limit='';
-			$limit.=$perpage;
-			$sql="SELECT SQL_CALC_FOUND_ROWS solution_id,user_id,user_login,problem_id,result,memory,time,language,code_length,in_date FROM {$oj->prefix}solution limit $limit";
+			$paged=1;
+			$where_clause='WHERE 1';
+			$limit_clause='';
+			
+			
+			if(!empty($problem_id)){
+				$where_clause.=' AND problem_id='.$problem_id;
+			}
+			if(!empty($user_id)){
+				$where_clause.=' AND user_id='.$user_id;
+			}
+			if(!empty($user_login)){
+				$where_clause.=' AND user_login='.$user_login;
+			}
+			if(empty($orderby)) $orderby=' ORDER BY in_date DESC ';
+			if(!empty($_GET['paged'])) $paged=$_GET['paged'];
+			if($paged>1) $limit_clause=($paged-1) * $perpage.' , ';
+			
+			$limit_clause.=$perpage;
+			
+			$sql="SELECT SQL_CALC_FOUND_ROWS solution_id,user_id,user_login,problem_id,result,memory,time,language,code_length,in_date FROM {$oj->prefix}solution $where_clause $orderby limit $limit_clause";
 			$posts=$wpdb->get_results($sql);
-			$max_pages = ceil($wpdb->get_var( 'SELECT FOUND_ROWS()' )/20);
-			$wp_query->max_num_pages=$max_pages;
+			
+			$wp_query->max_num_pages=ceil($wpdb->get_var( 'SELECT FOUND_ROWS()' )/20);
 			$wp_query->query_vars=array('paged'=> $paged);
+			
 			foreach ($posts as $post):?>
 				<tr>
 				<?php 
@@ -31,6 +51,7 @@ get_header(); ?>
 						'class'=>array('PD','PR','CI','RJ','AC','PE','WA','TLE','MLE','OLE','RE','CE','CO')
 					);	
 					$languages=array_keys($oj->languages);
+					$edit_solution_url=$oj->page['submitpage']['url_raw'].'&pid='.$post->problem_id.'&sid='.$post->solution_id.'&language='.$post->language;
 				?>
 					<td><?php echo $post->solution_id;?></td>
 					<td><a href="/?author=<?php echo $post->user_id;?>"><?php echo $post->user_login;?></a></td>
@@ -38,7 +59,10 @@ get_header(); ?>
 					<td><span class="<?php echo $compile_statas['class'][$post->result];?>"><?php echo $compile_statas['full'][$post->result];?></span></td>
 					<td><?php echo $post->memory;?> <span>kb</span></td>
 					<td><?php echo $post->time;?> <span>ms</span></td>
-					<td><?php echo $languages[$post->language];?></td>
+					<td>
+						<a href="/?oj=showsource&sid=<?php echo $post->solution_id;?>"><?php echo $languages[$post->language];?></a>/
+						<a href="<?php echo $edit_solution_url;?>">Edit</a>
+						</td>
 					<td><?php echo $post->code_length;?> B</td>
 					<td><?php echo $post->in_date;?></td>
 				</tr>
