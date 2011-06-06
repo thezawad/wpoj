@@ -146,6 +146,7 @@ function oj_active(){
 		`solution_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 		  `problem_id` int(11) NOT NULL DEFAULT '0',
 		  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+		  `user_login` varchar(60) NOT NULL DEFAULT '',
 		  `time` int(11) NOT NULL DEFAULT '0',
 		  `memory` int(11) NOT NULL DEFAULT '0',
 		  `in_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -160,6 +161,7 @@ function oj_active(){
 		  `judgetime` datetime DEFAULT NULL,
 		  PRIMARY KEY (`solution_id`),
 		  KEY `uid` (`user_id`),
+		  KEY `user_login_key` (`user_login`),
 		  KEY `pid` (`problem_id`),
 		  KEY `res` (`result`),
 		  KEY `cid` (`contest_id`)
@@ -171,7 +173,7 @@ function oj_active(){
 	if($wpdb->get_var("show tables like '$solution_source'") != $solution_source) {
       //className,valid,num 不知道干嘛的
 		$sql = "CREATE TABLE " . $solution_source . " (
-		  `solution_id` int(11) NOT NULL,
+		  `solution_id` bigint(20) NOT NULL,
 		  `source` text NOT NULL,
 		  PRIMARY KEY (`solution_id`)
 		) $charset_collate;";

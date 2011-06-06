@@ -4,7 +4,7 @@ function oj_import_problems(){
 		if ($_FILES ["import_problem"] ["error"] > 0) {
 			echo "Error: " . $_FILES ["fps"] ["error"] . "File size is too big, change in PHP.ini<br />";
 		}else{
-			global $userdata,$oj;
+			global $oj;
 			
 			$tempfile = $_FILES ["import_problem"] ["tmp_name"];
 			$fps_cat=trim($_FILES ["import_problem"] ["name"]);
@@ -16,7 +16,7 @@ function oj_import_problems(){
 				$basic_info.="新建FPS目录：$fps_cat<br>";
 				wp_insert_term($fps_cat, 'fps_cat');
 				fps_import_operate($tempfile,$basic_info,$fps_cat);
-			}elseif(isset($_GET['confirm_submit'])){
+			}elseif(isset($_POST['confirm_submit'])){
 				$basic_info.="已经存在FPS目录：$fps_cat<br>";
 				fps_import_operate($tempfile,$basic_info,$fps_cat);
 			}else{
@@ -73,7 +73,7 @@ function fps_import_operate($tempfile,$process_info,$fps_cat){
 		}
 		foreach($solutions as $solution) {
 			$language =$solution->getAttribute("language");
-			oj_submit_solution($userdata->ID,$problem_id,$solution->nodeValue,$oj->languages[$language],FALSE);    
+			oj_submit_solution($problem_id,$solution->nodeValue,$oj->languages[$language],FALSE);    
     	}
 	}
 	unlink ( $tempfile );
@@ -128,7 +128,7 @@ function fps_echo_import_form($confirm=false,$file=NULL){
 		<input type="hidden" name="page" value="import_problems"/>
 		<input type="hidden" name="post_type" value="problem"/>
 		<?php if($confirm){?>
-		<input type="hidden" name="submit_confirm" value="true"/>
+		<input type="hidden" name="confirm_submit" value="true"/>
 		<div class="error">There FPS File <b><?php echo $file;?></b> had been uploaded before, process anyway?</div>
 		<?php }else{?>
 		<div class="error"></div>
