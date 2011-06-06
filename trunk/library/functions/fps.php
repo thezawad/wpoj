@@ -15,6 +15,14 @@ function oj_import_problems(){
 			global $userdata,$oj;
 			$OJ_DATA="/home/judge/data";
 			$tempfile = $_FILES ["import_problem"] ["tmp_name"];
+			
+			$fps_cat=trim($_FILES ["import_problem"] ["name"]);
+			if(term_exists($fps_cat,'fps_cat')){
+				echo "已经存在FPS目录：$fps_cat<br>";
+			}else{
+				echo "新建FPS目录：$fps_cat<br>";
+				wp_insert_term($fps_cat, 'fps_cat');
+			}
 			echo "Upload: " . $_FILES ["import_problem"] ["name"] . "<br />";
 			echo "Type: " . $_FILES ["import_problem"] ["type"] . "<br />";
 			echo "Size: " . ($_FILES ["import_problem"] ["size"] / 1024) . " Kb<br />";
@@ -44,7 +52,7 @@ function oj_import_problems(){
 				$solutions = $searchNode->getElementsByTagName("solution");
 				
 			
-				$problem_id=fps_addproblem ($postarr,$problem_meta );
+				$problem_id=fps_addproblem ($postarr,$problem_meta,$fps_cat);
 	
 				$basedir = "$OJ_DATA/$problem_id";
 			    mkdir ( $basedir );
@@ -154,10 +162,11 @@ function mkdata($pid,$filename,$input,$OJ_DATA){
 		
 	}
 }
-function fps_addproblem($postarr,$problem_metas,$OJ_DATA="/home/judge/data"){
+function fps_addproblem($postarr,$problem_metas,$fps_cat,$OJ_DATA="/home/judge/data"){
 	$postarr['post_status']="publish";
 	$postarr['post_type']='problem';
 	$post_id=wp_insert_post($postarr);
+	wp_set_object_terms($post_id, $fps_cat, "fps_cat");
 	oj_save_object_metas($post_id,get_post($post_id),$problem_metas);
 	return $post_id;
 }
