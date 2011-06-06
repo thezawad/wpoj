@@ -1,5 +1,6 @@
 <?php
 function oj_get_objects(){
+	global $oj;
 	return array	(
 	'problem' =>	array(
 				'input' => 			array('name' =>'input' ,'title' =>'Input', 'type' =>'tinymce'),
@@ -30,7 +31,7 @@ function oj_get_objects(){
 												),
 				'langmask'=>		array('name'=>'langmask' , 'title'=> 'Language', 'type'=> 'selectm',
 											'options' => array('C'=>true,'C++'=>true,'Pascal'=>true,'Java'=>true,'Ruby'=>true,'Bash'=>true,'Python'=>true), 
-											'values' => array('C'=>0,'C++'=>1,'Pascal'=>2,'Java'=>3,'Ruby'=>4,'Bash'=>5,'Python'=>6), 
+											'values' => $oj->languages, 
 											'multiple'=>true),
 	),
 				);
