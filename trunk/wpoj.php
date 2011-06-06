@@ -18,6 +18,7 @@ class OJ{
 	var $current_page;
 	var $context="home";
 	var $objects;
+	var $languages=array('C'=>0,'C++'=>1,'Pascal'=>2,'Java'=>3,'Ruby'=>4,'Bash'=>5,'Python'=>6);
 	function init(){
 		$this->init_consts();
 		$this->include_functions();
@@ -33,6 +34,7 @@ class OJ{
 		define('OJ_CLASSES',OJ_LIBRARY.'/class');
 	}
 	function include_functions(){
+		require_once(OJ_FUNCTIONS.'/tools.php');
 		require_once(OJ_FUNCTIONS.'/init.php');
 		require_once(OJ_FUNCTIONS.'/url_locator.php');
 		require_once(OJ_FUNCTIONS.'/db.php');

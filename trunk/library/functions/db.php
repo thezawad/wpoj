@@ -99,6 +99,12 @@ function oj_delete_object_metas($post_id){
 	$table=$oj->prefix . $object->post_type . '_meta';
 	$sql= "DELETE FROM `{$table}` WHERE post_id={$post_id}";
 	$wpdb->query($sql);
+	if($object->post_type=="problem"){
+		$sql="DELETE FROM `{$oj->prefix}solution_source` WHERE solution_id IN (SELECT solution_id FROM `{$oj->prefix}solution` WHERE problem_id={$post_id})";
+		$wpdb->query($sql);
+		$sql="DELETE FROM `{$oj->prefix}solution` WHERE problem_id={$post_id}";
+		$wpdb->query($sql);
+	}
 }
 function oj_fill_object_metas($object){
 	global $wpdb,$oj;
@@ -116,5 +122,23 @@ function oj_fill_object_metas($object){
 }
 function oj_get_solution_source($sid){
 	
+}
+function oj_submit_solution($user_id,$problem_id,$source,$language,$time_strict=true,$solution_id=NULL,$contest_id=NULL){
+	global $wpdb,$oj;
+	$ip=$_SERVER['REMOTE_ADDR'];
+	$len=strlen($source);
+	if ($language>6 || $language<0) $language=0;	$language=strval($language);
+	if ($len<2){ return 1;}	elseif ($len>65536){ return 2;}
+	$source=mysql_real_escape_string($source);
+	if($time_strict){
+		$sql="SELECT `in_date` from `solution` where `user_id`='$user_id' and in_date>now()-10 order by `in_date` desc limit 1";
+		if( $wpdb->query($sql)){ return 3;}
+	}
+	$sql="INSERT INTO {$oj->prefix}solution(problem_id,user_id,in_date,language,ip,code_length) VALUES('$problem_id','$user_id',NOW(),'$language','$ip','$len')";
+	$wpdb->query($sql);	
+	$insert_id=mysql_insert_id();
+	$sql="INSERT INTO `{$oj->prefix}solution_source`(`solution_id`,`source`) VALUES('$insert_id','$source')";
+	$wpdb->query($sql);
+	return 0;
 }
 ?>

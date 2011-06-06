@@ -12,6 +12,7 @@ function oj_import_problems(){
 		if ($_FILES ["import_problem"] ["error"] > 0) {
 			echo "Error: " . $_FILES ["fps"] ["error"] . "File size is too big, change in PHP.ini<br />";
 		} else {
+			global $userdata,$oj;
 			$OJ_DATA="/home/judge/data";
 			$tempfile = $_FILES ["import_problem"] ["tmp_name"];
 			echo "Upload: " . $_FILES ["import_problem"] ["name"] . "<br />";
@@ -40,27 +41,31 @@ function oj_import_problems(){
 				$problem_meta['spj'] = fps_getValue ( $searchNode, 'spj' );
 				$problem_meta['spj'] = trim($problem_meta['spj'])?'1':'0';
 
-				//$solutions = $searchNode->getElementsByTagName("solution");
+				$solutions = $searchNode->getElementsByTagName("solution");
 				
 			
-				$pid=fps_addproblem ($postarr,$problem_meta );
+				$problem_id=fps_addproblem ($postarr,$problem_meta );
 	
-				$basedir = "$OJ_DATA/$pid";
+				$basedir = "$OJ_DATA/$problem_id";
 			    mkdir ( $basedir );
-				if(strlen($problem_meta['sample_input'] )) mkdata($pid,"sample.in",$problem_meta['sample_input'],$OJ_DATA);
-				if(strlen($problem_meta['sample_output'])) mkdata($pid,"sample.out",$problem_meta['sample_output'],$OJ_DATA);
+				if(strlen($problem_meta['sample_input'] )) mkdata($problem_id,"sample.in",$problem_meta['sample_input'],$OJ_DATA);
+				if(strlen($problem_meta['sample_output'])) mkdata($problem_id,"sample.out",$problem_meta['sample_output'],$OJ_DATA);
 				$testinputs=$searchNode->getElementsByTagName("test_input");
 				$testno=0;
 				foreach($testinputs as $testNode){
 					if($testNode->nodeValue)
-					mkdata($pid,"test".$testno++.".in",$testNode->nodeValue,$OJ_DATA);
+					mkdata($problem_id,"test".$testno++.".in",$testNode->nodeValue,$OJ_DATA);
 				}
 				$testinputs=$searchNode->getElementsByTagName("test_output");
 				$testno=0;
 				foreach($testinputs as $testNode){
 					//if($testNode->nodeValue)
-					mkdata($pid,"test".$testno++.".out",$testNode->nodeValue,$OJ_DATA);
+					mkdata($problem_id,"test".$testno++.".out",$testNode->nodeValue,$OJ_DATA);
 				}
+				foreach($solutions as $solution) {
+					$language =$solution->getAttribute("language");
+					oj_submit_solution($userdata->ID,$problem_id,$solution->nodeValue,$oj->languages[$language],FALSE);    
+		    	}
 			}
 			unlink ( $tempfile );
 		}
