@@ -119,7 +119,7 @@ function wpoj_add_top_menu($args){
 	if(in_array($oj->context, array('problem'))){
 		$first=$args[0];
 		array_shift($args);
-		$args=array_merge(array($first,$oj->page[$oj->context]['url']),$args);
+		$args=array_merge(array($first,$oj->page[$oj->context]['link']),$args);
 	}
 	return $args;
 }
