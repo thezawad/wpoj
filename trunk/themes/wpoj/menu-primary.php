@@ -23,6 +23,7 @@ if ( has_nav_menu( 'primary' ) ) : ?>
 					<li id="page-blogs" class="menu-item"><a href="/?oj=blogs">Blogs</a></li>
 					<li id="page-problem" class="menu-item"><a href="/?oj=problems">Problems</a></li>
 					<li id="page-status" class="menu-item"><a href="/?oj=statusl">Status</a></li>
+					<li id="page-faqs" class="menu-item"><a href="/?oj=faqs">F.A.Q.s</a></li>
 				</ul>
 			</div>
 

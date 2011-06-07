@@ -35,6 +35,10 @@ function oj_get_top_page(){
 		),
 		'compileinfo'=>array(
 			'url' =>'/?oj=compileinfo',
+		),
+		'faqs'=>array(
+			'url' =>'/?oj=faqs',
+			'label'=>'F.A.Qs',
 		)
 	);
 }
@@ -104,6 +108,11 @@ function oj_maybe_redirect_url(){
 				oj_end_with_status('Solution ID missing!');
 			}
 			locate_template('oj-compileinfo.php',true);
+			exit(0);break;
+		case 'faqs':
+			$oj->context='faqs';
+			$oj_bread_trail['trail_end']='F.A.Qs';
+			locate_template('oj-faqs.php',true);
 			exit(0);break;
 	}
 }
