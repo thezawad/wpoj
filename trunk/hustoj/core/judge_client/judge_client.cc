@@ -446,7 +446,7 @@ void _update_solution_mysql(int solution_id, int result, int time, int memory,
 	char sql[BUFFER_SIZE];
 	sprintf(
 			sql,
-			"UPDATE solution SET result=%d,time=%d,memory=%d,judgetime=NOW() WHERE solution_id=%d LIMIT 1%c",
+			"UPDATE oj_solution SET result=%d,time=%d,memory=%d,judgetime=NOW() WHERE solution_id=%d LIMIT 1%c",
 			result, time, memory, solution_id, 0);
 	//	printf("sql= %s\n",sql);
 	if (mysql_real_query(conn, sql, strlen(sql))) {
@@ -484,7 +484,7 @@ void _addceinfo_mysql(int solution_id) {
 	char ceinfo[(1 << 16)], *cend;
 	FILE *fp = fopen("ce.txt", "r");
 	snprintf(sql, (1 << 16) - 1,
-			"DELETE FROM compileinfo WHERE solution_id=%d", solution_id);
+			"DELETE FROM oj_compileinfo WHERE solution_id=%d", solution_id);
 	mysql_real_query(conn, sql, strlen(sql));
 	cend = ceinfo;
 	while (fgets(cend, 1024, fp)) {
@@ -494,7 +494,7 @@ void _addceinfo_mysql(int solution_id) {
 	}
 	cend = 0;
 	end = sql;
-	strcpy(end, "INSERT INTO compileinfo VALUES(");
+	strcpy(end, "INSERT INTO oj_compileinfo VALUES(");
 	end += strlen(sql);
 	*end++ = '\'';
 	end += sprintf(end, "%d", solution_id);
@@ -577,13 +577,13 @@ void _update_user_mysql(char * user_id) {
 	char sql[BUFFER_SIZE];
 	sprintf(
 			sql,
-			"UPDATE `users` SET `solved`=(SELECT count(DISTINCT `problem_id`) FROM `solution` WHERE `user_id`=\'%s\' AND `result`=\'4\') WHERE `user_id`=\'%s\'",
+			"UPDATE `oj_users_meta` SET `solved`=(SELECT count(DISTINCT `problem_id`) FROM `oj_solution` WHERE `user_id`=\'%s\' AND `result`=\'4\') WHERE `user_id`=\'%s\'",
 			user_id, user_id);
 	if (mysql_real_query(conn, sql, strlen(sql)))
 		write_log(mysql_error(conn));
 	sprintf(
 			sql,
-			"UPDATE `users` SET `submit`=(SELECT count(*) FROM `solution` WHERE `user_id`=\'%s\') WHERE `user_id`=\'%s\'",
+			"UPDATE `oj_users_meta` SET `submit`=(SELECT count(*) FROM `oj_solution` WHERE `user_id`=\'%s\') WHERE `user_id`=\'%s\'",
 			user_id, user_id);
 	if (mysql_real_query(conn, sql, strlen(sql)))
 		write_log(mysql_error(conn));
@@ -613,13 +613,13 @@ void _update_problem_mysql(int p_id) {
 	char sql[BUFFER_SIZE];
 	sprintf(
 			sql,
-			"UPDATE `problem` SET `accepted`=(SELECT count(*) FROM `solution` WHERE `problem_id`=\'%d\' AND `result`=\'4\') WHERE `problem_id`=\'%d\'",
+			"UPDATE `oj_problem_meta` SET `accepted`=(SELECT count(*) FROM `oj_solution` WHERE `problem_id`=\'%d\' AND `result`=\'4\') WHERE `post_id`=\'%d\'",
 			p_id, p_id);
 	if (mysql_real_query(conn, sql, strlen(sql)))
 		write_log(mysql_error(conn));
 	sprintf(
 			sql,
-			"UPDATE `problem` SET `submit`=(SELECT count(*) FROM `solution` WHERE `problem_id`=\'%d\') WHERE `problem_id`=\'%d\'",
+			"UPDATE `oj_problem_meta` SET `submit`=(SELECT count(*) FROM `oj_solution` WHERE `problem_id`=\'%d\') WHERE `post_id`=\'%d\'",
 			p_id, p_id);
 	if (mysql_real_query(conn, sql, strlen(sql)))
 		write_log(mysql_error(conn));
@@ -761,7 +761,7 @@ void _get_solution_mysql(int solution_id, char * work_dir, int lang) {
 	// get the source code
 	MYSQL_RES *res;
 	MYSQL_ROW row;
-	sprintf(sql, "SELECT source FROM source_code WHERE solution_id=%d",
+	sprintf(sql, "SELECT source FROM oj_source_code WHERE solution_id=%d",
 			solution_id);
 	mysql_real_query(conn, sql, strlen(sql));
 	res = mysql_store_result(conn);
@@ -810,7 +810,7 @@ void _get_solution_info_mysql(int solution_id, int & p_id, char * user_id, int &
 	// get the problem id and user id from Table:solution
 	sprintf(
 			sql,
-			"SELECT problem_id, user_id, language FROM solution where solution_id=%d",
+			"SELECT problem_id, user_id, language FROM oj_solution where solution_id=%d",
 			solution_id);
 	//printf("%s\n",sql);
 	mysql_real_query(conn, sql, strlen(sql));
@@ -850,7 +850,7 @@ void _get_problem_info_mysql(int p_id, int & time_lmt, int & mem_lmt, int & issp
 	MYSQL_ROW row;
 	sprintf(
 			sql,
-			"SELECT time_limit,memory_limit,spj FROM problem where problem_id=%d",
+			"SELECT time_limit,memory_limit,spj FROM oj_problem_meta where post_id=%d",
 			p_id);
 	mysql_real_query(conn, sql, strlen(sql));
 	res = mysql_store_result(conn);
