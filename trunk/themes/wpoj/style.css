@@ -301,7 +301,7 @@ img.wp-smiley {
 	background: url(images/header.png) repeat-x 0 0;
 	border-bottom: 10px solid #ce3000;
 	}
-#header .wrap {
+#header .wrap ,#footer .wrap ,#main {
 	width: 90%;
 	min-width:960px;
 	max-width:1250px;
@@ -1110,9 +1110,6 @@ input[type='submit'],input[type='reset']{
 
 /* Inside footer container */
 #footer .wrap {
-	width: 90%;
-	min-width:960px;
-	max-width:1250px;
 	margin: 0 auto;
 	color: #ce3000;
 	}
@@ -1141,20 +1138,7 @@ body {
 	background: url(images/bg.jpg) repeat 0 0;
 	}
 
-/* Content and primary/secondary sidebar wrapper */
-#main {
-	width: 90%;
-	min-width:960px;
-	max-width:1250px;
-	margin: 0 auto;
-	}
-
 /* One column layout */
-.layout-1c #content {
-	width: 90%;
-	min-width:960px;
-	max-width:1250px;
-}
 .layout-default #content{
 	float:left;	
 	width:100%;
@@ -1179,6 +1163,7 @@ body {
 	width: 325px;
 }
 .layout-2c-l #sidebar-secondary{
+	clear: right;
 	float: right;
 	width: 325px;
 }
