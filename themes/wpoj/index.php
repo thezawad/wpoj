@@ -21,7 +21,7 @@ get_header(); // Loads the header.php template. ?>
 </div>
 <div class="home-content clear">
 	<div class="hentry widgets">
-		<?php wp_list_bookmarks();?>
+		<?php wp_list_bookmarks(array('category_name'=>'blogroll'));?>
 	</div>
 	<div class="hentry news">
 		<h2>News</h2>
