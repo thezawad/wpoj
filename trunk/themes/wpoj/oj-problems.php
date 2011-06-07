@@ -1,7 +1,7 @@
 <?php
 get_header(); ?>
-
-	<div id="content" class="hentry" role="main">
+	<div class="content-wrapper hentry clearfix">
+	<div id="content" role="main">
 			<table>
 			<thead>
 				<tr>
@@ -28,6 +28,7 @@ get_header(); ?>
 			</table>
 			<?php loop_pagination( array( 'prev_text' => __( '&larr; Previous', hybrid_get_textdomain() ), 'next_text' => __( 'Next &rarr;', hybrid_get_textdomain() ) ) ); ?>
 	</div><!-- #content -->
+	</div>
 	<?php do_atomic( 'after_content' ); // retro-fitted_after_content ?>
 	
 	<?php get_sidebar( 'primary' ); // Loads the sidebar-primary.php template. ?>
