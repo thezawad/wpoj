@@ -51,17 +51,29 @@ get_header(); ?>
 						'class'=>array('PD','PR','CI','RJ','AC','PE','WA','TLE','MLE','OLE','RE','CE','CO')
 					);	
 					$languages=array_keys($oj->languages);
-					$edit_solution_url=$oj->page['submitpage']['url'].'&pid='.$post->problem_id.'&sid='.$post->solution_id.'&language='.$post->language;
+					$pid_clause='&pid='.$post->problem_id;
+					$sid_clause='&sid='.$post->solution_id;
+					$lang_clause='&language='.$post->language;
+					$submitpage_url=$oj->page['submitpage']['url'].$pid_clause.$sid_clause.$lang_clause;
+					$showsource_url=$oj->page['showsource']['url'].$sid_clause;
+					$compileinfo_url=$oj->page['compileinfo']['url'].$sid_clause;
 				?>
 					<td><?php echo $post->solution_id;?></td>
 					<td><a href="/?author=<?php echo $post->user_id;?>"><?php echo $post->user_login;?></a></td>
 					<td><a href="/?post_type=problem&p=<?php echo $post->problem_id;?>"><?php echo $post->problem_id?></a></td>
-					<td><span class="<?php echo $compile_statas['class'][$post->result];?>"><?php echo $compile_statas['full'][$post->result];?></span></td>
+					<td><span class="<?php echo $compile_statas['class'][$post->result];?>">
+						<?php 
+							if($post->result==11){
+								echo '<a href="'.$compileinfo_url.'">'.$compile_statas['full'][$post->result].'</a>';
+							}else {
+								echo $compile_statas['full'][$post->result];
+							}?>
+					</span></td>
 					<td><?php echo $post->memory;?> <span>kb</span></td>
 					<td><?php echo $post->time;?> <span>ms</span></td>
 					<td>
-						<a href="/?oj=showsource&sid=<?php echo $post->solution_id;?>"><?php echo $languages[$post->language];?></a>/
-						<a href="<?php echo $edit_solution_url;?>">Edit</a>
+						<a href="<?php echo $showsource_url;?>"><?php echo $languages[$post->language];?></a>/
+						<a href="<?php echo $submitpage_url;?>">Edit</a>
 						</td>
 					<td><?php echo $post->code_length;?> B</td>
 					<td><?php echo $post->in_date;?></td>

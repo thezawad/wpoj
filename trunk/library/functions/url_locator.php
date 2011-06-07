@@ -29,6 +29,9 @@ function oj_get_top_page(){
 		),
 		'showsource' => array(
 			'url' => '/?oj=showsource',
+		),
+		'compileinfo'=>array(
+			'url' =>'/?oj=compileinfo',
 		)
 	);
 }
@@ -82,6 +85,15 @@ function oj_maybe_redirect_url(){
 				oj_end_with_status('Solution ID missing!');
 			}
 			locate_template('oj-showsource.php',true);
+			exit(0);break;
+		case 'compileinfo':
+			$oj->context='status';
+			$oj_bread_trail[]=$oj->page['statusl']['link'];
+			$oj_bread_trail['trail_end']='solution-'.$_GET['sid'].'-compileinfo';
+			if(empty($_GET['sid'])){
+				oj_end_with_status('Solution ID missing!');
+			}
+			locate_template('oj-compileinfo.php',true);
 			exit(0);break;
 	}
 }
