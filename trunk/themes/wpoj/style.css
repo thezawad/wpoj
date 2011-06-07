@@ -696,7 +696,7 @@ img.wp-smiley {
 
 /* Primary and Secondary sidebar */
 #sidebar-primary, #sidebar-secondary {
-	font-size: 15px;
+	font-size: 12px;
 	}
 
 /* Widgets */
@@ -1088,8 +1088,7 @@ input[type='submit'],input[type='reset']{
 	clear: both;
 	overflow: hidden;
 	width: 100%;
-	height: 26px;
-	padding: 37px 0;
+	padding:22px 0 37px 0;
 	background: url(images/header.png) repeat-x 0 0;
 	border-top: 10px solid #ce3000;
 	}
@@ -1242,7 +1241,7 @@ div.problem-section-content{ margin:15px 0;}
 /*
  * top-page menu
  */
-.oj-home #page-home a ,.oj-problem #page-problem a, .oj-status #page-status a{
+.oj-home #page-home a ,.oj-problem #page-problem a, .oj-status #page-status a,.oj-blogs #page-blogs a{
 	background-color:#04648D;
 	color:#fff;
 }
@@ -1266,7 +1265,36 @@ div.problem-section-content{ margin:15px 0;}
 .CE { color:#004488; }
 .CO { color:#004488; }
 
-
-
-
-
+.home-banner{
+	margin-bottom:10px;
+}
+.home-banner .shadow{
+	 background:url(http://acm.hust.edu.cn/blog/wp-content/themes/boldy/images/bk_shadow_slider.png) 0 0 no-repeat;
+	 width:960px; 
+	 margin:0 auto; 
+	 height:50px;
+}
+#slider {
+    height: 370px;
+    width:960px;
+    margin:0 auto;
+    position:relative;
+}
+#slider img {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.home-content{
+	overflow:hidden;
+	margin-bottom:30px;
+}
+.home-content .widgets{
+	width:240px;
+	float:left;
+}
+.home-content .news{
+	float:left;
+	width:610px;
+	margin-left:26px;
+}
