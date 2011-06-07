@@ -40,16 +40,16 @@ add_action( 'admin_menu', 'theme_layouts_admin_setup' );
  * @return string The layout for the given page.
  */
 function theme_layouts_get_layout() {
-	global $wp_query;
+	global $wp_query,$oj;
 
 	/* Get the available post layouts. */
 	$post_layouts = get_theme_support( 'theme-layouts' );
 
 	/* Set the layout to an empty string. */
 	$layout = '';
-
+	
 	/* If viewing a singular post, check if a layout has been specified. */
-	if(is_home() || is_archive() || is_single()){
+	if(is_home() || is_archive() || is_single() || $oj->context=='blogs'){
 		$layout='2c-l';
 	}
 
