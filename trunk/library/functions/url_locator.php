@@ -5,30 +5,30 @@
 function oj_get_top_page(){
 	return array(
 		'problem'=>array(
-			'url'=>'<a href="/?oj=problems">Problems</a>',
-			'url_raw' => '/?oj=problems',
+			'link'=>'<a href="/?oj=problems">Problems</a>',
+			'url' => '/?oj=problems',
 			'label' => 'Problems'
 		),
 		'statusl' =>array(
-			'url' => '<a href="/?oj=statusl">Status</a>',
-			'url_raw' => '/?oj=statusl',
+			'link' => '<a href="/?oj=statusl">Status</a>',
+			'url' => '/?oj=statusl',
 			'label' =>'Status',
 		),
 		'statusd' =>array(
-			'url' => '<a href="/?oj=statusd">Status Detail</a>',
-			'url_raw' => '/?oj=statusd',
+			'link' => '<a href="/?oj=statusd">Status Detail</a>',
+			'url' => '/?oj=statusd',
 			'label' =>'Status Detail',
 		),
 		'submitpage' =>array(
-			'url' => '<a href="/?oj=submitpage">Submit Page</a>',
-			'url_raw' => '/?oj=submitpage',
+			'link' => '<a href="/?oj=submitpage">Submit Page</a>',
+			'url' => '/?oj=submitpage',
 			'label' =>'Submit Page',
 		),
 		'addsolution' => array(
-			'url_raw' => '/?oj=addsolution'
+			'url' => '/?oj=addsolution'
 		),
 		'showsource' => array(
-			'url_raw' => '/?oj=showsource',
+			'url' => '/?oj=showsource',
 		)
 	);
 }
@@ -41,7 +41,7 @@ function oj_maybe_redirect_url(){
 		case 'statusl':
 			if($_GET['title']){
 				$oj->context='problem';
-				$oj_bread_trail[]=$oj->page['problem']['url'];
+				$oj_bread_trail[]=$oj->page['problem']['link'];
 				$oj_bread_trail[]='<a href="/?post_type=problem&p='.$_GET['pid'].'">Problem-'.$_GET['pid'].'</a>';
 				$oj_bread_trail['trail_end']='Problem Status';
 			}else{
@@ -52,7 +52,7 @@ function oj_maybe_redirect_url(){
 			exit(0);break;
 		case 'statusd':
 			$oj->context='status';
-			$oj_bread_trail[]=$oj->page['statusl']['url'];
+			$oj_bread_trail[]=$oj->page['statusl']['link'];
 			$oj_bread_trail['trail_end']='Status Detail';
 			locate_template('oj-status-detail.php',true);
 			exit(0);break;		
@@ -63,7 +63,7 @@ function oj_maybe_redirect_url(){
 			exit(0);break;
 		case 'submitpage':
 			$oj->context='problem';
-			$oj_bread_trail[]=$oj->page['problem']['url'];
+			$oj_bread_trail[]=$oj->page['problem']['link'];
 			$oj_bread_trail[]='<a href="/?post_type=problem&p='.$_GET['pid'].'">Problem-'.$_GET['pid'].'</a>';
 			$oj_bread_trail['trail_end']='Submit Solution';
 			locate_template('oj-submitpage.php',true);
@@ -76,7 +76,7 @@ function oj_maybe_redirect_url(){
 			exit(0);break;
 		case 'showsource':
 			$oj->context='status';
-			$oj_bread_trail[]=$oj->page['statusl']['url'];
+			$oj_bread_trail[]=$oj->page['statusl']['link'];
 			$oj_bread_trail['trail_end']='solution-'.$_GET['sid'].'-source';
 			if(empty($_GET['sid'])){
 				oj_end_with_status('Solution ID missing!');

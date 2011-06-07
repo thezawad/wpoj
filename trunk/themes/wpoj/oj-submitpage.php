@@ -25,7 +25,7 @@ get_header();
 			,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,syntax_selection,|, change_smooth_selection, highlight, reset_highlight, word_wrap, |, help"          
 	});
 	</script>
-	<form class="solution-submit" action="<?php echo $oj->page['addsolution']['url_raw'];?>" method="post" >
+	<form class="solution-submit" action="<?php echo $oj->page['addsolution']['url'];?>" method="post" >
 		<input type="hidden" name="pid" value="<?=$problem_id?>">
 		<input type="hidden" name="cid" value="<?=$contest_id?>">
 		<input type="hidden" name="sid" value="<?=$solution_id?>">

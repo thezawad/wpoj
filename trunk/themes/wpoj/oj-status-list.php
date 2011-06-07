@@ -51,7 +51,7 @@ get_header(); ?>
 						'class'=>array('PD','PR','CI','RJ','AC','PE','WA','TLE','MLE','OLE','RE','CE','CO')
 					);	
 					$languages=array_keys($oj->languages);
-					$edit_solution_url=$oj->page['submitpage']['url_raw'].'&pid='.$post->problem_id.'&sid='.$post->solution_id.'&language='.$post->language;
+					$edit_solution_url=$oj->page['submitpage']['url'].'&pid='.$post->problem_id.'&sid='.$post->solution_id.'&language='.$post->language;
 				?>
 					<td><?php echo $post->solution_id;?></td>
 					<td><a href="/?author=<?php echo $post->user_id;?>"><?php echo $post->user_login;?></a></td>
