@@ -39,7 +39,7 @@ function oj_get_top_page(){
 	);
 }
 function oj_maybe_redirect_url(){
-	global $oj,$oj_bread_trail;
+	global $oj,$oj_bread_trail,$wp_query;
 	$oj_bread_trail=array();
 	$page=$_GET['oj'];
 	if(empty($page)){return ;}
@@ -47,6 +47,7 @@ function oj_maybe_redirect_url(){
 		case 'blogs':
 			$oj->context='blogs';
 			wp();
+			$wp_query->is_home=false;
 			$oj_bread_trail['trail_end']='Blogs';
 			locate_template('oj-blogs.php',true);
 			exit(0);break;
