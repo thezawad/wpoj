@@ -36,7 +36,7 @@ get_header();
 			Language : <?php oj_echo_language_select(0, $language)?>
 		</div>
 		<div>
-			<textarea cols=80 rows=20 id="source" style="height:308px;" name="source"><?=$source_code?></textarea>
+			<textarea id="source" style="width:100%; height:308px;" name="source"><?=$source_code?></textarea>
 		</div>
 		<div>
 			<input type="submit" value="Submit"><input type="reset" value="Reset">
