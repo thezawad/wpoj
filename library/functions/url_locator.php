@@ -4,6 +4,9 @@
  */
 function oj_get_top_page(){
 	return array(
+		'blogs' => array(
+			'url'=>'/?oj=blogs',
+		),
 		'problem'=>array(
 			'link'=>'<a href="/?oj=problems">Problems</a>',
 			'url' => '/?oj=problems',
@@ -41,6 +44,12 @@ function oj_maybe_redirect_url(){
 	$page=$_GET['oj'];
 	if(empty($page)){return ;}
 	switch ($page){
+		case 'blogs':
+			$oj->context='blogs';
+			wp();
+			$oj_bread_trail['trail_end']='Blogs';
+			locate_template('oj-blogs.php',true);
+			exit(0);break;
 		case 'statusl':
 			if($_GET['title']){
 				$oj->context='problem';

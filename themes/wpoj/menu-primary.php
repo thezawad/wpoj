@@ -20,6 +20,7 @@ if ( has_nav_menu( 'primary' ) ) : ?>
 			<div class="menu">
 				<ul id="menu-primary-items" class="sf-js-enabled">
 					<li id="page-home" class="menu-item"><a href="/">Home</a></li>
+					<li id="page-blogs" class="menu-item"><a href="/?oj=blogs">Blogs</a></li>
 					<li id="page-problem" class="menu-item"><a href="/?oj=problems">Problems</a></li>
 					<li id="page-status" class="menu-item"><a href="/?oj=statusl">Status</a></li>
 				</ul>

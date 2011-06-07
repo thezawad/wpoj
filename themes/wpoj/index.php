@@ -10,70 +10,54 @@
  */
 
 get_header(); // Loads the header.php template. ?>
+<link type="text/css" rel="stylesheet" href="http://acm.hust.edu.cn/blog/wp-content/themes/boldy/css/nivo-slider.css"/>
+<script type="text/javascript" src="http://acm.hust.edu.cn/blog/wp-content/themes/boldy/js/jquery.nivo.slider.pack.js"></script>
+<div class="home-banner">
+	<div id="slider">
+	  <a href="http://acm.hust.edu.cn/blog/?page_id=486"> <img class="alignnone size-full wp-image-501" title="HUST ACM/ICPC TEAM常年招新，点击图片查看详情！" src="http://acm.hust.edu.cn/blog/wp-content/uploads/2011/03/JoinAD.jpg" alt="" width="960" height="370" /></a>
+	  <img class="alignnone size-full wp-image-503" title="HUST Erbao队在杭州赛区夺得第6，将代表集训队出征World Final2011，祝贺他们！ " src="http://acm.hust.edu.cn/blog/wp-content/uploads/2011/03/TeamAD.jpg" alt="" width="960" height="370" />		
+	</div>
+	<div class="shadow"></div>
+</div>
+<div class="home-content clear">
+	<div class="hentry widgets">
+		<?php wp_list_bookmarks();?>
+	</div>
+	<div class="hentry news">
+		<h2>News</h2>
+		<ul>
+		<?php while(have_posts()):the_post();?>
+		<li>[<?php echo get_the_category_list(' ,'); ?>] <a href="<?php the_permalink(); ?>"> <?php the_title();?></a></li>
+		<?php endwhile;?>
+		</ul>
+	</div>
+</div>
+<?php wp_list_pages(array('post_type'=>'problem'));?>
 
-	<?php do_atomic( 'before_content' ); // retro-fitted_before_content ?>
 
-	<div id="content">
-
-		<?php get_sidebar( 'before-content' ); // Loads the sidebar-before-content.php template. ?>
-
-		<?php do_atomic( 'open_content' ); // retro-fitted_open_content ?>
-
-		<div class="hfeed">
-
-			<?php get_template_part( 'loop-meta' ); // Loads the loop-meta.php template. ?>
-
-			<?php if ( have_posts() ) : ?>
-
-				<?php while ( have_posts() ) : the_post(); ?>
-
-					<?php do_atomic( 'before_entry' ); // retro-fitted_before_entry ?>
-
-					<div id="post-<?php the_ID(); ?>" class="<?php hybrid_entry_class(); ?>">
-
-						<?php do_atomic( 'open_entry' ); // retro-fitted_open_entry ?>
-
-						<?php echo apply_atomic_shortcode( 'entry_title', '[entry-title]' ); ?>
-
-						<?php echo apply_atomic_shortcode( 'byline', '<div class="byline">' . __( 'By [entry-author] on [entry-published] [entry-edit-link before=" | "]', hybrid_get_textdomain() ) . '</div>' ); ?>
-
-						<div class="entry-content">
-							<?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', hybrid_get_textdomain() ) ); ?>
-							<?php wp_link_pages( array( 'before' => '<p class="page-links">' . __( 'Pages:', hybrid_get_textdomain() ), 'after' => '</p>' ) ); ?>
-						</div><!-- .entry-content -->
-
-						<?php echo apply_atomic_shortcode( 'entry_meta', '<div class="entry-meta">' . __( '[entry-terms taxonomy="category" before="Posted in "] [entry-terms before="| Tagged "] [entry-comments-link before=" | "]', hybrid_get_textdomain() ) . '</div>' ); ?>
-
-						<?php do_atomic( 'close_entry' ); // retro-fitted_close_entry ?>
-
-					</div><!-- .hentry -->
-
-					<?php do_atomic( 'after_entry' ); // retro-fitted_after_entry ?>
-
-				<?php endwhile; ?>
-
-			<?php else : ?>
-
-				<?php get_template_part( 'loop-error' ); // Loads the loop-error.php template. ?>
-
-			<?php endif; ?>
-
-		</div><!-- .hfeed -->
-
-		<?php do_atomic( 'close_content' ); // retro-fitted_close_content ?>
-
-		<?php get_sidebar( 'after-content' ); // Loads the sidebar-after-content.php template. ?>
-
-		<?php get_template_part( 'loop-nav' ); // Loads the loop-nav.php template. ?>
-
-	</div><!-- #content -->
-
-	<?php do_atomic( 'after_content' ); // retro-fitted_after_content ?>
-	
-	<?php get_sidebar( 'primary' ); // Loads the sidebar-primary.php template. ?>
-
-	<?php get_sidebar( 'secondary' ); // Loads the sidebar-secondary.php template. ?>
-
-	<?php do_atomic( 'close_main' ); // retro-fitted_close_main ?>
-
+<script type="text/javascript">
+jQuery(window).load(function() {
+	jQuery('#slider').nivoSlider({
+		effect:'random', //Specify sets like: 'fold,fade,sliceDown'
+		slices:15,
+		animSpeed:500,
+		pauseTime:3000,
+		startSlide:0, //Set starting Slide (0 index)
+		directionNav:true, //Next & Prev
+		directionNavHide:true, //Only show on hover
+		controlNav:true, //1,2,3...
+		controlNavThumbs:false, //Use thumbnails for Control Nav
+		controlNavThumbsFromRel:false, //Use image rel for thumbs
+		controlNavThumbsSearch: '.jpg', //Replace this with...
+		controlNavThumbsReplace: '_thumb.jpg', //...this in thumb Image src
+		keyboardNav:true, //Use left & right arrows
+		pauseOnHover:true, //Stop animation while hovering
+		manualAdvance:false, //Force manual transitions
+		captionOpacity:0.8, //Universal caption opacity
+		beforeChange: function(){},
+		afterChange: function(){},
+		slideshowEnd: function(){} //Triggers after all slides have been shown
+	});
+});
+</script>
 <?php get_footer(); // Loads the footer.php template. ?>
