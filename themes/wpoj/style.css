@@ -24,7 +24,19 @@ div.menu ul{margin:0;padding:0;list-style:none;line-height:1.0}div.menu ul ul{po
 	font-weight: normal;
 	font-style: normal;
 	}
-
+.clearfix:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.clearfix {
+    display: inline-block;
+}
+.clearfix {
+    display: block;
+}
 /**
 * Elements
 **************************************/
@@ -428,7 +440,6 @@ img.wp-smiley {
 **************************************/
 
 .breadcrumbs {
-	width: 930px;
 	margin: 0 auto 25px auto;
 	padding: 6px 25px;
 	font-size: 13px;
@@ -1151,21 +1162,26 @@ body {
 .layout-default .sidebar .widget{
 	float:left;
 	margin-right:20px;
+	min-width:205px;
 }
 /* Two columns, content left and default layouts */
+.layout-2c-l .content-wrapper{
+	float:left;
+	width:100%;
+	margin-left:-345px;
+}
 .layout-2c-l #content {
-	float: left;
-	width: 630px;
-	}
+	margin-left:345px;
+}
+
 .layout-2c-l #sidebar-primary {
 	float: right;
 	width: 325px;
-	}
+}
 .layout-2c-l #sidebar-secondary{
-	clear: right;
 	float: right;
 	width: 325px;
-	}
+}
 
 /* Two columns, content right layout */
 .layout-2c-r #content {
@@ -1300,11 +1316,14 @@ div.problem-section-content{ margin:15px 0;}
 	margin-bottom:30px;
 }
 .home-content .widgets{
-	width:240px;
+	width:275px;
 	float:left;
 }
-.home-content .news{
+.home-content .new-wrapper{
 	float:left;
-	width:610px;
-	margin-left:26px;
+	width:100%;
+}
+.home-content .news{
+	margin-left:345px;
+	margin-right:20px;
 }
