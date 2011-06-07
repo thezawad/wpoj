@@ -53,6 +53,8 @@ class OJ{
 		add_action('init',array($this,'register_core_components'));
 		add_action('init',array($this,'register_core_vars'));
 		add_action('wp_loaded','oj_maybe_redirect_url');
+		add_action('user_register','oj_add_user');
+		add_action('deleted_user','oj_delete_user');
 	}
 	function register_core_components(){
 		oj_register_post_types();

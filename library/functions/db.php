@@ -153,4 +153,17 @@ function oj_submit_solution($problem_id,$source,$language,$time_strict=true,$sol
 	$wpdb->query($sql);
 	return 0;
 }
+function oj_add_user($user_id){
+	global $wpdb,$oj;
+	$sql="SELECT user_login FROM {$wpdb->prefix}users WHERE ID={$user_id}";
+	$user=$wpdb->get_row($sql);
+	$user_login=$user->user_login;
+	$sql="INSERT INTO {$oj->prefix}users_meta (`user_id`,`user_login`) VALUES ($user_id,'$user_login')";
+	$wpdb->query($sql);
+}
+function oj_delete_user($user_id){
+	global $wpdb,$oj;
+	$sql="DELETE FROM {$oj->prefix}users_meta WHERE user_id={$user_id}";
+	$wpdb->query($sql);
+}
 ?>
