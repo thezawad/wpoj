@@ -97,9 +97,10 @@ function oj_active(){
 
    	$problem_meta					= $oj->prefix . 'problem_meta';
 	$contest_meta					= $oj->prefix . 'contest_meta';
-	$solution_meta					= $oj->prefix . 'solution';
-	$source_code				= $oj->prefix . 'source_code';
-
+	$solution						= $oj->prefix . 'solution';
+	$source_code					= $oj->prefix . 'source_code';
+	$compileinfo					= $oj->prefix . 'compileinfo';
+	$users_meta						= $oj->prefix . 'users_meta';
    
 	if($wpdb->get_var("show tables like '$problem_meta'") != $problem_meta) {
       
@@ -140,11 +141,11 @@ function oj_active(){
       $wpdb->query($sql);
    }
    
-	if($wpdb->get_var("show tables like '$solution_meta'") != $solution_meta) {
+	if($wpdb->get_var("show tables like '$solution'") != $solution) {
       //className,valid,num 不知道干嘛的
-		$sql = "CREATE TABLE " . $solution_meta . " (
+		$sql = "CREATE TABLE " . $solution . " (
 		`solution_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-		  `problem_id` int(11) NOT NULL DEFAULT '0',
+		  `problem_id` bigint(20) unsigned NOT NULL DEFAULT '0',
 		  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
 		  `user_login` varchar(60) NOT NULL DEFAULT '',
 		  `time` int(11) NOT NULL DEFAULT '0',
@@ -173,11 +174,43 @@ function oj_active(){
 	if($wpdb->get_var("show tables like '$source_code'") != $source_code) {
       //className,valid,num 不知道干嘛的
 		$sql = "CREATE TABLE " . $source_code . " (
-		  `solution_id` bigint(20) NOT NULL,
+		  `solution_id` bigint(20) unsigned NOT NULL DEFAULT '0',
 		  `source` text NOT NULL,
 		  PRIMARY KEY (`solution_id`)
 		) $charset_collate;";
 		
+      $wpdb->query($sql);
+   }
+   
+	if($wpdb->get_var("show tables like '$compileinfo'") != $compileinfo) {
+      //className,valid,num 不知道干嘛的
+		$sql = "CREATE TABLE " . $compileinfo . " (
+		  `solution_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+		  `error` text,
+		  PRIMARY KEY (`solution_id`)
+		) $charset_collate;";
+		
+      $wpdb->query($sql);
+   }
+   
+	if($wpdb->get_var("show tables like '$users_meta'") != $users_meta) {
+      //className,valid,num 不知道干嘛的
+		$sql = "CREATE TABLE " . $users_meta . " (
+		    `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+		    `user_login` varchar(60) NOT NULL DEFAULT '',
+			  `submit` int(11) DEFAULT '0',
+			  `solved` int(11) DEFAULT '0',
+			  `defunct` char(1) NOT NULL DEFAULT 'N',
+			  `ip` varchar(20) NOT NULL DEFAULT '',
+			  `accesstime` datetime DEFAULT NULL,
+			  `volume` int(11) NOT NULL DEFAULT '1',
+			  `language` int(11) NOT NULL DEFAULT '1',
+			  PRIMARY KEY (`user_id`),
+			  KEY `user_login` (`user_login`)
+		) $charset_collate;";
+		
+      $wpdb->query($sql);
+      $sql="INSERT INTO $users_meta(user_id,user_login) SELECT ID,user_login FROM {$wpdb->prefix}users";
       $wpdb->query($sql);
    }
 	// check one table again, to be sure
