@@ -190,9 +190,9 @@ void run_client(int runid,int clientid){
 	sprintf(runidstr,"%d",runid);
 	write_log("sid=%s\tclient=%s\toj_home=%s\n",runidstr,buf,oj_home);
 	if (!DEBUG)
-		execl("/usr/bin/judge_client_wpoj","/usr/bin/judge_client_wpoj",runidstr,buf,oj_home,NULL);
+		execl("/usr/bin/judge_client","/usr/bin/judge_client",runidstr,buf,oj_home,NULL);
 	else
-		execl("/usr/bin/judge_client_wpoj","/usr/bin/judge_client_wpoj",runidstr,buf,oj_home,"debug",NULL);
+		execl("/usr/bin/judge_client","/usr/bin/judge_client",runidstr,buf,oj_home,"debug",NULL);
 
 
 	//exit(0);
