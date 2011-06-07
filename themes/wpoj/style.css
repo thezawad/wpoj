@@ -352,7 +352,7 @@ img.wp-smiley {
 	float: right;
 	}
 #menu-primary li {
-	margin-left: 25px;
+	margin-left: 15px;
 	padding: 0;
 	background: transparent;
 	}
@@ -1252,7 +1252,7 @@ div.problem-section-content{ margin:15px 0;}
 /*
  * top-page menu
  */
-.oj-home #page-home a ,.oj-problem #page-problem a, .oj-status #page-status a,.oj-blogs #page-blogs a{
+.oj-home #page-home a ,.oj-problem #page-problem a, .oj-status #page-status a,.oj-blogs #page-blogs a,.oj-faqs #page-faqs a{
 	background-color:#04648D;
 	color:#fff;
 }
@@ -1262,19 +1262,12 @@ div.problem-section-content{ margin:15px 0;}
 /*
  * compile status
  */
-.PD { color:grey; }
-.PR { color:grey; }
-.CI { color:orange; }
-.RJ { color:orange; }
+.PD,.PR { color:grey; }
+.CI,.RJ { color:orange; }
 .AC { color:green; }
-.PE { color:red; }
-.WA { color:red; }
-.TLE { color:red; }
-.MLE { color:red; }
-.OLE { color:red; }
-.RE { color:red; }
-.CE { color:#004488; }
-.CO { color:#004488; }
+.PE,.WA { color:red; }
+.TLE,.MLE,.OLE,.RE { color:red; }
+.CE,.CO { color:#004488; }
 
 .home-banner{
 	margin-bottom:10px;
@@ -1311,4 +1304,13 @@ div.problem-section-content{ margin:15px 0;}
 .home-content .news{
 	margin-left:345px;
 	margin-right:20px;
+}
+.oj-faqs .faq-left{
+	width:49.5%;
+	margin-right:0.99%;
+	float:left;
+}
+.oj-faqs .faq-right{
+	width:49.5%;
+	float:left;
 }
