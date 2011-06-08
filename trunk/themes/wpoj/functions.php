@@ -110,7 +110,7 @@ function wpoj_top_menu(){
 	}
 }
 function wpoj_add_top_menu($args){
-	global $oj,$oj_bread_trail;
+	global $oj,$oju,$oj_bread_trail;
 	if (is_home()) return $args;
 	if (empty($oj->context)){echo "<h1>wrong top_page(debug mode)</h1>";}
 	if(count($args)==1){
@@ -119,7 +119,7 @@ function wpoj_add_top_menu($args){
 	if(in_array($oj->context, array('problem'))){
 		$first=$args[0];
 		array_shift($args);
-		$args=array_merge(array($first,$oj->page[$oj->context]['link']),$args);
+		$args=array_merge(array($first,$oju->link($oj->context),$args));
 	}
 	return $args;
 }

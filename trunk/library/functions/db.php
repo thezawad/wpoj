@@ -8,6 +8,8 @@ function oj_query_join($join){
 		case 'problems':
 			$join=' LEFT JOIN '.$oj->prefix.'problem_meta as meta ON meta.post_id='.$wpdb->prefix.'posts.ID ';
 			break;
+		case 'contests':
+			$join='LEFT JOIN '.$oj->prefix.'contest_meta as meta ON meta.post_id='.$wpdb->prefix.'posts.ID ';
 	}
 	return $join;
 }
@@ -15,8 +17,10 @@ function oj_query_fields($fields){
 	global $oj,$wpdb;
 	switch ($oj->current_page){
 		case 'problems':
-			$fields = $fields . ', meta.source , meta.accepted , meta.submit';
+			$fields .=', meta.source , meta.accepted , meta.submit ';
 			break;
+		case 'contests':
+			$fields .= ', meta.start_time, meta.end_time, meta.private ';
 	}
 	return $fields;
 }

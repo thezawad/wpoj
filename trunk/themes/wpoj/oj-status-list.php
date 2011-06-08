@@ -11,7 +11,7 @@ get_header(); ?>
 			</thead>
 			<tbody>
 			<?php
-			global $wpdb,$oj,$paged,$wp_query;
+			global $wpdb,$oj,$oju,$paged,$wp_query;
 			$problem_id=$_GET['pid'];
 			$user_id=$_GET['user_id'];
 			$user_login=$_GET['user_login'];
@@ -55,9 +55,9 @@ get_header(); ?>
 					$pid_clause='&pid='.$post->problem_id;
 					$sid_clause='&sid='.$post->solution_id;
 					$lang_clause='&language='.$post->language;
-					$submitpage_url=$oj->page['submitpage']['url'].$pid_clause.$sid_clause.$lang_clause;
-					$showsource_url=$oj->page['showsource']['url'].$sid_clause;
-					$compileinfo_url=$oj->page['compileinfo']['url'].$sid_clause;
+					$submitpage_url=$oju->url('submitpage').$pid_clause.$sid_clause.$lang_clause;
+					$showsource_url=$oju->url('showsource').$sid_clause;
+					$compileinfo_url=$oju->url('compileinfo').$sid_clause;
 				?>
 					<td><?php echo $post->solution_id;?></td>
 					<td><a href="/?author=<?php echo $post->user_id;?>"><?php echo $post->user_login;?></a></td>
