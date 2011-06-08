@@ -37,6 +37,13 @@ div.menu ul{margin:0;padding:0;list-style:none;line-height:1.0}div.menu ul ul{po
 .clearfix {
     display: block;
 }
+/*
+ * top-page menu
+ */
+.oj-home #page-home a ,.oj-problems #page-problems a, .oj-statusl #page-statusl a,.oj-blogs #page-blogs a,.oj-contests #page-contests a,.oj-faqs #page-faqs a{
+	background-color:#04648D;
+	color:#fff;
+}
 /**
 * Elements
 **************************************/
@@ -1249,13 +1256,6 @@ div.problem-section-title span{
 	font-family:"Times New Roman";
 }
 div.problem-section-content{ margin:15px 0;}
-/*
- * top-page menu
- */
-.oj-home #page-home a ,.oj-problem #page-problem a, .oj-status #page-status a,.oj-blogs #page-blogs a,.oj-faqs #page-faqs a{
-	background-color:#04648D;
-	color:#fff;
-}
 .solution-submit{
 	font-size:14px;
 }
@@ -1268,6 +1268,12 @@ div.problem-section-content{ margin:15px 0;}
 .PE,.WA { color:red; }
 .TLE,.MLE,.OLE,.RE { color:red; }
 .CE,.CO { color:#004488; }
+
+.c-start{ color:blue;}
+.c-run{ color:red;}
+.c-end{ color:green;}
+.c-pub{ color:green;}
+.c-pri{ color:red;}
 
 .home-banner{
 	margin-bottom:10px;

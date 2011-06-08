@@ -2,85 +2,80 @@
 /*
  * wp-loaded hook callback
  */
-function oj_get_top_page(){
+function oj_get_menu_main(){
+	return array('home','blogs','contests','problems','statusl','faqs');
+}
+function oj_get_pages(){
 	return array(
-		'blogs' => array(
-			'url'=>'/?oj=blogs',
+		'home' =>array(
+			'label' => 'Home',
 		),
-		'problem'=>array(
-			'link'=>'<a href="/?oj=problems">Problems</a>',
-			'url' => '/?oj=problems',
+		'blogs' => array(
+			'label' => 'Blogs',
+		),
+		'contests' => array(
+			'label' => 'Contests'
+		),
+		'problems'=>array(
 			'label' => 'Problems'
 		),
 		'statusl' =>array(
-			'link' => '<a href="/?oj=statusl">Status</a>',
-			'url' => '/?oj=statusl',
 			'label' =>'Status',
 		),
-		'statusd' =>array(
-			'link' => '<a href="/?oj=statusd">Status Detail</a>',
-			'url' => '/?oj=statusd',
-			'label' =>'Status Detail',
-		),
-		'submitpage' =>array(
-			'link' => '<a href="/?oj=submitpage">Submit Page</a>',
-			'url' => '/?oj=submitpage',
-			'label' =>'Submit Page',
-		),
-		'addsolution' => array(
-			'url' => '/?oj=addsolution'
-		),
-		'showsource' => array(
-			'url' => '/?oj=showsource',
-		),
-		'compileinfo'=>array(
-			'url' =>'/?oj=compileinfo',
-		),
 		'faqs'=>array(
-			'url' =>'/?oj=faqs',
 			'label'=>'F.A.Qs',
-		)
+		),
+		'submitpage' => array(),
+		'addsolution' => array(),
+		'showsource' => array(),
+		'compileinfo'=> array(),
 	);
 }
 function oj_maybe_redirect_url(){
-	global $oj,$oj_bread_trail,$wp_query;
+	global $oj,$oju,$oj_bread_trail,$wp_query;
 	$oj_bread_trail=array();
 	$page=$_GET['oj'];
 	if(empty($page)){return ;}
 	switch ($page){
+		case 'contests':
+			$subpage=$_GET['ct'];
+			if(empty($subpage)){
+				$oj->context='contests';
+				$oj_bread_trail['trail_end']=$oju->label($page);
+				locate_template('oj-contests.php',true);
+				exit(0);break;
+			}else{
+				switch($subpage){
+				
+				}
+			}
 		case 'blogs':
 			$oj->context='blogs';
 			wp();
 			$wp_query->is_home=false;
-			$oj_bread_trail['trail_end']='Blogs';
+			$oj_bread_trail['trail_end']=$oju->label($page);
 			locate_template('oj-blogs.php',true);
 			exit(0);break;
 		case 'statusl':
 			if($_GET['title']){
-				$oj->context='problem';
-				$oj_bread_trail[]=$oj->page['problem']['link'];
+				$oj->context='problems';
+				$oj_bread_trail[]=$oju->link('problems');
 				$oj_bread_trail[]='<a href="/?post_type=problem&p='.$_GET['pid'].'">Problem-'.$_GET['pid'].'</a>';
 				$oj_bread_trail['trail_end']='Problem Status';
 			}else{
-				$oj->context='status';
-				$oj_bread_trail['trail_end']='Status';		
+				$oj->context='statusl';
+				$oj_bread_trail['trail_end']=$oju->label($page);		
 			}
 			locate_template('oj-status-list.php',true);
 			exit(0);break;
-		case 'statusd':
-			$oj->context='status';
-			$oj_bread_trail[]=$oj->page['statusl']['link'];
-			$oj_bread_trail['trail_end']='Status Detail';
-			locate_template('oj-status-detail.php',true);
-			exit(0);break;		
 		case 'problems':
-			$oj->context='problem';
-			$oj_bread_trail['trail_end']='Problem';
+			$oj->context='problems';
+			$oj_bread_trail['trail_end']=$oju->label($page);
 			locate_template('oj-problems.php',true);
 			exit(0);break;
 		case 'submitpage':
-			$oj->context='problem';
-			$oj_bread_trail[]=$oj->page['problem']['link'];
+			$oj->context='problems';
+			$oj_bread_trail[]=$oju->link('problems');;
 			$oj_bread_trail[]='<a href="/?post_type=problem&p='.$_GET['pid'].'">Problem-'.$_GET['pid'].'</a>';
 			$oj_bread_trail['trail_end']='Submit Solution';
 			locate_template('oj-submitpage.php',true);
@@ -92,8 +87,8 @@ function oj_maybe_redirect_url(){
 			header("Location:/?oj=statusl&user_id=".$userdata->ID);
 			exit(0);break;
 		case 'showsource':
-			$oj->context='status';
-			$oj_bread_trail[]=$oj->page['statusl']['link'];
+			$oj->context='statusl';
+			$oj_bread_trail[]=$oju->link('statusl');
 			$oj_bread_trail['trail_end']='solution-'.$_GET['sid'].'-source';
 			if(empty($_GET['sid'])){
 				oj_end_with_status('Solution ID missing!');
@@ -101,8 +96,8 @@ function oj_maybe_redirect_url(){
 			locate_template('oj-showsource.php',true);
 			exit(0);break;
 		case 'compileinfo':
-			$oj->context='status';
-			$oj_bread_trail[]=$oj->page['statusl']['link'];
+			$oj->context='statusl';
+			$oj_bread_trail[]=$oju->link('statusl');
 			$oj_bread_trail['trail_end']='solution-'.$_GET['sid'].'-compileinfo';
 			if(empty($_GET['sid'])){
 				oj_end_with_status('Solution ID missing!');
@@ -111,7 +106,7 @@ function oj_maybe_redirect_url(){
 			exit(0);break;
 		case 'faqs':
 			$oj->context='faqs';
-			$oj_bread_trail['trail_end']='F.A.Qs';
+			$oj_bread_trail['trail_end']=$oju->label($page);;
 			locate_template('oj-faqs.php',true);
 			exit(0);break;
 	}

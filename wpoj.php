@@ -37,6 +37,7 @@ class OJ{
 		require_once(OJ_FUNCTIONS.'/tools.php');
 		require_once(OJ_FUNCTIONS.'/init.php');
 		require_once(OJ_FUNCTIONS.'/url_locator.php');
+		require_once(OJ_FUNCTIONS.'/templates.php');
 		require_once(OJ_FUNCTIONS.'/db.php');
 		if(is_admin()){
 			require_once(OJ_FUNCTIONS.'/fps.php');
@@ -44,14 +45,15 @@ class OJ{
 	}
 	function include_classes(){
 		require_once(OJ_CLASSES.'/objects.php');
+		require_once(OJ_CLASSES.'/URL.php');
 		if(is_admin()){
 			require_once (OJ_CLASSES.'/meta_boxs.php');
 		}
 	}
 	function _init(){
 		register_theme_directory( OJ_THEMES);
-		add_action('init',array($this,'register_core_components'));
 		add_action('init',array($this,'register_core_vars'));
+		add_action('init',array($this,'register_core_components'));
 		add_action('wp_loaded','oj_maybe_redirect_url');
 		add_action('user_register','oj_add_user');
 		add_action('deleted_user','oj_delete_user');
@@ -63,7 +65,9 @@ class OJ{
 		}
 	}
 	function register_core_vars(){
-		$this->page=oj_get_top_page();
+		global $oju;
+		$oju=new OJ_URL();
+		$this->page=$oju;
 		$this->objects=oj_get_objects();
 	}
 	

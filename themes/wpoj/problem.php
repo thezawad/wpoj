@@ -29,10 +29,10 @@ get_header(); // Loads the header.php template. ?>
 
 					<div id="post-<?php the_ID(); ?>" class="<?php hybrid_entry_class(); ?>">
 					<?php 
-						global $oj;
+						global $oj,$oju;
 						$url_common_parm='&title='.$post->post_title.'&pid='.$post->ID;
-						$url_submit=$oj->page['submitpage']['url'].$url_common_parm.'&language='.$_GET['language'];
-						$url_status=$oj->page['statusl']['url'].$url_common_parm;
+						$url_submit=$oju->url('submitpage').$url_common_parm.'&language='.$_GET['language'];
+						$url_status=$oju->url('statusl').$url_common_parm;
 					?>
 						<div class='problem-feature problem-feature-top'>
 							<a class="feature f-submit" href="<?php echo $url_submit;?>">Submit</a>
