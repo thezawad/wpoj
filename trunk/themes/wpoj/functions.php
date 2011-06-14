@@ -86,17 +86,17 @@ function retro_fitted_theme_setup() {
 	add_filter( 'previous_comments_link_attributes', 'retro_fitted_previous_comments_link_attributes' );
 	add_filter( 'next_comments_link_attributes', 'retro_fitted_next_comments_link_attributes' );
 	/* Add By Johnnychen */
-	add_action( 'wp','wpoj_top_menu');
-	add_filter( 'breadcrumb_trail_items', 'wpoj_add_top_menu');
+	add_action( 'wp','wpoj_set_other_context');
+	add_filter( 'breadcrumb_trail_items', 'wpoj_breadcrumb_ajust');
 	add_filter( 'body_class','wpoj_set_top_page_class');
 }
-function wpoj_top_menu(){
+function wpoj_set_other_context(){
 	global $oj,$wp_query;
 	if(is_singular()){
 		$post = $wp_query->get_queried_object();
 		$post_type = $post -> post_type;
-		if(in_array($post_type, array('problem'))){
-			$oj->context='problems';
+		if(in_array($post_type, array('post'))){
+			$oj->context='blogs';
 		}
 	}elseif(is_archive()){
 		if ( is_tax() || is_category() || is_tag() ) {
@@ -105,11 +105,13 @@ function wpoj_top_menu(){
 			$post_type =$taxonomy->object_type[0];
 			if(in_array($post_type, array('problem'))){
 				$oj->context='problems';
+			}elseif(in_array($post_type, array('post'))){
+				$oj->context='blogs';
 			}
 		}
 	}
 }
-function wpoj_add_top_menu($args){
+function wpoj_breadcrumb_ajust($args){
 	global $oj,$oju,$oj_bread_trail;
 	if (is_home()) return $args;
 	if (empty($oj->context)){echo "<h1>wrong top_page(debug mode)</h1>";}
