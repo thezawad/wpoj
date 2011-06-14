@@ -67,7 +67,6 @@ class OJ{
 	function register_core_vars(){
 		global $oju;
 		$oju=new OJ_URL();
-		$this->page=$oju;
 		$this->objects=oj_get_objects();
 	}
 	

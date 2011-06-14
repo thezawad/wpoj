@@ -5,11 +5,19 @@ class OJ_URL{
 	function OJ_URL(){
 		$this->pages = oj_get_pages();
 		$this->register_menu('main', oj_get_menu_main());
+		$this->register_menu('contest', oj_get_menu_contest());
 	}
 	function url($page){
 		if($page=='home') return site_url();
 		else{
-			return site_url().'?oj='.$page;
+			$the_url=site_url().'?oj='.$page;
+			if(isset($_GET['cid'])){
+				$the_url.='&cid='.$_GET['cid'];
+				$the_url.='&ctitle='.$_GET['ctitle'];
+			}elseif(isset($_GET['pid'])){
+				$the_url.='&pid='.$_GET['pid'];
+			}
+			return $the_url;
 		}
 	}
 	function link($page){

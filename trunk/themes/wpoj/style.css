@@ -44,6 +44,13 @@ div.menu ul{margin:0;padding:0;list-style:none;line-height:1.0}div.menu ul ul{po
 	background-color:#04648D;
 	color:#fff;
 }
+.oj-contests-clarication #page-contests-clarication a,
+.oj-contests-problems #page-contests-problems a,
+.oj-contests-status #page-contests-status a,
+.oj-contests-ranklist #page-contests-ranklist a,
+.oj-contests-statistics #page-contests-statistics a{
+	background-color:#CE3000; font-weight:bold;
+}
 /**
 * Elements
 **************************************/
@@ -308,6 +315,7 @@ img.wp-smiley {
 	background: url(images/header.png) repeat-x 0 0;
 	border-bottom: 10px solid #ce3000;
 	}
+#header,#footer{ min-width:960px;}
 #header .wrap ,#footer .wrap ,#main {
 	width: 90%;
 	min-width:960px;
@@ -346,7 +354,21 @@ img.wp-smiley {
 /**
 * Primary menu
 **************************************/
-
+#oj-menu-contest{
+	background-color:#04648D;
+	margin:0;
+	border-bottom:2px solid #04648D;
+}
+#oj-menu-contest li{
+	float:left;
+	text-align:center;
+	font-size:16px;
+	padding:0;
+	width:17.6%;
+	padding:0 10px;
+}
+#oj-menu-contest li a{color:#FFF; text-decoration:none; padding:8px 0; display:block;}
+#oj-menu-contest li a:hover{background-color:#CE3000; font-weight:bold;}
 #menu-primary {
 	position: relative;
 	width: 90%;
@@ -361,10 +383,8 @@ img.wp-smiley {
 #menu-primary li {
 	margin-left: 15px;
 	padding: 0;
+	text-align:center;
 	background: transparent;
-	}
-#menu-primary li li {
-	margin-left: 0;
 	}
 #menu-primary li a {
 	padding: 10px 20px;
@@ -378,26 +398,6 @@ img.wp-smiley {
 	color: #fff;
 	background: #04648d;
 	text-decoration: none;
-	}
-#menu-primary li ul {
-	background: #04648d;
-	border-top: 1px dotted #5fadce;
-	-moz-box-shadow: 2px 2px 5px #999;
-	-webkit-box-shadow: 2px 2px 5px #999;
-	box-shadow: 2px 2px 5px #999;
-	}
-#menu-primary li li a {
-	font: normal normal normal 12px/14px Arial, Verdana, sans-serif;
-	text-transform: none;
-	color: #E4EEF3;
-	background: #04648d;
-	border-bottom: 1px dotted #5fadce;
-	}
-#menu-primary li li a:hover, #menu-primary li li.current-menu-item a:hover {
-	background: #01435f;
-	}
-#menu-primary li li.current-menu-item a {
-	background: #01435f;
 	}
 
 /* Sub-nav indicator. */
