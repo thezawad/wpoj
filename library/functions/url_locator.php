@@ -5,6 +5,9 @@
 function oj_get_menu_main(){
 	return array('home','blogs','contests','problems','statusl','faqs');
 }
+function oj_get_menu_contest(){
+	return array('contests-clarication','contests-problems','contests-ranklist','contests-status','contests-statistics');
+}
 function oj_get_pages(){
 	return array(
 		'home' =>array(
@@ -16,6 +19,22 @@ function oj_get_pages(){
 		'contests' => array(
 			'label' => 'Contests'
 		),
+			'contests-clarication'=>array(
+				'label' => 'Clarication',
+			),
+			'contests-problems'=>array(
+				'label' => 'Problems',
+			),
+			'contests-ranklist'=>array(
+				'label' => 'Ranklist',
+			),
+			'contests-status'=>array(
+				'label' => 'Status',
+			),
+			'contests-statistics'=>array(
+				'label' => 'Statistics',
+			),
+			
 		'problems'=>array(
 			'label' => 'Problems'
 		),
@@ -38,25 +57,21 @@ function oj_maybe_redirect_url(){
 	if(empty($page)){return ;}
 	switch ($page){
 		case 'contests':
-			$subpage=$_GET['ct'];
-			if(empty($subpage)){
-				$oj->context='contests';
-				$oj_bread_trail['trail_end']=$oju->label($page);
-				locate_template('oj-contests.php',true);
-				exit(0);break;
-			}else{
-				switch($subpage){
-				
-				}
-			}
+			$oj->context='contests';
+			$oj->page=$page;
+			$oj_bread_trail['trail_end']=$oju->label($page);
+			locate_template('oj-contests.php',true);
+			exit(0);break;
 		case 'blogs':
 			$oj->context='blogs';
+			$oj->page=$page;
 			wp();
 			$wp_query->is_home=false;
 			$oj_bread_trail['trail_end']=$oju->label($page);
 			locate_template('oj-blogs.php',true);
 			exit(0);break;
 		case 'statusl':
+			
 			if($_GET['title']){
 				$oj->context='problems';
 				$oj_bread_trail[]=$oju->link('problems');
@@ -66,15 +81,18 @@ function oj_maybe_redirect_url(){
 				$oj->context='statusl';
 				$oj_bread_trail['trail_end']=$oju->label($page);		
 			}
+			$oj->page=$page;
 			locate_template('oj-status-list.php',true);
 			exit(0);break;
 		case 'problems':
 			$oj->context='problems';
+			$oj->page=$page;
 			$oj_bread_trail['trail_end']=$oju->label($page);
 			locate_template('oj-problems.php',true);
 			exit(0);break;
 		case 'submitpage':
 			$oj->context='problems';
+			$oj->page=$page;
 			$oj_bread_trail[]=$oju->link('problems');;
 			$oj_bread_trail[]='<a href="/?post_type=problem&p='.$_GET['pid'].'">Problem-'.$_GET['pid'].'</a>';
 			$oj_bread_trail['trail_end']='Submit Solution';
@@ -83,11 +101,13 @@ function oj_maybe_redirect_url(){
 		case 'addsolution':
 			global $userdata;
 			$oj->context='home';
+			$oj->page=$page;
 			require_once (dirname(dirname(dirname(__FILE__))).'/addsolution.php');
 			header("Location:/?oj=statusl&user_id=".$userdata->ID);
 			exit(0);break;
 		case 'showsource':
 			$oj->context='statusl';
+			$oj->page=$page;
 			$oj_bread_trail[]=$oju->link('statusl');
 			$oj_bread_trail['trail_end']='solution-'.$_GET['sid'].'-source';
 			if(empty($_GET['sid'])){
@@ -97,6 +117,7 @@ function oj_maybe_redirect_url(){
 			exit(0);break;
 		case 'compileinfo':
 			$oj->context='statusl';
+			$oj->page=$page;
 			$oj_bread_trail[]=$oju->link('statusl');
 			$oj_bread_trail['trail_end']='solution-'.$_GET['sid'].'-compileinfo';
 			if(empty($_GET['sid'])){
@@ -106,8 +127,34 @@ function oj_maybe_redirect_url(){
 			exit(0);break;
 		case 'faqs':
 			$oj->context='faqs';
-			$oj_bread_trail['trail_end']=$oju->label($page);;
+			$oj->page=$page;
+			$oj_bread_trail['trail_end']=$oju->label($page);
 			locate_template('oj-faqs.php',true);
+			exit(0);break;
+		case 'contests-clarication':
+			$oj->context='contests';
+			$oj->page=$page;
+			locate_template('oj-contests-clarication.php',true);
+			exit(0);break;
+		case 'contests-problems':
+			$oj->context='contests';
+			$oj->page=$page;
+			locate_template('oj-contests-problems.php',true);
+			exit(0);break;
+		case 'contests-status':
+			$oj->context='contests';
+			$oj->page=$page;
+			locate_template('oj-contests-status.php',true);
+			exit(0);break;
+		case 'contests-ranklist':
+			$oj->context='contests';
+			$oj->page=$page;
+			locate_template('oj-contests-ranklist.php',true);
+			exit(0);break;
+		case 'contests-statistics':
+			$oj->context='contests';
+			$oj->page=$page;
+			locate_template('oj-contests-statistics.php',true);
 			exit(0);break;
 	}
 }

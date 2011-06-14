@@ -25,10 +25,12 @@ get_header(); ?>
 
 			if (intval($post->private)==0) $private='<span class="c-pub">Public</span>';
 			else $private='<span class="c-pri">Private</span>';
+			
+			$contest_url=site_url().'?oj=contests-problems&cid='.$post->ID.'&ctitle='.$post->post_title;
 			?>
 				<tr>
 					<td><?php echo $post->ID;?></td>
-					<td><a href="<?php the_permalink();?>"><?php the_title(); ?></a></td>
+					<td><a href="<?php echo $contest_url;?>"><?php the_title(); ?></a></td>
 					<td><?php echo $status; ?></td>
 					<td><?php echo $private;?></td>
 				</tr>
@@ -39,10 +41,5 @@ get_header(); ?>
 	</div><!-- #content -->
 	</div>
 	<?php do_atomic( 'after_content' ); // retro-fitted_after_content ?>
-	
-	<?php get_sidebar( 'primary' ); // Loads the sidebar-primary.php template. ?>
-
-	<?php get_sidebar( 'secondary' ); // Loads the sidebar-secondary.php template. ?>
-
 	<?php do_atomic( 'close_main' ); // retro-fitted_close_main ?>
 <?php get_footer(); ?>

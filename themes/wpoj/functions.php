@@ -96,7 +96,7 @@ function wpoj_top_menu(){
 		$post = $wp_query->get_queried_object();
 		$post_type = $post -> post_type;
 		if(in_array($post_type, array('problem'))){
-			$oj->context=$post_type;
+			$oj->context='problems';
 		}
 	}elseif(is_archive()){
 		if ( is_tax() || is_category() || is_tag() ) {
@@ -104,7 +104,7 @@ function wpoj_top_menu(){
 			$taxonomy = get_taxonomy( $term->taxonomy );
 			$post_type =$taxonomy->object_type[0];
 			if(in_array($post_type, array('problem'))){
-				$oj->context=$post_type;
+				$oj->context='problems';
 			}
 		}
 	}
@@ -113,10 +113,11 @@ function wpoj_add_top_menu($args){
 	global $oj,$oju,$oj_bread_trail;
 	if (is_home()) return $args;
 	if (empty($oj->context)){echo "<h1>wrong top_page(debug mode)</h1>";}
+	
 	if(count($args)==1){
 		return array_merge($args,$oj_bread_trail);
 	}
-	if(in_array($oj->context, array('problem'))){
+	if(in_array($oj->context, array('problems'))){
 		$first=$args[0];
 		array_shift($args);
 		$args=array_merge(array($first,$oju->link($oj->context),$args));
@@ -126,6 +127,9 @@ function wpoj_add_top_menu($args){
 function wpoj_set_top_page_class($classes){
 	global $oj;
 	$classes[]='oj-'.$oj->context;
+	if(isset($oj->page)){
+		$classes[]='oj-'.$oj->page;
+	}
 	return $classes;
 }
 /**
