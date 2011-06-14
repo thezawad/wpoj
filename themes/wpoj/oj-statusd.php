@@ -1,5 +1,3 @@
-<?php
-get_header(); ?>
 <div class="content-wrapper hentry clearfix">
 	<div id="content" role="main">
 		<div class="inner-wrapper">
@@ -12,7 +10,7 @@ get_header(); ?>
 			<tbody>
 			<?php
 			global $wpdb,$oj,$oju,$paged,$wp_query;
-			$problem_id=$_GET['pid'];
+			$problem_id=$_GET['fpid'];
 			$user_id=$_GET['user_id'];
 			$user_login=$_GET['user_login'];
 			$orderby=$_GET['orderby'];

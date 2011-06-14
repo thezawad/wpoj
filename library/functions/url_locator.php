@@ -75,17 +75,37 @@ function oj_maybe_redirect_url(){
 			exit(0);break;
 		case 'statusl':
 			
-			if($_GET['title']){
+			if(empty($_GET['cid'])){
+				$oj->context='statusl';
+				$oj->page=$page;
+				$oj_bread_trail['trail_end']=$oju->label($page);
+				get_header();	
+			}else{
+				$oj->context='statusl';
+				$oj->page=$page;
+				$oj_bread_trail['trail_end']=$oju->label($page);
+				get_header('contest');	
+			}
+			
+			locate_template('oj-statusl.php',true);
+			exit(0);break;
+		case 'statusd':
+			if(empty($_GET['cid'])){
 				$oj->context='problems';
+				$oj->page=$page;
 				$oj_bread_trail[]=$oju->link('problems');
 				$oj_bread_trail[]='<a href="/?post_type=problem&p='.$_GET['pid'].'">Problem-'.$_GET['pid'].'</a>';
 				$oj_bread_trail['trail_end']='Problem Status';
+				get_header();
 			}else{
-				$oj->context='statusl';
-				$oj_bread_trail['trail_end']=$oju->label($page);		
+				$oj->context='problems';
+				$oj->page=$page;
+				$oj_bread_trail[]=$oju->link('problems');
+				$oj_bread_trail[]='<a href="/?post_type=problem&p='.$_GET['pid'].'">Problem-'.$_GET['pid'].'</a>';
+				$oj_bread_trail['trail_end']='Problem Status';
+				get_header('contest');
 			}
-			$oj->page=$page;
-			locate_template('oj-status-list.php',true);
+			locate_template('oj-statusd.php',true);
 			exit(0);break;
 		case 'problems':
 			$oj->context='problems';
@@ -94,20 +114,46 @@ function oj_maybe_redirect_url(){
 			locate_template('oj-problems.php',true);
 			exit(0);break;
 		case 'problem':
-			$oj->context='problems';
-			$oj->page=$page;
-			$oj_bread_trail[]=$oju->link("problems");
-			$oj_bread_trail['trail_end']='Problem-'.$_GET['pid'];
 			$wp_query->query_vars=array('p'=>$_GET['pid'],'post_type'=>'problem');
 			$wp_query->query($wp_query->query_vars);
+			
+			if(empty($_GET['cid'])){
+				$oj->context='problems';
+				$oj->page=$page;
+				$oj_bread_trail[]=$oju->link("problems");
+				$oj_bread_trail['trail_end']='Problem-'.$_GET['pid'];
+				get_header();
+			}else{
+				$oj->context='contests';
+				$oj->page='contests-problems';
+				$oj_bread_trail[]=$oju->link("contests");
+				$oj_bread_trail[]=$_GET['ctitle'];
+				$oj_bread_trail[]=$oju->link("contests-problems");
+				$oj_bread_trail['trail_end']='Problem-'.$_GET['pid'];
+				get_header('contest');
+			}
+			
 			locate_template('oj-problem.php',true);
 			exit(0);break;
 		case 'submitpage':
-			$oj->context='problems';
-			$oj->page=$page;
-			$oj_bread_trail[]=$oju->link('problems');;
-			$oj_bread_trail[]='<a href="/?post_type=problem&p='.$_GET['pid'].'">Problem-'.$_GET['pid'].'</a>';
-			$oj_bread_trail['trail_end']='Submit Solution';
+			if(empty($_GET['cid'])){
+				$oj->context='problems';
+				$oj->page=$page;
+				$oj_bread_trail[]=$oju->link('problems');;
+				$oj_bread_trail[]='<a href="/?post_type=problem&p='.$_GET['pid'].'">Problem-'.$_GET['pid'].'</a>';
+				$oj_bread_trail['trail_end']='Submit Solution';
+				get_header();
+			}else{
+				$oj->context='contests';
+				$oj->page='contests-problems';
+				$oj_bread_trail[]=$oju->link("contests");
+				$oj_bread_trail[]=$_GET['ctitle'];
+				$oj_bread_trail[]=$oju->link("contests-problems");
+				$oj_bread_trail[]='<a href="'.$oju->url('problem').'">Problem-'.$_GET['pid'].'</a>';
+				$oj_bread_trail['trail_end']='Submit Solution';
+				get_header('contest');
+			}
+			
 			locate_template('oj-submitpage.php',true);
 			exit(0);break;
 		case 'addsolution':

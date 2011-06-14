@@ -1,6 +1,3 @@
-<?php 
-get_header();
-?>
 <?php
 	global $oj,$oju;
 	$problem_id=$_GET['pid'];
