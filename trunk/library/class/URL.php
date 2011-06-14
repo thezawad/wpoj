@@ -14,7 +14,6 @@ class OJ_URL{
 			if(isset($_GET['cid'])){
 				$the_url.='&cid='.$_GET['cid'];
 				$the_url.='&ctitle='.$_GET['ctitle'];
-			}elseif(isset($_GET['pid'])){
 				$the_url.='&pid='.$_GET['pid'];
 			}
 			return $the_url;
@@ -28,7 +27,7 @@ class OJ_URL{
 		if(!empty($this->pages[$page]['label'])){
 			return $this->pages[$page]['label'];
 		}else{
-			return strtoupper($page);
+			return ucfirst($page);
 		}
 	}
 	function register_menu($pos,$pages){

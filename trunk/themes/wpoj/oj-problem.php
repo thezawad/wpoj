@@ -8,8 +8,7 @@
  * @package Retro-fitted
  * @subpackage Template
  */
-
-get_header(); // Loads the header.php template. ?>
+ // Loads the header.php template. ?>
 
 	<?php do_atomic( 'before_content' ); // retro-fitted_before_content ?>
 	<div class="content-wrapper">
@@ -32,7 +31,7 @@ get_header(); // Loads the header.php template. ?>
 						global $oj,$oju;
 						$url_common_parm='&title='.$post->post_title.'&pid='.$post->ID;
 						$url_submit=$oju->url('submitpage').$url_common_parm.'&language='.$_GET['language'];
-						$url_status=$oju->url('statusl').$url_common_parm;
+						$url_status=$oju->url('statusd').$url_common_parm;
 					?>
 						<div class='problem-feature problem-feature-top'>
 							<a class="feature f-submit" href="<?php echo $url_submit;?>">Submit</a>
