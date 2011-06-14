@@ -13,10 +13,12 @@ get_header(); ?>
 			global $wp_query,$oj;
 			$oj->current_page="problems";
 			$posts=$wp_query->query(array("post_type" => "problem",'posts_per_page' =>20 ,'paged'=> trim($_GET['paged']),'orderby'=>'submit'));
-			foreach ($posts as $post):setup_postdata($post);?>
+			foreach ($posts as $post):setup_postdata($post);
+				$problem_url=site_url().'?oj=problem&pid='.$post->ID;
+			?>
 				<tr>
 					<td><?php echo $post->ID;?></td>
-					<td><a href="<?php the_permalink();?>"><?php the_title(); ?></a></td>
+					<td><a href="<?php echo $problem_url;?>"><?php the_title(); ?></a></td>
 					<td><?php echo $post->source;?></td>
 					<td><?php echo $post->accepted;?></td>
 					<td><?php echo $post->submit;?></td>

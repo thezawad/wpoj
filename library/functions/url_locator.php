@@ -38,6 +38,9 @@ function oj_get_pages(){
 		'problems'=>array(
 			'label' => 'Problems'
 		),
+		'problem'=>array(
+			'label' => 'Problem'
+		),
 		'statusl' =>array(
 			'label' =>'Status',
 		),
@@ -89,6 +92,15 @@ function oj_maybe_redirect_url(){
 			$oj->page=$page;
 			$oj_bread_trail['trail_end']=$oju->label($page);
 			locate_template('oj-problems.php',true);
+			exit(0);break;
+		case 'problem':
+			$oj->context='problems';
+			$oj->page=$page;
+			$oj_bread_trail[]=$oju->link("problems");
+			$oj_bread_trail['trail_end']='Problem-'.$_GET['pid'];
+			$wp_query->query_vars=array('p'=>$_GET['pid'],'post_type'=>'problem');
+			$wp_query->query($wp_query->query_vars);
+			locate_template('oj-problem.php',true);
 			exit(0);break;
 		case 'submitpage':
 			$oj->context='problems';
