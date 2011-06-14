@@ -134,26 +134,41 @@ function oj_maybe_redirect_url(){
 		case 'contests-clarication':
 			$oj->context='contests';
 			$oj->page=$page;
+			$oj_bread_trail[]=$oju->link('contests');
+			$oj_bread_trail[]=$_GET['ctitle'];
+			$oj_bread_trail['trail_end']=$oju->label("contests-clarication");
 			locate_template('oj-contests-clarication.php',true);
 			exit(0);break;
 		case 'contests-problems':
 			$oj->context='contests';
 			$oj->page=$page;
+			$oj_bread_trail[]=$oju->link('contests');
+			$oj_bread_trail[]=$_GET['ctitle'];
+			$oj_bread_trail['trail_end']=$oju->label("contests-problems");
 			locate_template('oj-contests-problems.php',true);
 			exit(0);break;
 		case 'contests-status':
 			$oj->context='contests';
 			$oj->page=$page;
+			$oj_bread_trail[]=$oju->link('contests');
+			$oj_bread_trail[]=$_GET['ctitle'];
+			$oj_bread_trail['trail_end']=$oju->label("contests-status");
 			locate_template('oj-contests-status.php',true);
 			exit(0);break;
 		case 'contests-ranklist':
 			$oj->context='contests';
 			$oj->page=$page;
+			$oj_bread_trail[]=$oju->link('contests');
+			$oj_bread_trail[]=$_GET['ctitle'];
+			$oj_bread_trail['trail_end']=$oju->label("contests-ranklist");
 			locate_template('oj-contests-ranklist.php',true);
 			exit(0);break;
 		case 'contests-statistics':
 			$oj->context='contests';
 			$oj->page=$page;
+			$oj_bread_trail[]=$oju->link('contests');
+			$oj_bread_trail[]=$_GET['ctitle'];
+			$oj_bread_trail['trail_end']=$oju->label("contests-statistics");
 			locate_template('oj-contests-statistics.php',true);
 			exit(0);break;
 	}
