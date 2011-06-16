@@ -44,28 +44,25 @@
 			foreach ($posts as $post):?>
 				<tr>
 				<?php 
-					$compile_statas=array(
-						'full'=>array('Pending','Pending Rejudging','Compiling','Running & Judging','Accepted','Presentation Error','Wrong Answer','Time Limit Exceed','Memory Limit Exceed','Output Limit Exceed','Runtime Error','Compile Error','Compile OK'),
-						'short'=>array('PD','PR','CI','RJ','AC','PE','WA','TLE','MLE','OLE','RE','CE','CO'),
-						'class'=>array('PD','PR','CI','RJ','AC','PE','WA','TLE','MLE','OLE','RE','CE','CO')
-					);	
+					$compile_status=oj_get_compile_status();
 					$languages=array_keys($oj->languages);
 					$pid_clause='&pid='.$post->problem_id;
 					$sid_clause='&sid='.$post->solution_id;
 					$lang_clause='&language='.$post->language;
 					$submitpage_url=$oju->url('submitpage').$pid_clause.$sid_clause.$lang_clause;
+					$problem_url=$oju->url('problem').$pid_clause;
 					$showsource_url=$oju->url('showsource').$sid_clause;
 					$compileinfo_url=$oju->url('compileinfo').$sid_clause;
 				?>
 					<td><?php echo $post->solution_id;?></td>
 					<td><a href="/?author=<?php echo $post->user_id;?>"><?php echo $post->user_login;?></a></td>
-					<td><a href="/?post_type=problem&p=<?php echo $post->problem_id;?>"><?php echo $post->problem_id?></a></td>
-					<td><span class="<?php echo $compile_statas['class'][$post->result];?>">
+					<td><a href="<?php echo $problem_url;?>"><?php echo $post->problem_id?></a></td>
+					<td><span class="<?php echo $compile_status['class'][$post->result];?>">
 						<?php 
 							if($post->result==11){
-								echo '<a href="'.$compileinfo_url.'">'.$compile_statas['full'][$post->result].'</a>';
+								echo '<a href="'.$compileinfo_url.'">'.$compile_status['full'][$post->result].'</a>';
 							}else {
-								echo $compile_statas['full'][$post->result];
+								echo $compile_status['full'][$post->result];
 							}?>
 					</span></td>
 					<td><?php echo $post->memory;?> <span>kb</span></td>

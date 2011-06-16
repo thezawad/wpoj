@@ -18,4 +18,16 @@ function oj_echo_language_select($langmask,$default){
 	if(($lang&64)>0) 	echo"	<option value=6 ".( $default==6?"selected":"").">Python</option>";
 	echo '</select>';
 }
+function oj_get_compile_status($key="all"){
+	$compile_status=array(
+		'full'=>array('Pending','Pending Rejudging','Compiling','Running & Judging','Accepted','Presentation Error','Wrong Answer','Time Limit Exceed','Memory Limit Exceed','Output Limit Exceed','Runtime Error','Compile Error','Compile OK'),
+		'short'=>array('PD','PR','CI','RJ','AC','PE','WA','TLE','MLE','OLE','RE','CE','CO'),
+		'class'=>array('PD','PR','CI','RJ','AC','PE','WA','TLE','MLE','OLE','RE','CE','CO')
+	);
+	if($key=='all'){
+		return $compile_status;
+	}else{
+		return $compile_status[$key];
+	}
+}
 ?>
