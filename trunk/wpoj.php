@@ -28,6 +28,7 @@ class OJ{
 	}
 	function init_consts(){
 		define('OJ_HOME', dirname(__FILE__));
+		define('OJ_URL', WP_PLUGIN_URL.'/wpoj');
 		define('OJ_LIBRARY',OJ_HOME.'/library');
 		define('OJ_THEMES',OJ_HOME.'/themes');
 		define('OJ_FUNCTIONS',OJ_LIBRARY.'/functions');
@@ -37,6 +38,7 @@ class OJ{
 		require_once(OJ_FUNCTIONS.'/tools.php');
 		require_once(OJ_FUNCTIONS.'/init.php');
 		require_once(OJ_FUNCTIONS.'/url_locator.php');
+		require_once(OJ_FUNCTIONS.'/part_loader.php');
 		require_once(OJ_FUNCTIONS.'/templates.php');
 		require_once(OJ_FUNCTIONS.'/db.php');
 		if(is_admin()){
