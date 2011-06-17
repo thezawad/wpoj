@@ -48,6 +48,7 @@ function loop_pagination( $args = array() ) {
 		'format' => '',
 		'total' => $max_num_pages,
 		'current' => $current,
+		'cur_before' => '',
 		'prev_next' => true,
 		'prev_text' => __( '&laquo; Previous' ), // Translate in WordPress. This is the default.
 		'next_text' => __( 'Next &raquo;' ), // Translate in WordPress. This is the default.

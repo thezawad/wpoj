@@ -12,8 +12,8 @@ get_posts();
 	<div class="content-wrapper hentry clearfix">
 	<div id="content" role="main">
 			<div id="problems-filters">
-				<div class="widget search widget-search"><div class="widget-wrap widget-inside"><h3 class="widget-title">Search Problems</h3><form id="search-form" class="search-form" method="get"><div><input type="hidden" name="oj" value="problems"/><label for="search-text">Search Problems</label><input type="text" onblur="if(this.value=='')this.value=this.defaultValue;" onfocus="if(this.value==this.defaultValue)this.value='';" value="asdf" id="search-text" name="s" class="search-text"></div></form><!-- .search-form --></div></div>
-				<?php loop_pagination( array('show_all' => true ,'prev_next' => false) ); ?>
+				<div class="widget search widget-search"><div class="widget-wrap widget-inside"><h3 class="widget-title">Search Problems</h3><form a id="search-form" class="search-form" method="get"><div><input type="hidden" name="oj" value="problems"/><label for="search-text">Search Problems</label><input type="text" onblur="if(this.value=='')this.value=this.defaultValue;" onfocus="if(this.value==this.defaultValue)this.value='';" value="asdf" id="search-text" name="s" class="search-text"></div></form><!-- .search-form --></div></div>
+				<?php loop_pagination( array('show_all' => true ,'prev_next' => false ,'cur_before' =>'Volume <span style="font-size:10px;">{20}</span> ') ); ?>
 			</div>
 			<table>
 			<thead>
@@ -38,7 +38,7 @@ get_posts();
 			<?php endforeach;?>
 			</tbody>
 			</table>
-			<?php loop_pagination( array('show_all' => true ,'prev_next' => false) ); ?>
+			<?php loop_pagination( array('show_all' => true ,'prev_next' => false , 'cur_before' => 'Volume(20) ') ); ?>
 	</div><!-- #content -->
 	</div>
 	<?php do_atomic( 'after_content' ); // retro-fitted_after_content ?>
