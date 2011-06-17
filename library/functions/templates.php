@@ -57,7 +57,7 @@ function oj_list_user_status($user_id=0){
 	$user_problems=$wpdb->get_results($sql);
 ?>
 <script type="text/javascript" src="<?php echo FC_URL.'/FusionCharts.js'?>"></script>
-<table>
+<table class="tb2cols">
 	<tr>	<th>NO.</th>		<td><?php echo $user_id;?></td>									</tr>
 	<tr>	<th>login_name</th>	<td><?php echo $user_login;?></td>								</tr>
 	<tr>	<th>Solved</th>		<td><?php echo $user_solved;?></td>								</tr>
@@ -115,28 +115,26 @@ function oj_list_statusd($pid){
 	$languages=array_keys($oj->languages);
 ?>
 <script type="text/javascript" src="<?php echo FC_URL.'/FusionCharts.js'?>"></script>
-<table>
+<table class="tb2cols">
 	<tr>	<th>User(Submit)</th>		<td><?php echo $total_users;?></td>									</tr>
 	<tr>	<th>User(Solved)</th>	<td><?php echo $ac_users;?></td>								</tr>
 <?php foreach ($user_kinds_submit as $item){ $status=$item->result;	$count=$item->count;?>
 	<tr>	<th><?php echo $compile_status['full'][$status]?></th><td><?php echo $count;?></td>	</tr><?php }?>
 	<tr>	<th>Statistics</th>	<td><?php $FC->renderChart(false,true);?></td>					</tr>
+</table>
 
-	<tr>	<th colspan="2">Success Submits:</th>														</tr>
-	<tr><td colspan="2">
-		<table>
-			<tr><th>NO.</th><th>RunID</th><th>User</th><th>Memory</th><th>Time</th><th>Language</th><th>Code Length</th><th>Submit Time</th></tr>
-			<?php foreach ($problem_submits as $item){$i++;?><tr>
-				<td><?php echo $i; ?></td>
-				<td><?php echo $item->solution_id;?></td>
-				<td><?php echo $item->user_login;?></td>
-				<td><?php echo $item->memory;?> KB</td>
-				<td><?php echo $item->time;?> MS</td>
-				<td><?php echo $languages[$item->language];?></td>
-				<td><?php echo $item->code_length;?> B</td>
-				<td><?php echo $item->in_date;?></td>
-			</tr><?php }?>
-		</table>
-	</td></tr>
+<table>
+	<tr><th colspan="8">Success Submits:</th></tr>
+	<tr><th>NO.</th><th>RunID</th><th>User</th><th>Memory</th><th>Time</th><th>Language</th><th>Code Length</th><th>Submit Time</th></tr>
+	<?php foreach ($problem_submits as $item){$i++;?><tr>
+		<td><?php echo $i; ?></td>
+		<td><?php echo $item->solution_id;?></td>
+		<td><?php echo $item->user_login;?></td>
+		<td><?php echo $item->memory;?> KB</td>
+		<td><?php echo $item->time;?> MS</td>
+		<td><?php echo $languages[$item->language];?></td>
+		<td><?php echo $item->code_length;?> B</td>
+		<td><?php echo $item->in_date;?></td>
+	</tr><?php }?>
 </table>
 <?php }?>
