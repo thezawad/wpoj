@@ -11,7 +11,7 @@ class OJ_URL{
 		if($page=='home') return site_url();
 		else{
 			$the_url=site_url().'?oj='.$page;
-			if(isset($_GET['cid'])){
+			if((isset($_GET['cid']) && !in_array($page, oj_get_menu_main()))){
 				$the_url.='&cid='.$_GET['cid'];
 				$the_url.='&ctitle='.$_GET['ctitle'];
 				$the_url.='&pid='.$_GET['pid'];
