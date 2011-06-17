@@ -1,7 +1,20 @@
 <?php
-get_header(); ?>
+get_header(); 
+global $wp_query,$oj;
+$oj->current_page="problems";
+if(empty($_GET['s'])){
+	$posts=$wp_query->query(array("post_type" => "problem",'posts_per_page' =>20 ,'paged'=> trim($_GET['paged'])));
+}else{
+	$posts=$wp_query->query(array("post_type" => "problem",'posts_per_page' =>20 ,'s'=>$_GET['s']));
+}
+get_posts();
+?>
 	<div class="content-wrapper hentry clearfix">
 	<div id="content" role="main">
+			<div id="problems-filters">
+				<div class="widget search widget-search"><div class="widget-wrap widget-inside"><h3 class="widget-title">Search Problems</h3><form id="search-form" class="search-form" method="get"><div><input type="hidden" name="oj" value="problems"/><label for="search-text">Search Problems</label><input type="text" onblur="if(this.value=='')this.value=this.defaultValue;" onfocus="if(this.value==this.defaultValue)this.value='';" value="asdf" id="search-text" name="s" class="search-text"></div></form><!-- .search-form --></div></div>
+				<?php loop_pagination( array('show_all' => true ,'prev_next' => false) ); ?>
+			</div>
 			<table>
 			<thead>
 				<tr>
@@ -10,9 +23,6 @@ get_header(); ?>
 			</thead>
 			<tbody>
 			<?php
-			global $wp_query,$oj;
-			$oj->current_page="problems";
-			$posts=$wp_query->query(array("post_type" => "problem",'posts_per_page' =>20 ,'paged'=> trim($_GET['paged']),'orderby'=>'submit'));
 			foreach ($posts as $post):setup_postdata($post);
 				$problem_url=site_url().'?oj=problem&pid='.$post->ID;
 			?>
@@ -28,7 +38,7 @@ get_header(); ?>
 			<?php endforeach;?>
 			</tbody>
 			</table>
-			<?php loop_pagination( array( 'prev_text' => __( '&larr; Previous', hybrid_get_textdomain() ), 'next_text' => __( 'Next &rarr;', hybrid_get_textdomain() ) ) ); ?>
+			<?php loop_pagination( array('show_all' => true ,'prev_next' => false) ); ?>
 	</div><!-- #content -->
 	</div>
 	<?php do_atomic( 'after_content' ); // retro-fitted_after_content ?>
