@@ -38,6 +38,7 @@ class OJ{
 		require_once(OJ_FUNCTIONS.'/tools.php');
 		require_once(OJ_FUNCTIONS.'/init.php');
 		require_once(OJ_FUNCTIONS.'/url_locator.php');
+		require_once(OJ_FUNCTIONS.'/core.php');
 		require_once(OJ_FUNCTIONS.'/part_loader.php');
 		require_once(OJ_FUNCTIONS.'/templates.php');
 		require_once(OJ_FUNCTIONS.'/db.php');

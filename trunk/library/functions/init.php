@@ -16,7 +16,8 @@ function oj_register_post_types(){
 			'add_new_item' => 'Add New Contest',
 			'not_found' => 'No contests found'
 		),
-		'has_archive' => 'contests'
+		'has_archive' => 'contests',
+		'supports' => array('title','comments')
 	));
 	
 	register_post_type("problem",array(
@@ -32,7 +33,6 @@ function oj_register_post_types(){
 			'not_found' => 'No problems found'
 		),
 		'has_archive' =>'problems',
-
 	));
 	register_post_type("solution",array(
 		'public' => true,
