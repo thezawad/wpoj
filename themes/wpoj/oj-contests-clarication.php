@@ -12,10 +12,12 @@
 get_header('contest'); // Loads the header.php template. ?>
 
 	<?php do_atomic( 'before_content' ); // retro-fitted_before_content ?>
-	<div class="content-wrapper hentry clearfix">
+	<div class="content-wrapper clearfix">
 	<div id="content">
-
-	This is the clarication page.
+	<?php 
+		oj_wp(array('p' => $_GET['cid'],'post_type' => 'contest'));
+	?>
+	<?php comments_template( '/comments-clarication.php', true ); // Loads the comments.php template. ?>
 
 	</div><!-- #content -->
 	</div>
