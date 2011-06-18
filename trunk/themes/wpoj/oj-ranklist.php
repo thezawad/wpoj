@@ -15,8 +15,25 @@ get_header();
 	<div class="content-wrapper">
 	<div id="content" class="hentry">
 
-	ranklist file;		
-
+	<?php 
+	global $oj,$wpdb,$oju;
+	$sql="SELECT user_id,user_login,submit,solved,solved/submit as ratio FROM {$oj->prefix}users_meta ORDER BY solved , ratio DESC";
+	$users=$wpdb->get_results($sql);
+	$number=0;
+	?>	
+	<table class="tb-statusl">
+		<tr><th>NO.</th><th>User</th><th>Nick Name</th><th>AC</th><th>Submit</th><th>Ration</th></tr>
+		<?php foreach ($users as $user){$number++;?>
+		<tr>
+		<td class="AC"><?php echo $number;?></td>
+		<td><a href="<?php echo site_url().'/?author='.$user->user_id;?>"><?php echo $user->user_login;?></a></td>
+		<td><?php echo get_user_meta($user->user_id, 'nickname',true);?></td>
+		<td><?php echo $user->solved;?></td>
+		<td><?php echo $user->submit;?></td>
+		<td><?php printf("%.03lf%%",100*$user->ratio);?></td>
+		</tr>
+		<?php }?>
+	</table>
 	</div><!-- #content -->
 	</div>
 	<?php do_atomic( 'after_content' ); // retro-fitted_after_content ?>
