@@ -26,7 +26,7 @@ get_header();
 		<?php foreach ($users as $user){$number++;?>
 		<tr>
 		<td class="AC"><?php echo $number;?></td>
-		<td><a href="<?php echo site_url().'/?author='.$user->user_id;?>"><?php echo $user->user_login;?></a></td>
+		<td><a href="<?php echo $oju->url('user').'&uid='.$user->user_id;?>"><?php echo $user->user_login;?></a></td>
 		<td><?php echo get_user_meta($user->user_id, 'nickname',true);?></td>
 		<td><?php echo $user->solved;?></td>
 		<td><?php echo $user->submit;?></td>
