@@ -302,7 +302,7 @@ void get_jobs(int * jobs){
 }
 bool _check_out_mysql(int solution_id,int result){
 	char sql[BUFFER_SIZE];
-	sprintf(sql,"UPDATE solution SET result=%d,time=0,memory=0,judgetime=NOW() WHERE solution_id=%d and result<2 LIMIT 1"
+	sprintf(sql,"UPDATE oj_solution SET result=%d,time=0,memory=0,judgetime=NOW() WHERE solution_id=%d and result<2 LIMIT 1"
 			,result,solution_id);
 	if (mysql_real_query(conn,sql,strlen(sql))){
 		syslog(LOG_ERR | LOG_DAEMON, "%s",mysql_error(conn));
