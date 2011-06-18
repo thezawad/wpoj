@@ -2,7 +2,7 @@
 get_header(); ?>
 	<div class="content-wrapper hentry clearfix">
 	<div id="content" role="main">
-			<table>
+			<table class="tb-contests">
 			<thead>
 				<tr>
 				<th>ID</th><th>Name</th><th>Status</th><th>Private</th>
