@@ -166,11 +166,15 @@ function oj_maybe_redirect_url(){
 			locate_template('oj-submitpage.php',true);
 			exit(0);break;
 		case 'addsolution':
-			global $userdata;
+			global $userdata,$oju;
 			$oj->context='home';
 			$oj->page=$page;
-			require_once (dirname(dirname(dirname(__FILE__))).'/addsolution.php');
-			header("Location:/?oj=statusl&user_id=".$userdata->ID);
+			require_once (OJ_HOME.'/addsolution.php');
+			if(isset($_POST['cpid'])){
+				header('Location:'.$oju->url('contests-status')."&user_id={$userdata->ID}");
+			}else{
+				header('Location:'.$oju->url('statusl')."&user_id={$userdata->ID}");
+			}
 			exit(0);break;
 		case 'showsource':
 			$oj->context='statusl';
@@ -179,6 +183,11 @@ function oj_maybe_redirect_url(){
 			$oj_bread_trail['trail_end']='solution-'.$_GET['sid'].'-source';
 			if(empty($_GET['sid'])){
 				oj_end_with_status('Solution ID missing!');
+			}
+			if(isset($_GET['cid'])){
+				get_header('contest');
+			}else{
+				get_header();
 			}
 			locate_template('oj-showsource.php',true);
 			exit(0);break;

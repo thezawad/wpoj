@@ -139,7 +139,7 @@ function oj_get_source_code($sid){
 	$source_code=$wpdb->get_row($sql);
 	return $source_code->source;
 }
-function oj_submit_solution($problem_id,$source,$language,$time_strict=true,$solution_id=NULL,$contest_id=NULL){
+function oj_submit_solution($problem_id,$source,$language,$time_strict=true,$contest_id=NULL,$cp_id=NULL,$solution_id=NULL){
 	global $wpdb,$oj,$userdata;
 	$ip=$_SERVER['REMOTE_ADDR'];
 	$len=strlen($source);
@@ -150,7 +150,15 @@ function oj_submit_solution($problem_id,$source,$language,$time_strict=true,$sol
 		$sql="SELECT `in_date` from `solution` where `user_id`='$userdata->ID' and in_date>now()-10 order by `in_date` desc limit 1";
 		if( $wpdb->query($sql)){ return 3;}
 	}
-	$sql="INSERT INTO {$oj->prefix}solution(problem_id,user_id,user_login,in_date,language,ip,code_length) VALUES('$problem_id',$userdata->ID,'$userdata->user_login',NOW(),'$language','$ip','$len')";
+	$keys=array('problem_id','user_id','user_login','in_date','language','ip','code_length');
+	$values=array($problem_id,$userdata->ID,"'".$userdata->user_login."'",'NOW()',"'".$language."'","'".$ip."'",$len);
+	if(!empty($contest_id) && !empty($cp_id)){
+		$keys[]='contest_id'; $values[]=$contest_id;
+		$keys[]='cp_id';  $values[]=$cp_id;
+	}
+	$_keys=implode(',', $keys);
+	$_values=implode(',', $values);
+	$sql="INSERT INTO {$oj->prefix}solution({$_keys}) VALUES({$_values})";
 	$wpdb->query($sql);	
 	$insert_id=mysql_insert_id();
 	$sql="INSERT INTO `{$oj->prefix}source_code`(`solution_id`,`source`) VALUES('$insert_id','$source')";

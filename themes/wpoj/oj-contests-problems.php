@@ -17,28 +17,33 @@ get_header('contest'); // Loads the header.php template. ?>
 			<table class="tb-problems">
 			<thead>
 				<tr>
-				<th>Problem ID</th><th>Title</th><th>Source</th><th>AC</th><th>Submit</th><th>FPS Category</th><th>Tagged</th>
+				<th>Problem ID</th><th>Title</th><th>AC</th><th>Submit</th><th>FPS Category</th>
 				</tr>
 			</thead>
 			<tbody>
 			<?php
 			get_posts();
-			global $wp_query,$oj;
+			global $wp,$wpdb,$wp_query,$oj,$oju;
 			$oj->current_page="problems";
 			$contest_id=$_GET['cid'];
-			$ids=p2p_get_connected($contest_id,'from');
-			$posts=$wp_query->query(array("post_type" => "problem",'posts_per_page' =>20 ,'post__in'=>$ids));
-			foreach ($posts as $post):setup_postdata($post);
-			$problem_url=site_url().'?oj=problem&pid='.$post->ID.'&cid='.$_GET['cid'].'&ctitle='.$_GET['ctitle'];
+			$sql="SELECT cp.p2p_id cp_id,p2p_to p_id,posts.post_title,meta.accepted,meta.submit
+					FROM {$oj->prefix}problem_meta as meta
+					RIGHT JOIN {$wpdb->prefix}p2p as cp ON meta.post_id=cp.p2p_to
+					INNER JOIN {$wpdb->prefix}posts as posts ON posts.ID=cp.p2p_to
+					WHERE p2p_from={$contest_id} AND post_type='problem'
+					ORDER BY p2p_id";
+			$cps=$wpdb->get_results($sql);
+			$latter=65;
+			foreach ($cps as $cp):
+				$post_id=$cp->p_id;
+				$problem_url=$oju->url('problem').'&pid='.$post_id.'&cpid='.$cp->cp_id;
 			?>
 				<tr>
-					<td><?php echo $post->ID;?></td>
-					<td><a href="<?php echo $problem_url;?>"><?php the_title(); ?></a></td>
-					<td><?php echo $post->source;?></td>
-					<td><?php echo $post->accepted;?></td>
-					<td><?php echo $post->submit;?></td>
-					<td><?php echo get_the_term_list($post->ID,'fps_cat','','，');?></td>
-					<td><?php echo get_the_term_list($post->ID,'problem_tag','','，');?></td>
+					<td><?php echo $post_id;?> <?php echo chr($latter);$latter++;?></td>
+					<td><a href="<?php echo $problem_url;?>"><?php echo $cp->post_title;?></a></td>
+					<td><?php echo $cp->accepted;?></td>
+					<td><?php echo $cp->submit;?></td>
+					<td><?php echo get_the_term_list($post_id,'fps_cat','','，');?></td>
 				</tr>
 			<?php endforeach;?>
 			</tbody>

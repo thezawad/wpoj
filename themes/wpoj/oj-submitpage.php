@@ -3,6 +3,7 @@
 	$problem_id=$_GET['pid'];
 	$contest_id=$_GET['cid'];
 	$solution_id=$_GET['sid'];
+	$cp_id=$_GET['cpid'];
 	$source_code=oj_get_source_code($solution_id);
 	if(isset($_GET['language'])) $language=$_GET['language'];  else	$language=0;
 ?>
@@ -23,9 +24,10 @@
 	});
 	</script>
 	<form class="solution-submit" action="<?php echo $oju->url('addsolution');?>" method="post" >
-		<input type="hidden" name="pid" value="<?=$problem_id?>">
-		<input type="hidden" name="cid" value="<?=$contest_id?>">
-		<input type="hidden" name="sid" value="<?=$solution_id?>">
+		<?php if(isset($problem_id)){?> <input type="hidden" name="pid" value="<?=$problem_id?>"> <?php }?>
+		<?php if(isset($contest_id)){?> <input type="hidden" name="cid" value="<?=$contest_id?>"> <?php }?>
+		<?php if(isset($solution_id)){?> <input type="hidden" name="sid" value="<?=$solution_id?>"> <?php }?>
+		<?php if(isset($cp_id)){?> <input type="hidden" name="cpid" value="<?=$cp_id?>"> <?php }?>
 		<div>
 			Problem <span style="color:#00f; font-weight:bold;"><?=$problem_id?></span> : <?php echo $_GET['title'];?>
 		</div>
