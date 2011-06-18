@@ -15,7 +15,7 @@ get_header(); // Loads the header.php template. ?>
 	<div class="content-wrapper">
 	<div id="content" class="hentry">
 		
-	<?php oj_list_user_status($_GET['author']);?>
+	<?php oj_list_user_status($_GET['uid']);?>
 
 	</div><!-- #content -->
 	</div>

@@ -1330,7 +1330,7 @@ div.problem-section-content{ margin:15px 0;}
 }
 #problems-filters .widget-search{
 	padding:1px !important;
-	margin-bottom:10px;
+	margin-bottom:18px;
 }
 #problems-filters .search-title{
 	float:left;
@@ -1338,9 +1338,11 @@ div.problem-section-content{ margin:15px 0;}
 	color:#fcfcfc;
 	font-size:14px;
 	text-align:right;
-	line-height:26px;
+	line-height:36px;
 	padding:0 12px;
+	margin-bottom:0;
 }
+#problems-filters .widget-search input[type="text"]{ padding:10px 0 10px 0.7em;}
 .tb-problems th,.tb-statusl th{
 	background: none repeat scroll 0 0 #04648D;
     color: #FFFFFF;

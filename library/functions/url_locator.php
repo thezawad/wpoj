@@ -82,6 +82,13 @@ function oj_maybe_redirect_url(){
 			$oj_bread_trail['trail_end']=$oju->label($page);
 			locate_template('oj-ranklist.php',true);
 			exit(0);break;
+			case 'user':
+				$oj->context='ranklist';
+				$oj->page=$page;
+				$oj_bread_trail[]=$oju->link('ranklislt');
+				$oj_bread_trail['trail_end']=$oju->label($page);
+				locate_template('oj-user.php',true);
+				exit(0);break;
 		case 'statusl':
 			
 			if(empty($_GET['cid'])){
