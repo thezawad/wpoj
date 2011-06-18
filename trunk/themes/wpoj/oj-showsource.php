@@ -1,4 +1,3 @@
-<?php get_header();?>
 <link href="<?php echo THEME_URI;?>/highlight/styles/shCore.css" rel="stylesheet" type="text/css"/> 
 <link href="<?php echo THEME_URI;?>/highlight/styles/shThemeDefault.css" rel="stylesheet" type="text/css"/> 
 <script src="<?php echo THEME_URI;?>/highlight/scripts/shCore.js" type="text/javascript"></script> 

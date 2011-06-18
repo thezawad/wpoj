@@ -13,8 +13,9 @@ class OJ_URL{
 			$the_url=site_url().'?oj='.$page;
 			if((isset($_GET['cid']) && !in_array($page, oj_get_menu_main()))){
 				$the_url.='&cid='.$_GET['cid'];
-				$the_url.='&ctitle='.$_GET['ctitle'];
-				$the_url.='&pid='.$_GET['pid'];
+				if(isset($_GET['ctitle'])) $the_url.='&ctitle='.$_GET['ctitle'];
+				if(isset($_GET['pid'])) $the_url.='&pid='.$_GET['pid'];
+				if(isset($_GET['cpid'])) $the_url.='&cpid='.$_GET['cpid'];
 			}
 			return $the_url;
 		}
