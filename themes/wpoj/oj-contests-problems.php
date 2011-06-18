@@ -36,7 +36,7 @@ get_header('contest'); // Loads the header.php template. ?>
 			$latter=65;
 			foreach ($cps as $cp):
 				$post_id=$cp->p_id;
-				$problem_url=$oju->url('problem').'&pid='.$post_id.'&cpid='.$cp->cp_id;
+				$problem_url=$oju->url('problem').'&pid='.$post_id;
 			?>
 				<tr>
 					<td><?php echo $post_id;?> <?php echo chr($latter);$latter++;?></td>

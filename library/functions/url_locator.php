@@ -178,15 +178,20 @@ function oj_maybe_redirect_url(){
 			exit(0);break;
 		case 'showsource':
 			$oj->context='statusl';
-			$oj->page=$page;
-			$oj_bread_trail[]=$oju->link('statusl');
-			$oj_bread_trail['trail_end']='solution-'.$_GET['sid'].'-source';
 			if(empty($_GET['sid'])){
 				oj_end_with_status('Solution ID missing!');
 			}
 			if(isset($_GET['cid'])){
+				$oj->page='contests-status';
+				$oj_bread_trail[]=$oju->link('contests');
+				$oj_bread_trail[]=$_GET['ctitle'];
+				$oj_bread_trail[]=$oju->link('contests-status');
+				$oj_bread_trail['trail_end']='solution-'.$_GET['sid'].'-source';
 				get_header('contest');
 			}else{
+				$oj->page=$page;
+				$oj_bread_trail[]=$oju->link('statusl');
+				$oj_bread_trail['trail_end']='solution-'.$_GET['sid'].'-source';
 				get_header();
 			}
 			locate_template('oj-showsource.php',true);
