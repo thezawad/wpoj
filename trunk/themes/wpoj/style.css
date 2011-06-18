@@ -1328,7 +1328,27 @@ div.problem-section-content{ margin:15px 0;}
 	text-align:right;
 	vertical-align:top;
 }
-#problems-filters .widget-title{
-	width:195px;
-	float:left;
+#problems-filters .widget-search{
+	padding:1px !important;
+	margin-bottom:10px;
 }
+#problems-filters .search-title{
+	float:left;
+	font-family:'Aria';
+	color:#fcfcfc;
+	font-size:14px;
+	text-align:right;
+	line-height:26px;
+	padding:0 12px;
+}
+.tb-problems th,.tb-statusl th{
+	background: none repeat scroll 0 0 #04648D;
+    color: #FFFFFF;
+    font-weight: bold;
+    margin: 0 15px 0 0;
+    padding: 11px 15px;
+}
+.tb-problems td{
+	text-align:center;
+}
+.col-id{width:63px;}.col-ac{width:21px;}.col-sb{width:41px;}

@@ -1,7 +1,7 @@
 <div class="content-wrapper hentry clearfix">
 	<div id="content" role="main">
 		<div class="inner-wrapper">
-			<table>
+			<table class="tb-statusl">
 			<thead>
 				<tr>
 				<th>Run ID</th><th>User</th><th>Problem</th><th>Result</th><th>Memory</th><th>Time</th><th>Language</th><th>Code Length</th><th>Submit Time</th>

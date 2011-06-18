@@ -14,7 +14,7 @@ get_header('contest'); // Loads the header.php template. ?>
 	<?php do_atomic( 'before_content' ); // retro-fitted_before_content ?>
 	<div class="content-wrapper hentry clearfix">
 	<div id="content" role="main">
-			<table>
+			<table class="tb-problems">
 			<thead>
 				<tr>
 				<th>Problem ID</th><th>Title</th><th>Source</th><th>AC</th><th>Submit</th><th>FPS Category</th><th>Tagged</th>
