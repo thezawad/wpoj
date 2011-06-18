@@ -40,7 +40,7 @@ div.menu ul{margin:0;padding:0;list-style:none;line-height:1.0}div.menu ul ul{po
 /*
  * top-page menu
  */
-.oj-home #page-home a ,.oj-problems #page-problems a, .oj-statusl #page-statusl a,.oj-blogs #page-blogs a,.oj-contests #page-contests a,.oj-faqs #page-faqs a{
+.oj-home #page-home a ,.oj-problems #page-problems a,.oj-ranklist #page-ranklist a , .oj-statusl #page-statusl a,.oj-blogs #page-blogs a,.oj-contests #page-contests a,.oj-faqs #page-faqs a{
 	background-color:#04648D;
 	color:#fff;
 }
@@ -1347,6 +1347,10 @@ div.problem-section-content{ margin:15px 0;}
     font-weight: bold;
     margin: 0 15px 0 0;
     padding: 11px 15px;
+}
+.tb-problems td,.tb-statusl td{
+	padding:10px 16px;
+	line-height:18px;
 }
 .tb-problems td{
 	text-align:center;
