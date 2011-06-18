@@ -9,7 +9,7 @@ if(empty($_GET['s'])){
 }
 $cur_before='<span style="font-size:10px;">{'.count($posts).'}</span> Volume ';
 if(empty($_GET['s'])){
-	$search_text="Problems Title";
+	$search_text="Search Problems (Title specific)";
 }else{
 	$search_text=$_GET['s'];
 }
