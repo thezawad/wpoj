@@ -157,7 +157,7 @@ function oj_active(){
 		  `ip` varchar(20) NOT NULL DEFAULT '',
 		  `contest_id` bigint(20) unsigned NOT NULL DEFAULT '0',
 		  `valid` tinyint(4) NOT NULL DEFAULT '1',
-		  `num` tinyint(4) NOT NULL DEFAULT '-1',
+		  `cp_id` bigint(20) unsigned NOT NULL DEFAULT '-1',
 		  `code_length` int(11) NOT NULL DEFAULT '0',
 		  `judgetime` datetime DEFAULT NULL,
 		  PRIMARY KEY (`solution_id`),
