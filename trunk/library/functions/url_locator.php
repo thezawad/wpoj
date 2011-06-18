@@ -3,10 +3,10 @@
  * wp-loaded hook callback
  */
 function oj_get_menu_main(){
-	return array('home','blogs','contests','problems','statusl','faqs');
+	return array('home','blogs','ranklist','contests','problems','statusl','faqs');
 }
 function oj_get_menu_contest(){
-	return array('contests-clarication','contests-problems','contests-ranklist','contests-status','contests-statistics');
+	return array('contests-clarication','contests-problems','contests-standing','contests-status','contests-statistics');
 }
 function oj_get_pages(){
 	return array(
@@ -15,6 +15,9 @@ function oj_get_pages(){
 		),
 		'blogs' => array(
 			'label' => 'Blogs',
+		),
+		'ranklist'=>array(
+			'label' => 'Ranklist'
 		),
 		'contests' => array(
 			'label' => 'Contests'
@@ -25,8 +28,8 @@ function oj_get_pages(){
 			'contests-problems'=>array(
 				'label' => 'Problems',
 			),
-			'contests-ranklist'=>array(
-				'label' => 'Ranklist',
+			'contests-standing'=>array(
+				'label' => 'Standing',
 			),
 			'contests-status'=>array(
 				'label' => 'Status',
@@ -72,6 +75,12 @@ function oj_maybe_redirect_url(){
 			$wp_query->is_home=false;
 			$oj_bread_trail['trail_end']=$oju->label($page);
 			locate_template('oj-blogs.php',true);
+			exit(0);break;
+		case 'ranklist':
+			$oj->context='ranklist';
+			$oj->page=$page;
+			$oj_bread_trail['trail_end']=$oju->label($page);
+			locate_template('oj-ranklist.php',true);
 			exit(0);break;
 		case 'statusl':
 			
@@ -213,13 +222,13 @@ function oj_maybe_redirect_url(){
 			$oj_bread_trail['trail_end']=$oju->label("contests-status");
 			locate_template('oj-contests-status.php',true);
 			exit(0);break;
-		case 'contests-ranklist':
+		case 'contests-standing':
 			$oj->context='contests';
 			$oj->page=$page;
 			$oj_bread_trail[]=$oju->link('contests');
 			$oj_bread_trail[]=$_GET['ctitle'];
-			$oj_bread_trail['trail_end']=$oju->label("contests-ranklist");
-			locate_template('oj-contests-ranklist.php',true);
+			$oj_bread_trail['trail_end']=$oju->label("contests-standing");
+			locate_template('oj-contests-standing.php',true);
 			exit(0);break;
 		case 'contests-statistics':
 			$oj->context='contests';
