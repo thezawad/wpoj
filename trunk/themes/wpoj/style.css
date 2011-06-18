@@ -47,7 +47,7 @@ div.menu ul{margin:0;padding:0;list-style:none;line-height:1.0}div.menu ul ul{po
 .oj-contests-clarication #page-contests-clarication a,
 .oj-contests-problems #page-contests-problems a,
 .oj-contests-status #page-contests-status a,
-.oj-contests-ranklist #page-contests-ranklist a,
+.oj-contests-standing #page-contests-standing a,
 .oj-contests-statistics #page-contests-statistics a{
 	background-color:#CE3000; font-weight:bold;
 }
