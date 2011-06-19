@@ -98,7 +98,7 @@ function oj_maybe_redirect_url(){
 				get_header();	
 			}else{
 				$oj->context='statusl';
-				$oj->page=$page;
+				$oj->page="contests-status";
 				$oj_bread_trail['trail_end']=$oju->label($page);
 				get_header('contest');	
 			}
