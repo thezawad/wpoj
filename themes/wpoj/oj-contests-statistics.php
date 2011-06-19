@@ -37,6 +37,11 @@ get_header('contest'); // Loads the header.php template. ?>
 		}else{
 			$problems[$cpid]['result'][$result]=1;
 		}
+		if (isset($problems[$cpid]['result'][13])){
+			$problems[$cpid]['result'][13]++;
+		}else{
+			$problems[$cpid]['result'][13]=1;
+		}
 		//language statistics
 		if (isset($problems[$cpid]['language'][$lang])){
 			$problems[$cpid]['language'][$lang]++;
@@ -55,12 +60,13 @@ get_header('contest'); // Loads the header.php template. ?>
 			<?php for($i=4;$i<13;$i++){
 				echo '<th title="'.$compile_status['full'][$i].'">'.$compile_status['short'][$i].'</th>';
 			}?>
+			<th>ALL</th>
 		</tr>
 		<?php $p_name=65;
 		foreach ($cps as $cp ){ $cpid=$cp->cpid;?>
 		<tr>
 			<th><?php echo chr($p_name++);?></th>
-			<?php for($i=4;$i<13;$i++){
+			<?php for($i=4;$i<14;$i++){
 				if (isset($problems[$cpid]['result'][$i])){
 					echo '<td>'.$problems[$cpid]['result'][$i].'</td>';
 				}else echo '<td></td>';

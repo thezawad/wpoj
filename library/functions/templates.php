@@ -140,24 +140,46 @@ function oj_list_statusd($pid){
 <?php }
 function oj_list_statusl(){
 	global $wpdb,$oj,$oju,$paged,$wp_query;
-	$problem_id=$_GET['fpid'];
+	$problem_id=$_GET['s_pid'];
 	$contest_id=$_GET['cid'];
 	$user_id=$_GET['user_id'];
 	$user_login=$_GET['user_login'];
 	$orderby=$_GET['orderby'];
+	
+	if(!isset($_GET['language'])){
+		$s_language=-1;
+	}else{
+		$s_language=intval($_GET['language']);
+	}
+	if(!isset($_GET['result'])){
+		$s_result=-1;
+	}else{
+		$s_result=intval($_GET['result']);
+	}
+	
 	$perpage=20;
 	$paged=1;
 	$where_clause='WHERE 1';
 	$limit_clause='';
 	
-	if(!empty($problem_id)){
+	if($s_language!=-1){
+		$where_clause.=' AND language='.$s_language;
+	}
+	if($s_result!=-1){
+		$where_clause.=' AND result='.$s_result;
+	}
+	if(!empty($problem_id) && $problem_id=intval($problem_id)){
 		$where_clause.=' AND problem_id='.$problem_id;
+	}else{
+		$problem_id="Problem ID";
 	}
 	if(!empty($user_id)){
 		$where_clause.=' AND user_id='.$user_id;
 	}
-	if(!empty($user_login)){
-		$where_clause.=' AND user_login='.$user_login;
+	if(!empty($user_login) && $user_login!="User"){
+		$where_clause.=' AND user_login=\''.$user_login.'\'';
+	}else{
+		$user_login="User";
 	}
 	if(!empty($contest_id)){
 		$where_clause.=' AND contest_id='.$contest_id;
@@ -170,10 +192,33 @@ function oj_list_statusl(){
 	
 	$sql="SELECT SQL_CALC_FOUND_ROWS solution_id,user_id,user_login,problem_id,result,memory,time,language,code_length,in_date FROM {$oj->prefix}solution $where_clause $orderby limit $limit_clause";
 	$posts=$wpdb->get_results($sql);
-	
 	$wp_query->max_num_pages=ceil($wpdb->get_var( 'SELECT FOUND_ROWS()' )/20);
 	$wp_query->query_vars=array('paged'=> $paged);
 ?>
+<style type="text/css">
+<!--
+#status-filter{padding-bottom:15px;}
+#status-filter .filter-warpper{border:1px solid #CE3000; float:left; vertical-align:top}
+#status-filter label{background-color:#CE3000; height:35px; line-height:35px; color:#FFF; float:left; padding:0 5px;}
+#status-filter select{border:0; height:35px; line-height:35px; float:left; }
+#status-filter option{vertical-align:middle; padding:5px;}
+#status-filter input,#status-filter select{color:#04648D; font-style:italic;}
+#status-filter input[type="text"]{border:0; height:35px;  float:left; padding:0 10px;}
+#status-filter .search-btn {font-size:12px; font-style:normal; color:#FFF; float:left; height:37px;}
+#status-filter .search-btn input{margin:0;  }
+-->
+</style>
+<div id="status-filter" class="clearfix">
+	<form>
+	<input type="hidden" name="oj" value="<?php echo $oj->page?>"/>
+	<input type="hidden" name="cid" value="<?php echo $contest_id;?>"/>
+	<div class="filter-warpper"><label for="s_pid">Problem ID:</label><input type="text" id="s_pid" name="s_pid" value="<?php echo $problem_id;?>" onfocus="if(this.value==this.defaultValue) this.value='';"/></div>
+	<div class="filter-warpper"><label for="user_login">User:</label><input type="text" id="user_login" name="user_login" value="<?php echo $user_login;?>" onfocus="if(this.value==this.defaultValue) this.value='';"/></div>
+	<div class="filter-warpper"><label for="language">Language:</label><?php oj_echo_language_select(0, $s_language,true);?></div>
+	<div class="filter-warpper"><label for="result">Result:</label><?php oj_echo_filter_select($s_result)?></div>
+	<div class="search-btn"><input class="search-btn" type="submit" value="Search"/></div>
+	</form>
+</div>
 <table class="tb-statusl">
 	<thead>
 		<tr>
