@@ -26,17 +26,36 @@ get_header('contest'); // Loads the header.php template. ?>
 			global $wp,$wpdb,$wp_query,$oj,$oju;
 			$oj->current_page="problems";
 			$contest_id=$_GET['cid'];
+			/*
+			 * 此sql获得的accept及submit包含非竞赛种提交的统计
+			 * $sql="SELECT cp.p2p_id cp_id,p2p_to p_id,posts.post_title,meta.accepted,meta.submit
+					FROM {$oj->prefix}problem_meta as meta
+					RIGHT JOIN {$wpdb->prefix}p2p as cp ON meta.post_id=cp.p2p_to
+					INNER JOIN {$wpdb->prefix}posts as posts ON posts.ID=cp.p2p_to
+					WHERE p2p_from={$contest_id} AND post_type='problem'
+					ORDER BY p2p_id";
+				//张老师hustoj启发，不过貌似速度并不快
+				$sql="SELECT cp.p2p_id cp_id,p2p_to p_id,posts.post_title,meta.accepted,meta.submit
+					FROM (SELECT * FROM {$wpdb->prefix}posts WHERE post_type='problem') as posts
+					INNER JOIN {$wpdb->prefix}p2p as cp ON cp.p2p_to=posts.ID
+					LEFT JOIN {$oj->prefix}problem_meta as meta ON meta.post_id=posts.ID
+					WHERE p2p_from={$contest_id}
+					ORDER BY p2p_id";
+			 *
+			 */
 			$sql="SELECT cp.p2p_id cp_id,p2p_to p_id,posts.post_title,meta.accepted,meta.submit
 					FROM {$oj->prefix}problem_meta as meta
 					RIGHT JOIN {$wpdb->prefix}p2p as cp ON meta.post_id=cp.p2p_to
 					INNER JOIN {$wpdb->prefix}posts as posts ON posts.ID=cp.p2p_to
 					WHERE p2p_from={$contest_id} AND post_type='problem'
 					ORDER BY p2p_id";
+		
+			
 			$cps=$wpdb->get_results($sql);
 			$latter=65;
 			foreach ($cps as $cp):
 				$post_id=$cp->p_id;
-				$problem_url=$oju->url('problem').'&pid='.$post_id;
+				$problem_url=$oju->url('problem').'&pid='.$post_id.'&cpid='.$cp->cp_id;
 			?>
 				<tr>
 					<td><?php echo $post_id;?> <?php echo chr($latter);$latter++;?></td>
