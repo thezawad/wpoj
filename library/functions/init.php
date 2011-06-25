@@ -1,6 +1,177 @@
 <?php
+class OJ_PAGE{
+	function blogs(){
+		global $wp_query;
+		wp();
+		$wp_query->is_home=false;
+	}
+	function problem(){
+		global $wp_query;
+		$wp_query->query_vars=array('p'=>$_GET['pid'],'post_type'=>'problem');
+		$wp_query->query($wp_query->query_vars);
+		$wp_query->is_singular=false;
+	}
+	function addsolution(){
+		global $userdata,$oju;
+		require_once (OJ_HOME.'/addsolution.php');
+		if(isset($_POST['cpid'])){
+			header('Location:'.$oju->url('contest-statusl')."&user_id={$userdata->ID}");
+		}else{
+			header('Location:'.$oju->url('statusl')."&user_id={$userdata->ID}");
+		}
+	}
+}
+function oj_register_page_type($args){
+	global $ojp,$oj;
+	$defaults = array(
+		'page'=>'blogs',
+		'context'=>'blogs',
+		'label'=>null,
+		'args'=>array()
+	);
+	$args = array_merge($defaults,$args);
+	$page=$args['page'];
+	$ojp[$page]['context']=$args['context'];
+	$ojp[$page]['label']=$args['label'];
+	$ojp[$page]['args']=$args['args'];
+}
 function oj_register_admin_menu(){
 	add_submenu_page('edit.php?post_type=problem', 'Import Problems', 'Import Problems', 6, 'import_problems','oj_import_problems');
+}
+function oj_loadtemplates($page){
+	global $oj,$ojp;
+	if(in_array($page, array_keys($ojp))){
+		$oj->context=$ojp[$page]['context'];
+		$oj_bread_trail['trail_end']=$ojp[$page]['trail_end'];
+		locate_template('oj-'.$page.'.php',true);
+		exit(0);
+	}else{
+		echo 'NO OJ TYPE PAGE!';
+	}
+}
+function oj_register_page_types(){
+	//No templates file
+	add_action('oj-addsolution',array(OJ_PAGE,'addsolution'));
+	//TOP PAGES
+	oj_register_page_type(array(
+				'page'=>'home',
+				'label'=>'Home'
+		));
+	oj_register_page_type(array(
+				'page'=>'blogs',
+				'context'=>'blogs',
+		));
+	add_action('oj-blogs',array(OJ_PAGE,'blogs'));
+	oj_register_page_type(array(
+				'page'=>'ranklist',
+				'context'=>'ranklist',
+		));
+	oj_register_page_type(array(
+				'page'=>'contests',
+				'context'=>'contests',	
+		));
+	oj_register_page_type(array(
+				'page'=>'problems',
+				'context'=>'problems',
+		));
+	oj_register_page_type(array(
+				'page'=>'statusl',
+				'context'=>'statusl',	
+				'label'=>'Status'
+		));
+	oj_register_page_type(array(
+				'page'=>'faqs',
+				'context'=>'faqs',
+				'label'=>'F.A.Qs'
+		));
+	//Singular Pages
+	oj_register_page_type(array(
+				'page'=>'user',
+				'context'=>'ranklist',
+				'label'=>'User Infomation'
+		));
+	oj_register_page_type(array(
+				'page'=>'problem',
+				'context'=>'problems'
+		));
+	oj_register_page_type(array(
+				'page'=>'statusd',
+				'context'=>'problems',
+				'label'=>'Status'
+		));
+	add_action('oj-problem', array(OJ_PAGE,'problem'));
+	oj_register_page_type(array(
+				'page'=>'submitpage',
+				'context'=>'problems',
+				'label'=>'F.A.Qs',
+		));
+	oj_register_page_type(array(
+				'page'=>'showsource',
+				'context'=>'statusl',
+		));
+	oj_register_page_type(array(
+				'page'=>'compileinfo',
+				'context'=>'statusl',
+				'label'=>'Compile Infomation'
+		));
+	//Contest Top Pages
+	oj_register_page_type(array(
+				'page'=>'contest-clarication',
+				'context'=>'contests',
+				'label'=>'Clarication',
+				'args'=>array('cid','ctitle')
+		));
+	oj_register_page_type(array(
+				'page'=>'contest-problems',
+				'context'=>'contests',
+				'label'=>'Problems',
+				'args'=>array('cid','ctitle')
+		));
+	oj_register_page_type(array(
+				'page'=>'contest-standing',
+				'context'=>'contests',
+				'label'=>'Standing',
+				'args'=>array('cid','ctitle')
+		));
+	oj_register_page_type(array(
+				'page'=>'contest-statusl',
+				'context'=>'contests',
+				'label'=>'Status',
+				'args'=>array('cid','ctitle')
+		));
+	oj_register_page_type(array(
+				'page'=>'contest-statistics',
+				'context'=>'contests',
+				'label'=>'Statistics',
+				'args'=>array('cid','ctitle')
+		));
+	//Contest Singular Page
+	oj_register_page_type(array(
+				'page'=>'contest-problem',
+				'context'=>'contests',
+				'label'=>'Problem',
+				'args'=>array('cid','ctitle','pid','cpid')
+		));
+	add_action('oj-contest-problem', array(OJ_PAGE,'problem') );
+	oj_register_page_type(array(
+				'page'=>'contest-statusd',
+				'context'=>'contests',
+				'label'=>'Status',
+				'args'=>array('cid','ctitle','pid','cpid','title')
+		));
+	oj_register_page_type(array(
+				'page'=>'contest-showsource',
+				'context'=>'contests',
+				'label'=>'Show Source',
+				'args'=>array('cid','ctitle','pid','cpid','title')
+		));
+	oj_register_page_type(array(
+				'page'=>'contest-submitpage',
+				'context'=>'contests',
+				'label'=>'Submit Page',
+				'args'=>array('cid','ctitle','pid','cpid','title')
+		));
+	add_action('oj-loadtemplates', 'oj_loadtemplates');
 }
 function oj_register_post_types(){
 	/* register post types */

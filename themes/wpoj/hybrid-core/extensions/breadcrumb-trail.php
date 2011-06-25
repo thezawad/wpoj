@@ -109,7 +109,7 @@ function breadcrumb_trail( $args = array() ) {
  * @return array List of items to be shown in the trail.
  */
 function breadcrumb_trail_get_items( $args = array() ) {
-	global $wp_query, $wp_rewrite;
+	global $wp_query, $wp_rewrite ,$oju ,$oj;
 
 	/* Get the textdomain. */
 	$textdomain = breadcrumb_trail_textdomain();
@@ -122,6 +122,23 @@ function breadcrumb_trail_get_items( $args = array() ) {
 	if ( !is_front_page() && $args['show_home'] )
 		$trail[] = '<a href="' . home_url() . '" title="' . esc_attr( get_bloginfo( 'name' ) ) . '" rel="home" class="trail-begin">' . $args['show_home'] . '</a>';
 
+	if( $oj->iscontest){
+		$trail[]=$oju->link('contests');
+		$trail[]=$_GET['ctitle'];
+		$trail['trail_end']=$oju->label($oj->page);
+	}elseif( isset($_GET['oj'])){
+		if($oj->page==$oj->context){
+			$trail['trail_end'] = $oju->label($oj->page);
+		}else{
+			$trail[] = $oju->link($oj->context);
+			switch ($oj->page){
+				case 'user':
+					//$trail[] = $oju->label($oj->page);
+					//$trail['trail_end'] = $oju->label($oj->page);
+			}
+			$trail['trail_end'] = $oju->label($oj->page);
+		}
+	}
 	/* If viewing the front page of the site. */
 	if ( is_front_page() ) {
 		if ( $args['show_home'] && $args['front_page'] )
@@ -130,6 +147,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 
 	/* If viewing the "home"/posts page. */
 	elseif ( is_home() ) {
+
 		$home_page = get_page( $wp_query->get_queried_object_id() );
 		$trail = array_merge( $trail, breadcrumb_trail_get_parents( $home_page->post_parent, '' ) );
 		$trail['trail_end'] = get_the_title( $home_page->ID );
@@ -137,7 +155,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 
 	/* If viewing a singular post (page, attachment, etc.). */
 	elseif ( is_singular() ) {
-
+		$trail[]=$oju->link('blogs');
 		/* Get singular post variables needed. */
 		$post = $wp_query->get_queried_object();
 		$post_id = absint( $wp_query->get_queried_object_id() );
@@ -215,7 +233,7 @@ function breadcrumb_trail_get_items( $args = array() ) {
 
 	/* If we're viewing any type of archive. */
 	elseif ( is_archive() ) {
-
+		$trail[]=$oju->link('blogs');
 		/* If viewing a taxonomy term archive. */
 		if ( is_tax() || is_category() || is_tag() ) {
 
@@ -333,8 +351,10 @@ function breadcrumb_trail_get_items( $args = array() ) {
 	}
 
 	/* If viewing search results. */
-	elseif ( is_search() )
+	elseif ( is_search() ){
+		$trail[]=$oju->link('blogs');
 		$trail['trail_end'] = sprintf( __( 'Search results for &quot;%1$s&quot;', $textdomain ), esc_attr( get_search_query() ) );
+	}
 
 	/* If viewing a 404 error page. */
 	elseif ( is_404() )

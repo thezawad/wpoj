@@ -18,6 +18,7 @@ class OJ{
 	var $current_page;
 	var $context="home";
 	var $objects;
+	var $iscontest=false;
 	var $languages=array('C'=>0,'C++'=>1,'Pascal'=>2,'Java'=>3,'Ruby'=>4,'Bash'=>5,'Python'=>6);
 	function init(){
 		$this->init_consts();
@@ -63,13 +64,16 @@ class OJ{
 	}
 	function register_core_components(){
 		oj_register_post_types();
+		oj_register_page_types();
 		if(is_admin()){
 			add_action("admin_menu",'oj_register_admin_menu');
 		}
 	}
 	function register_core_vars(){
-		global $oju;
+		global $oju,$ojp;
 		$oju=new OJ_URL();
+		$ojp=array();
+		if(isset($_GET['cid'])){ $this->iscontest=true; }
 		$this->objects=oj_get_objects();
 	}
 	

@@ -1,21 +1,20 @@
 <?php
 class OJ_URL{
 	var $menu;
-	var $pages;
 	function OJ_URL(){
-		$this->pages = oj_get_pages();
 		$this->register_menu('main', oj_get_menu_main());
 		$this->register_menu('contest', oj_get_menu_contest());
 	}
 	function url($page){
+		global $ojp;
 		if($page=='home') return site_url();
 		else{
 			$the_url=site_url().'?oj='.$page;
-			if((isset($_GET['cid']) && !in_array($page, oj_get_menu_main()))){
-				$the_url.='&cid='.$_GET['cid'];
-				if(isset($_GET['ctitle'])) $the_url.='&ctitle='.$_GET['ctitle'];
-				if(isset($_GET['pid'])) $the_url.='&pid='.$_GET['pid'];
-				if(isset($_GET['cpid'])) $the_url.='&cpid='.$_GET['cpid'];
+			if(isset($_GET['cid'])){
+				if(in_array('cid',$ojp[$page]['args'])) $the_url.='&cid='.$_GET['cid'];
+				if(isset($_GET['ctitle']) && in_array('ctitle',$ojp[$page]['args']) ) $the_url.='&ctitle='.$_GET['ctitle'];
+				if(isset($_GET['pid']) && in_array('pid',$ojp[$page]['args']) ) $the_url.='&pid='.$_GET['pid'];
+				if(isset($_GET['cpid']) && in_array('cpid',$ojp[$page]['args'])) $the_url.='&cpid='.$_GET['cpid'];
 			}
 			return $the_url;
 		}
@@ -25,8 +24,9 @@ class OJ_URL{
 		return $link;
 	}
 	function label($page){
-		if(!empty($this->pages[$page]['label'])){
-			return $this->pages[$page]['label'];
+		global $ojp;
+		if(!empty($ojp[$page]['label'])){
+			return $ojp[$page]['label'];
 		}else{
 			return ucfirst($page);
 		}
