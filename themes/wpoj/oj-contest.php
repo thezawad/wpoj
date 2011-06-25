@@ -26,7 +26,7 @@ get_header(); ?>
 			if (intval($post->private)==0) $private='<span class="c-pub">Public</span>';
 			else $private='<span class="c-pri">Private</span>';
 			
-			$contest_url=site_url().'?oj=contests-problems&cid='.$post->ID.'&ctitle='.$post->post_title;
+			$contest_url=site_url().'?oj=contest-problems&cid='.$post->ID.'&ctitle='.$post->post_title;
 			?>
 				<tr>
 					<td><?php echo $post->ID;?></td>
