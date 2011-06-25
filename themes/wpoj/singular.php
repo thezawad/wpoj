@@ -67,9 +67,9 @@ get_header(); // Loads the header.php template. ?>
 	</div><!-- #content -->
 	</div>
 	<?php do_atomic( 'after_content' ); // retro-fitted_after_content ?>
-	<?php get_sidebar( 'primary' ); // Loads the sidebar-primary.php template. ?>
+	<?php get_sidebar( 'blog-primary' ); // Loads the sidebar-primary.php template. ?>
 
-	<?php get_sidebar( 'secondary' ); // Loads the sidebar-secondary.php template. ?>
+	<?php get_sidebar( 'blog-secondary' ); // Loads the sidebar-secondary.php template. ?>
 
 	<?php do_atomic( 'close_main' ); // retro-fitted_close_main ?>
 <?php get_footer(); // Loads the footer.php template. ?>

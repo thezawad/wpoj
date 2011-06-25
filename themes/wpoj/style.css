@@ -1169,11 +1169,11 @@ body {
 	margin-left:345px;
 }
 
-.layout-2c-l #sidebar-primary {
+.layout-2c-l #sidebar-primary,.layout-2c-l #sidebar-blog-primary {
 	float: right;
 	width: 325px;
 }
-.layout-2c-l #sidebar-secondary{
+.layout-2c-l #sidebar-secondary,.layout-2c-l #sidebar-blog-secondary{
 	clear: right;
 	float: right;
 	width: 325px;

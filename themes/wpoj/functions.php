@@ -47,7 +47,7 @@ function retro_fitted_theme_setup() {
 
 	/* Add theme support for core framework features. */
 	//add_theme_support( 'hybrid-core-menus', array( 'primary' ) );
-	add_theme_support( 'hybrid-core-sidebars', array( 'primary', 'secondary', 'before-content', 'after-content', 'after-singular' ) );
+	add_theme_support( 'hybrid-core-sidebars', array('blog-primary','blog-secondary', 'primary', 'secondary', 'before-content', 'after-content', 'after-singular' ) );
 	add_theme_support( 'hybrid-core-widgets' );
 	add_theme_support( 'hybrid-core-shortcodes' );
 	add_theme_support( 'hybrid-core-post-meta-box' );

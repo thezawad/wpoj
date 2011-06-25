@@ -86,7 +86,7 @@ class Hybrid_Widget_Search extends WP_Widget {
 			$search_text = ( ( is_search() ) ? esc_attr( get_search_query() ) : esc_attr( $instance['search_text'] ) );
 
 			/* Open the form. */
-			$search = '<form method="get" class="search-form" id="search-form' . $search_num . '" action="' . home_url() . '/"><div>';
+			$search = '<form method="get" class="search-form" id="search-form' . $search_num . '" action="' .$instance['actioni_url'] . '/"><div>';
 
 			/* If a search label was set, add it. */
 			if ( !empty( $instance['search_label'] ) )
@@ -122,6 +122,7 @@ class Hybrid_Widget_Search extends WP_Widget {
 		$instance['search_label'] = strip_tags( $new_instance['search_label'] );
 		$instance['search_text'] = strip_tags( $new_instance['search_text'] );
 		$instance['search_submit'] = strip_tags( $new_instance['search_submit'] );
+		$instance['action_url'] = strip_tags( $new_instance['action_url'] );
 		$instance['theme_search'] = ( isset( $new_instance['theme_search'] ) ? 1 : 0 );
 
 		return $instance;
@@ -139,6 +140,7 @@ class Hybrid_Widget_Search extends WP_Widget {
 			'theme_search' => false,
 			'search_label' => '',
 			'search_text' => '',
+			'action_url' => site_url(),
 			'search_submit' => ''
 		);
 
@@ -168,6 +170,10 @@ class Hybrid_Widget_Search extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id( 'theme_search' ); ?>">
 			<input class="checkbox" type="checkbox" <?php checked( $instance['theme_search'], true ); ?> id="<?php echo $this->get_field_id( 'theme_search' ); ?>" name="<?php echo $this->get_field_name( 'theme_search' ); ?>" /> <?php _e( 'Use theme\'s <code>searchform.php</code>?', $this->textdomain ); ?></label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'action_url' ); ?>"><?php _e( 'Action URL:', $this->textdomain ); ?></label>
+			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'action_url' ); ?>" name="<?php echo $this->get_field_name( 'action_url' ); ?>" value="<?php echo esc_attr( $instance['action_url'] ); ?>" />
 		</p>
 		</div>
 		<div style="clear:both;">&nbsp;</div>
