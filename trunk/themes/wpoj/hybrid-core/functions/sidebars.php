@@ -107,7 +107,27 @@ function hybrid_register_sidebars() {
 		'before_title' => '<h3 class="widget-title">',
 		'after_title' => '</h3>'
 	);
-
+	$blog_primary=array(
+		'id' => 'blog-primary',
+		'name' => __( 'Blog Primary', $domain ),
+		'description' => __( 'The main (primary) widget area, most often used as a sidebar.', $domain ),
+		'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-wrap widget-inside">',
+		'after_widget' => '</div></div>',
+		'before_title' => '<h3 class="widget-title">',
+		'after_title' => '</h3>'
+	);
+	if ( in_array( 'blog-primary', $sidebars[0] ) ) register_sidebar( $blog_primary );
+	$blog_secondary=array(
+		'id' => 'blog-secondary',
+		'name' => __( 'Blog Secondary', $domain ),
+		'description' => __( 'The main (primary) widget area, most often used as a sidebar.', $domain ),
+		'before_widget' => '<div id="%1$s" class="widget %2$s widget-%2$s"><div class="widget-wrap widget-inside">',
+		'after_widget' => '</div></div>',
+		'before_title' => '<h3 class="widget-title">',
+		'after_title' => '</h3>'
+	);
+	if ( in_array( 'blog-secondary', $sidebars[0] ) ) register_sidebar( $blog_secondary );
+	
 	/* Register the primary sidebar. */
 	if ( in_array( 'primary', $sidebars[0] ) )
 		register_sidebar( $primary );
