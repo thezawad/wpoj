@@ -221,7 +221,8 @@ function oj_maybe_redirect_url(){
 			locate_template('oj-contest-statistics.php',true);
 			exit(0);break;
 		case 'contest-showsource':
-			$oj->page='contest-statusl';
+			$oj->context='contest-statusl';
+			$oj->page=$page;
 			$oj_bread_trail[]=$oju->link('contests');
 			$oj_bread_trail[]=$_GET['ctitle'];
 			$oj_bread_trail[]=$oju->link('contest-statusl');
@@ -230,7 +231,7 @@ function oj_maybe_redirect_url(){
 			exit(0);break;
 		case 'contest-submitpage':
 			$oj->context='contests';
-			$oj->page='contest-problems';
+			$oj->page=$page;
 			$oj_bread_trail[]=$oju->link("contests");
 			$oj_bread_trail[]=$_GET['ctitle'];
 			$oj_bread_trail[]=$oju->link("contest-problems");
