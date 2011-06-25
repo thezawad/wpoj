@@ -1059,17 +1059,17 @@ input[type='submit'],input[type='reset']{
 	box-shadow:1px 2px 5px #999999;
 	
 }
-.singular-problem .problem-feature{
+.problem-feature{
 	position:absolute;
 	left:200px;
 }
-.singular-problem .problem-feature-top{
+.problem-feature-top{
 	top:0;
 }
-.singular-problem .problem-feature-bottom{
+.problem-feature-bottom{
 	bottom:0;
 }
-.singular-problem .problem-feature a{
+.problem-feature a{
 	display:inline-block;
 	min-width:60px;
 	padding:10px 15px 0px 15px;
@@ -1081,22 +1081,22 @@ input[type='submit'],input[type='reset']{
 	text-indent:-2000px;
 	border:1px solid #FFF;
 }
-.singular-problem .problem-feature a.f-submit{
+.problem-feature a.f-submit{
 	left:100px;
 }
-.singular-problem .problem-feature-top a{
+.problem-feature-top a{
 	border-width:0;
 	padding-top:15px;
 	vertical-align:top;
 	margin-left:20px;
 }
-.singular-problem .problem-feature-bottom a{
+.problem-feature-bottom a{
 	border-width:30px 10px 0px 10px;
 	vertical-align:bottom;
 }
-.singular-problem .problem-feature a.f-submit{background: #04648D;}
-.singular-problem .problem-feature a.f-status{background: #CE3000;}
-.singular-problem .problem-feature a:hover{
+.problem-feature a.f-submit{background: #04648D;}
+.problem-feature a.f-status{background: #CE3000;}
+.problem-feature a:hover{
 	text-indent:0;
 	height:auto;
 	padding:10px 15px 10px 15px;

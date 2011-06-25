@@ -1,3 +1,4 @@
+<?php get_header();?>
 <div class="content-wrapper hentry clearfix">
 	<div id="content">
 		<div class="inner-wrapper">

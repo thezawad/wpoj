@@ -237,16 +237,17 @@ function oj_list_statusl(){
 			if(isset($_GET['cid'])){
 				$submitpage_url=$oju->url('contest-submitpage').$pid_clause.$sid_clause.$lang_clause;
 				$showsource_url=$oju->url('contest-showsource').$sid_clause;
+				$problem_url=$oju->url('contest-problem').$pid_clause;
 			}else{
 				$submitpage_url=$oju->url('submitpage').$pid_clause.$sid_clause.$lang_clause;
 				$showsource_url=$oju->url('showsource').$sid_clause;
-			}
+				$problem_url=$oju->url('problem').$pid_clause;
+			}	
 			
-			$problem_url=$oju->url('problem').$pid_clause;
 			$compileinfo_url=$oju->url('compileinfo').$sid_clause;
 		?>
 			<td><?php echo $post->solution_id;?></td>
-			<td><a href="/?author=<?php echo $post->user_id;?>"><?php echo $post->user_login;?></a></td>
+			<td><a href="<?php echo $oju->url('user').'&uid='.$post->user_id;?>"><?php echo $post->user_login;?></a></td>
 			<td><a href="<?php echo $problem_url;?>"><?php echo $post->problem_id?></a></td>
 			<td><span class="<?php echo $compile_status['class'][$post->result];?>">
 				<?php 
