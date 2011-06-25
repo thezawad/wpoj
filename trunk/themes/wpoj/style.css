@@ -44,11 +44,11 @@ div.menu ul{margin:0;padding:0;list-style:none;line-height:1.0}div.menu ul ul{po
 	background-color:#04648D;
 	color:#fff;
 }
-.oj-contests-clarication #page-contests-clarication a,
-.oj-contests-problems #page-contests-problems a,
-.oj-contests-status #page-contests-status a,
-.oj-contests-standing #page-contests-standing a,
-.oj-contests-statistics #page-contests-statistics a{
+.oj-contest-clarication #page-contest-clarication a,
+.oj-contest-problems #page-contest-problems a,
+.oj-contest-statusl #page-contest-statusl a,
+.oj-contest-standing #page-contest-standing a,
+.oj-contest-statistics #page-contest-statistics a{
 	background-color:#CE3000; font-weight:bold;
 }
 /**

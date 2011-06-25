@@ -1,4 +1,4 @@
-<?php get_header();?>
+<?php get_header('contest');?>
 <div class="content-wrapper hentry clearfix">
 	<div id="content" role="main">
 	<?php oj_list_statusd($_GET['pid']);?>

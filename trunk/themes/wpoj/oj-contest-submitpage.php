@@ -1,4 +1,4 @@
-<?php get_header();?>
+<?php get_header('contest');?>
 <?php
 	global $oj,$oju;
 	$problem_id=$_GET['pid'];
