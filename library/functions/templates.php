@@ -234,9 +234,15 @@ function oj_list_statusl(){
 			$pid_clause='&pid='.$post->problem_id;
 			$sid_clause='&sid='.$post->solution_id;
 			$lang_clause='&language='.$post->language;
-			$submitpage_url=$oju->url('submitpage').$pid_clause.$sid_clause.$lang_clause;
+			if(isset($_GET['cid'])){
+				$submitpage_url=$oju->url('contest-submitpage').$pid_clause.$sid_clause.$lang_clause;
+				$showsource_url=$oju->url('contest-showsource').$sid_clause;
+			}else{
+				$submitpage_url=$oju->url('submitpage').$pid_clause.$sid_clause.$lang_clause;
+				$showsource_url=$oju->url('showsource').$sid_clause;
+			}
+			
 			$problem_url=$oju->url('problem').$pid_clause;
-			$showsource_url=$oju->url('showsource').$sid_clause;
 			$compileinfo_url=$oju->url('compileinfo').$sid_clause;
 		?>
 			<td><?php echo $post->solution_id;?></td>

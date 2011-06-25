@@ -8,7 +8,7 @@
  * @package Retro-fitted
  * @subpackage Template
  */
-get_header();
+get_header('contest');
  // Loads the header.php template. ?>
  
 
@@ -32,8 +32,8 @@ get_header();
 					<?php 
 						global $oj,$oju;
 						$url_common_parm='&title='.$post->post_title.'&pid='.$post->ID;
-						$url_submit=$oju->url('submitpage').$url_common_parm.'&language='.$_GET['language'];
-						$url_status=$oju->url('statusd').$url_common_parm;
+						$url_submit=$oju->url('contest-submitpage').$url_common_parm.'&language='.$_GET['language'];
+						$url_status=$oju->url('contest-statusd').$url_common_parm;
 					?>
 						<div class='problem-feature problem-feature-top'>
 							<a class="feature f-submit" href="<?php echo $url_submit;?>">Submit</a>
