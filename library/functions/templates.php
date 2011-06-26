@@ -236,12 +236,12 @@ function oj_list_statusl(){
 			$lang_clause='&language='.$post->language;
 			if(isset($_GET['cid'])){
 				$submitpage_url=$oju->url('contest-submitpage').$pid_clause.$sid_clause.$lang_clause;
-				$showsource_url=$oju->url('contest-showsource').$sid_clause;
+				$showsource_url=$oju->url('contest-showsource').$pid_clause.$sid_clause;
 				$problem_url=$oju->url('contest-problem').$pid_clause;
 				$user_url=$oju->url('contest-user').'&uid='.$post->user_id;
 			}else{
 				$submitpage_url=$oju->url('submitpage').$pid_clause.$sid_clause.$lang_clause;
-				$showsource_url=$oju->url('showsource').$sid_clause;
+				$showsource_url=$oju->url('showsource').$pid_clause.$sid_clause;
 				$problem_url=$oju->url('problem').$pid_clause;
 				$user_url=$oju->url('user').'&uid='.$post->user_id;
 			}	
