@@ -33,7 +33,7 @@ class OJ{
 		define('OJ_LIBRARY',OJ_HOME.'/library');
 		define('OJ_THEMES',OJ_HOME.'/themes');
 		define('OJ_FUNCTIONS',OJ_LIBRARY.'/functions');
-		define('OJ_CLASSES',OJ_LIBRARY.'/class');
+		define('OJ_CLASSES',OJ_LIBRARY.'/classes');
 	}
 	function include_functions(){
 		require_once(OJ_FUNCTIONS.'/tools.php');
