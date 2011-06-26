@@ -41,6 +41,20 @@ function oj_register_page_type($args){
 function oj_register_admin_menu(){
 	add_submenu_page('edit.php?post_type=problem', 'Import Problems', 'Import Problems', 6, 'import_problems','oj_import_problems');
 }
+function oj_load_template( $_template_file, $parms=array(),$require_once = true ) {
+	global $posts, $post, $wp_did_header, $wp_did_template_redirect, $wp_query, $wp_rewrite, $wpdb, $wp_version, $wp, $id, $comment, $user_ID;
+	$_template_file=THEME_DIR.'/'.$_template_file;
+	if(!empty($parms)){
+		extract( $parms, EXTR_SKIP );
+	}
+	if ( is_array( $wp_query->query_vars ) )
+		extract( $wp_query->query_vars , EXTR_SKIP );
+
+	if ( $require_once )
+		require_once( $_template_file );
+	else
+		require( $_template_file );
+}
 function oj_loadtemplates($page){
 	global $oj,$ojp;
 	if(in_array($page, array_keys($ojp))){
@@ -49,7 +63,7 @@ function oj_loadtemplates($page){
 			$oj->contest_context=$ojp[$page]['contest_context'];
 		}
 		$oj_bread_trail['trail_end']=$ojp[$page]['trail_end'];
-		locate_template('oj-'.$page.'.php',true);
+		oj_load_template('oj-'.$page.'.php');
 		exit(0);
 	}else{
 		echo 'NO OJ TYPE PAGE!';
@@ -257,10 +271,10 @@ function oj_register_post_types(){
 	register_taxonomy("fps_cat", "problem",array(
 		'public' => true,
 		'labels' => array(
-			'name'=>'FPS Categores',
-			'singular_name'=>'FPS Category',
+			'name'=>'FPS Categores'
 		),
-		'hierarchical'=> true
+		'hierarchical'=> true,
+		'rewrite'=> array('slug'=>'fps_category'),
 	));
 	register_taxonomy("problem_tag", "problem",array(
 		'public' => true,

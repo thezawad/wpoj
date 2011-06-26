@@ -49,7 +49,7 @@ function theme_layouts_get_layout() {
 	$layout = '';
 	
 	/* If viewing a singular post, check if a layout has been specified. */
-	if(is_home() || is_archive() || is_single() || $oj->context=='blogs'){
+	if(is_home() || is_archive() || is_single() || is_search() || $oj->page=='blogs'){
 		$layout='2c-l';
 	}
 
