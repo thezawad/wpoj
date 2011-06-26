@@ -97,6 +97,8 @@ function wpoj_set_other_context(){
 		if(in_array($post_type, array('post'))){
 			$oj->context='blogs';
 		}
+	}elseif(is_search()){
+		$oj->context='blogs';
 	}elseif(is_archive()){
 		if ( is_tax() || is_category() || is_tag() ) {
 			$term = $wp_query->get_queried_object();

@@ -60,6 +60,7 @@ class OJ{
 		add_action('init',array($this,'register_core_vars'));
 		add_action('init',array($this,'register_core_components'));
 		add_action('wp_loaded','oj_maybe_redirect_url');
+		add_action('parse_request','oj_maybe_redirect_url_wp');
 		add_action('user_register','oj_add_user');
 		add_action('deleted_user','oj_delete_user');
 	}

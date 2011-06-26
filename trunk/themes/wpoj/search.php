@@ -12,7 +12,7 @@
 get_header(); // Loads the header.php template. ?>
 
 	<?php do_atomic( 'before_content' ); // retro-fitted_before_content ?>
-
+	<div class="content-wrapper">
 	<div id="content">
 
 		<?php get_sidebar( 'before-content' ); // Loads the sidebar-before-content.php template. ?>
@@ -64,6 +64,10 @@ get_header(); // Loads the header.php template. ?>
 		<?php get_template_part( 'loop-nav' ); // Loads the loop-nav.php template. ?>
 
 	</div><!-- #content -->
+	</div>
+	<?php get_sidebar( 'blog-primary' ); // Loads the sidebar-primary.php template. ?>
+
+	<?php get_sidebar( 'blog-secondary' ); // Loads the sidebar-secondary.php template. ?>
 
 	<?php do_atomic( 'after_content' ); // retro-fitted_after_content ?>
 
