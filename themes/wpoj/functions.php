@@ -113,8 +113,8 @@ function wpoj_set_other_context(){
 function wpoj_set_top_page_class($classes){
 	global $oj;
 	$classes[]='oj-'.$oj->context;
-	if($oj->page != $oj->context){
-		$classes[]='oj-'.$oj->page;
+	if(isset($oj->contest_context)){
+		$classes[]='oj-'.$oj->contest_context;
 	}
 	return $classes;
 }

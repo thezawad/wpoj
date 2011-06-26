@@ -34,6 +34,9 @@ function oj_register_page_type($args){
 	$ojp[$page]['context']=$args['context'];
 	$ojp[$page]['label']=$args['label'];
 	$ojp[$page]['args']=$args['args'];
+	if(isset($args['contest_context'])){
+		$ojp[$page]['contest_context']=$args['contest_context'];
+	}
 }
 function oj_register_admin_menu(){
 	add_submenu_page('edit.php?post_type=problem', 'Import Problems', 'Import Problems', 6, 'import_problems','oj_import_problems');
@@ -42,6 +45,9 @@ function oj_loadtemplates($page){
 	global $oj,$ojp;
 	if(in_array($page, array_keys($ojp))){
 		$oj->context=$ojp[$page]['context'];
+		if(isset($ojp[$page]['contest_context'])){
+			$oj->contest_context=$ojp[$page]['contest_context'];
+		}
 		$oj_bread_trail['trail_end']=$ojp[$page]['trail_end'];
 		locate_template('oj-'.$page.'.php',true);
 		exit(0);
@@ -118,30 +124,35 @@ function oj_register_page_types(){
 	oj_register_page_type(array(
 				'page'=>'contest-clarication',
 				'context'=>'contests',
+				'contest_context'=>'contest-clarication',
 				'label'=>'Clarication',
 				'args'=>array('cid','ctitle')
 		));
 	oj_register_page_type(array(
 				'page'=>'contest-problems',
 				'context'=>'contests',
+				'contest_context'=>'contest-problems',
 				'label'=>'Problems',
 				'args'=>array('cid','ctitle')
 		));
 	oj_register_page_type(array(
 				'page'=>'contest-standing',
 				'context'=>'contests',
+				'contest_context'=>'contest-standing',
 				'label'=>'Standing',
 				'args'=>array('cid','ctitle')
 		));
 	oj_register_page_type(array(
 				'page'=>'contest-statusl',
 				'context'=>'contests',
+				'contest_context'=>'contest-statusl',
 				'label'=>'Status',
 				'args'=>array('cid','ctitle')
 		));
 	oj_register_page_type(array(
 				'page'=>'contest-statistics',
 				'context'=>'contests',
+				'contest_context'=>'contest-statistics',
 				'label'=>'Statistics',
 				'args'=>array('cid','ctitle')
 		));
@@ -149,6 +160,7 @@ function oj_register_page_types(){
 	oj_register_page_type(array(
 				'page'=>'contest-problem',
 				'context'=>'contests',
+				'contest_context'=>'contest-problems',
 				'label'=>'Problem',
 				'args'=>array('cid','ctitle','pid','cpid')
 		));
@@ -156,19 +168,29 @@ function oj_register_page_types(){
 	oj_register_page_type(array(
 				'page'=>'contest-statusd',
 				'context'=>'contests',
+				'contest_context'=>'contest-problems',
 				'label'=>'Status',
 				'args'=>array('cid','ctitle','pid','cpid','title')
 		));
 	oj_register_page_type(array(
 				'page'=>'contest-showsource',
 				'context'=>'contests',
+				'contest_context'=>'contest-statusl',
 				'label'=>'Show Source',
 				'args'=>array('cid','ctitle','pid','cpid','title')
 		));
 	oj_register_page_type(array(
 				'page'=>'contest-submitpage',
 				'context'=>'contests',
+				'contest_context'=>'contest-problems',
 				'label'=>'Submit Page',
+				'args'=>array('cid','ctitle','pid','cpid','title')
+		));
+	oj_register_page_type(array(
+				'page'=>'contest-user',
+				'context'=>'contests',
+				'contest_context'=>'contest-standing',
+				'label'=>'User Infomation',
 				'args'=>array('cid','ctitle','pid','cpid','title')
 		));
 	add_action('oj-loadtemplates', 'oj_loadtemplates');

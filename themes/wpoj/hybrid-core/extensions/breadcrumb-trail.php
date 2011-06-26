@@ -125,6 +125,20 @@ function breadcrumb_trail_get_items( $args = array() ) {
 	if( $oj->iscontest){
 		$trail[]=$oju->link('contests');
 		$trail[]=$_GET['ctitle'];
+		if($oj->contest_context!=$oj->page){
+			$trail[] = $oju->link($oj->contest_context);
+			switch ($oj->page){
+				case 'contest-submitpage':
+					$trail[] = '<a href='.$oju->url('contest-problem').'>Probelm:'.$_GET['pid'].'</a>';
+					break;
+				case 'contest-statusd':
+					$trail[] = '<a href='.$oju->url('contest-problem').'>Probelm:'.$_GET['pid'].'</a>';
+					break;
+				case 'contest-showsource':
+					$trail[] = '<a href='.$oju->url('contest-showsource').'>Probelm:'.$_GET['pid'].'</a>';
+					break;
+			}
+		}
 		$trail['trail_end']=$oju->label($oj->page);
 	}elseif( isset($_GET['oj'])){
 		if($oj->page==$oj->context){
@@ -132,9 +146,15 @@ function breadcrumb_trail_get_items( $args = array() ) {
 		}else{
 			$trail[] = $oju->link($oj->context);
 			switch ($oj->page){
-				case 'user':
-					//$trail[] = $oju->label($oj->page);
-					//$trail['trail_end'] = $oju->label($oj->page);
+				case 'submitpage':
+					$trail[] = '<a href='.$oju->url('problem').'>Probelm:'.$_GET['pid'].'</a>';
+					break;
+				case 'statusd':
+					$trail[] = '<a href='.$oju->url('problem').'>Probelm:'.$_GET['pid'].'</a>';
+					break;
+				case 'showsource':
+					$trail[] = '<a href='.$oju->url('showsource').'>Probelm:'.$_GET['pid'].'</a>';
+					break;
 			}
 			$trail['trail_end'] = $oju->label($oj->page);
 		}

@@ -17,6 +17,7 @@ class OJ{
 	var $page;
 	var $current_page;
 	var $context="home";
+	var $contest_context=null;
 	var $objects;
 	var $iscontest=false;
 	var $languages=array('C'=>0,'C++'=>1,'Pascal'=>2,'Java'=>3,'Ruby'=>4,'Bash'=>5,'Python'=>6);
