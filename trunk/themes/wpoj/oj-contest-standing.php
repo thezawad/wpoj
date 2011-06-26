@@ -99,8 +99,8 @@ get_header('contest'); // Loads the header.php template. ?>
 		<?php for ($i=0;$i<$user_cnt;$i++){ $user_id=$U[$i]->user_id; $user_login=$U[$i]->user_login; $user_solved=$U[$i]->solved;?>
 		<tr>
 			<td><?php echo $i+1;?></td>
-			<td><a href="<?php echo $oju->url('user').'?uid='.$user_id?>"><?php echo $user_login;?></a></td>
-			<td><a href="<?php echo $oju->url('user').'?uid='.$user_id?>"><?php echo $U[$i]->nick;?></a></td>
+			<td><a href="<?php echo $oju->url('contest-user').'&uid='.$user_id?>"><?php echo $user_login;?></a></td>
+			<td><a href="<?php echo $oju->url('contest-user').'&uid='.$user_id?>"><?php echo $U[$i]->nick;?></a></td>
 			<td><a href="<?php echo $oju->url('contests-status');?>"><?php echo $user_solved;?></a></td>
 			<td><?php echo sec2str($U[$i]->time);?></td>
 				<?php foreach($cps as $cp){
